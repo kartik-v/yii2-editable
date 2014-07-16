@@ -14,8 +14,7 @@
     ],
     "require": {
         "kartik-v/yii2-widgets": "*",
-        "kartik-v/yii2-popover-x": "*",
-        "kartik-v/bootstrap-editable": "*"
+        "kartik-v/yii2-popover-x": "*"
     },
     "autoload": {
         "psr-4": {
