@@ -43,7 +43,6 @@ to the ```require``` section of your `composer.json` file.
 
 ```php
 use kartik\editable\Editable;
-
 ```
 
 ## License
