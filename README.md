@@ -8,7 +8,7 @@ The extension uses the enhanced [yii2-popover-x](http://demos.krajee.com/popover
 ## Features  
 
 1. Set any readable markup on your view, DetailView, or GridView to be editable. (**Under Process:** The widgets `\kartik\grid\GridView` 
-   and `\kartik\detail\DetailView` widgets will be enhanced to use this extension in a very easy way.
+   and `\kartik\detail\DetailView` widgets will be enhanced to use this extension in a very easy way).
 2. Provides two display formats for setting up your editable content . 
    - **Link**: Convert the editable content as a clickable link for popover.
    - **Button**: Do not convert the editable content to a link, but instead display a button beside it for editing content.
