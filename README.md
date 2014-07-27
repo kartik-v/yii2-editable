@@ -31,6 +31,8 @@ for extension break if you do not wish to auto update dependencies.
 ## Demo
 You can see detailed [documentation and examples](http://demos.krajee.com/editable) on usage of the extension.
 
+### _Demo is under construction_
+
 ## Installation
 
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
