@@ -36,10 +36,14 @@
             self.valueIfNull = options.valueIfNull;
         },
         listen: function () {
-            var self = this, $form = self.$form, $btnSubmit = self.$btnSubmit,
-                $btnReset = self.$btnReset, $cont = $form.parent(),
-                $popover = self.$popover, $loading = self.$loading;
+            var self = this, $form = self.$form, $btnSubmit = self.$btnSubmit, $btnReset = self.$btnReset,
+                $cont = $form.parent(), $popover = self.$popover, $loading = self.$loading,
+                $el = self.$element, valueIfNull = self.valueIfNull, $parent = $el.closest('.field-' + $el.attr('id')),
+                $parent2 = $el.parent(), $message = $parent.find('.help-block'),
+                $hasEditable = $form.find('input[name="hasEditable"]'),
+                notActiveForm = isEmpty($parent.attr('class')) || isEmpty($message.attr('class'));
             $btnReset.on('click', function (ev) {
+                $hasEditable.val(0);
                 setTimeout(function () {
                     $form[0].reset();
                 }, 200);
@@ -47,23 +51,47 @@
             $form.on('reset', function (ev) {
                 setTimeout(function () {
                     $form.data('kvEditableSubmit', false);
+                    if (notActiveForm) {
+                        $parent2.find('.help-block').remove();
+                        $parent2.removeClass('has-error');
+                    } else {
+                        $parent.removeClass('has-error');
+                        $message.html(' ');
+                    }
                     $popover.popoverX('show');
                 }, 200);
             });
             $btnSubmit.on('click', function (ev) {
                 $cont.addClass('kv-editable-processing');
                 $loading.show();
+                $hasEditable.val(1);
                 setTimeout(function () {
                     $form.submit();
                 }, 200);
             });
             $form.on('submit', function (ev) {
-                var chkError = '', objActiveForm = self.$form.data('yiiActiveForm'), valueIfNull = self.valueIfNull;
+                var chkError = '', objActiveForm = self.$form.data('yiiActiveForm');
                 $.ajax({
                     type: $form.attr('method'),
                     url: $form.attr('action'),
                     data: $form.serialize(),
+                    dataType: 'json',
                     success: function (data) {
+                        var out = !isEmpty(data.output) ? data.output : self.$element.val();
+                        if (!isEmpty(data.message)) {
+                            if (notActiveForm) {
+                                $parent2.append('<div class="help-block"></div>');
+                                $parent2.find('.help-block').html(data.message);
+                                $parent2.addClass('has-error');
+                            } else {
+                                $parent.addClass('has-error');
+                                $message.html(data.message);
+                            }
+                            $loading.hide();
+                            $popover.popoverX('show');
+                            $cont.removeClass('kv-editable-processing');
+                            return;
+                        }
                         $form.find('.help-block').each(function () {
                             chkError = $(this).text();
                             if (!isEmpty(chkError.trim())) {
@@ -72,15 +100,23 @@
                             }
                         });
                         if (isEmpty(chkError.trim())) {
-                            var out = !isEmpty(data.output) ? data.output : self.$element.val();
+                            $loading.hide();
                             if (isEmpty(out)) {
                                 out = valueIfNull;
                             }
-                            $loading.hide();
-                            $popover.popoverX('hide');
-                            self.$value.html(out);
-                            $form.yiiActiveForm('destroy');
-                            $form.yiiActiveForm(objActiveForm.attributes, objActiveForm.settings);
+                            if (notActiveForm) {
+                                $parent2.find('.help-block').remove();
+                                $parent2.removeClass('has-error');
+                            } else {
+                                $parent.removeClass('has-error');
+                                $message.html(' ');
+                                $popover.popoverX('hide');
+                                self.$value.html(out);
+                                if (objActiveForm != undefined) {
+                                    $form.yiiActiveForm('destroy');
+                                    $form.yiiActiveForm(objActiveForm.attributes, objActiveForm.settings);
+                                }
+                            }
                         }
                         $cont.removeClass('kv-editable-processing');
                     }

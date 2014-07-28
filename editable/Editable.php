@@ -34,6 +34,7 @@ class Editable extends InputWidget
      * Edit input types
      */
     // input types
+    const INPUT_HIDDEN = 'hiddenInput';
     const INPUT_TEXT = 'textInput';
     const INPUT_PASSWORD = 'passwordInput';
     const INPUT_TEXTAREA = 'textArea';
@@ -227,6 +228,7 @@ class Editable extends InputWidget
     protected $_form;
 
     private static $_inputsList = [
+        self::INPUT_HIDDEN => 'hiddenInput',
         self::INPUT_TEXT => 'textInput',
         self::INPUT_PASSWORD => 'passwordInput',
         self::INPUT_TEXTAREA => 'textArea',
@@ -332,6 +334,7 @@ class Editable extends InputWidget
         if (in_array($this->inputType, static::$_dropDownInputs) && !isset($this->data)) {
             throw new InvalidConfigException("You must set the 'data' property for '{$this->inputType}'.");
         }
+        echo Html::hiddenInput('hasEditable', 0);
         if ($this->beforeInput !== null) {
             echo $this->beforeInput;
         }
@@ -393,9 +396,9 @@ class Editable extends InputWidget
                     ->input($type, $this->inputOptions)
                     ->label(false);
             }
-            return Html::activeInput($type, $this->name, $this->value, $this->inputOptions);
+            return '<div class="kv-editable-parent">' . Html::activeInput($type, $this->name, $this->value, $this->inputOptions) . '</div>';
         }
-        return Html::input($type, $this->name, $this->value, $this->inputOptions);
+        return '<div class="kv-editable-parent">' . Html::input($type, $this->name, $this->value, $this->inputOptions) . '</div>';
     }
 
     /**
@@ -426,11 +429,11 @@ class Editable extends InputWidget
             $this->options['value'] = $this->value;
             $checked = ArrayHelper::remove($this->inputOptions, 'checked', false);
         }
-        return $list ?
+        return '<div class="kv-editable-parent">' . ($list ?
             Html::$input($this->name, $this->value, $this->data, $this->inputOptions) :
             (($input == 'checkbox' || $input == 'radio') ?
                 Html::$input($this->name, $checked, $this->inputOptions) :
-                Html::$input($this->name, $this->value, $this->inputOptions));
+                Html::$input($this->name, $this->value, $this->inputOptions))) . '</div>';
     }
 
     /**
@@ -457,7 +460,7 @@ class Editable extends InputWidget
                 'value' => $this->value
             ]);
         }
-        return $class::widget($options);
+        return '<div class="kv-editable-parent">' . $class::widget($options) . '</div>';
     }
 
     /**
