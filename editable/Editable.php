@@ -175,7 +175,7 @@ class Editable extends InputWidget
      * property must be setup:
      * `class`: string, the class of the widget to be used.
      */
-    public $inputOptions = [];
+    public $options = [];
 
     /**
      * @var array the ActiveField configuration, if you are using with `model`.
@@ -221,6 +221,11 @@ class Editable extends InputWidget
      * @var array the generated configuration for the `kartik\popover\PopoverX` widget.
      */
     protected $_popoverOptions = [];
+
+    /**
+     * @var array the HTML attributes or options for the input/widget
+     */
+    protected $_inputOptions = [];
 
     /**
      * @var \yii\widgets\ActiveForm instance
@@ -345,7 +350,7 @@ class Editable extends InputWidget
         } elseif (in_array($this->inputType, static::$_inputWidgets)) {
             echo $this->renderWidget($this->inputType);
         } elseif ($this->inputType === self::INPUT_WIDGET) {
-            $class = ArrayHelper::remove($this->inputOptions, 'class', '');
+            $class = ArrayHelper::remove($this->_inputOptions, 'class', '');
             if (empty($class)) {
                 throw new InvalidConfigException("The widget class must be set in 'inputOptions[\"class\"]' when the 'type' is set to 'widget'.");
             }
@@ -388,17 +393,17 @@ class Editable extends InputWidget
      */
     protected function renderHtml5Input()
     {
-        $type = ArrayHelper::remove($this->inputOptions, 'type', 'text');
+        $type = ArrayHelper::remove($this->_inputOptions, 'type', 'text');
         if ($this->hasModel()) {
             if (isset($this->_form)) {
                 return $this->_form
                     ->field($this->model, $this->attribute, $this->inputFieldConfig)
-                    ->input($type, $this->inputOptions)
+                    ->input($type, $this->_inputOptions)
                     ->label(false);
             }
-            return '<div class="kv-editable-parent">' . Html::activeInput($type, $this->name, $this->value, $this->inputOptions) . '</div>';
+            return '<div class="kv-editable-parent">' . Html::activeInput($type, $this->name, $this->value, $this->_inputOptions) . '</div>';
         }
-        return '<div class="kv-editable-parent">' . Html::input($type, $this->name, $this->value, $this->inputOptions) . '</div>';
+        return '<div class="kv-editable-parent">' . Html::input($type, $this->name, $this->value, $this->_inputOptions) . '</div>';
     }
 
     /**
@@ -415,11 +420,11 @@ class Editable extends InputWidget
                 return $list ?
                     $this->_form
                         ->field($this->model, $this->attribute, $this->inputFieldConfig)
-                        ->$input($this->data, $this->inputOptions)
+                        ->$input($this->data, $this->_inputOptions)
                         ->label(false) :
                     $this->_form
                         ->field($this->model, $this->attribute, $this->inputFieldConfig)
-                        ->$input($this->inputOptions)
+                        ->$input($this->_inputOptions)
                         ->label(false);
             }
             $input = 'active' . ucfirst($this->inputType);
@@ -427,13 +432,13 @@ class Editable extends InputWidget
         $checked = false;
         if ($input == 'radio' || $input == 'checkbox') {
             $this->options['value'] = $this->value;
-            $checked = ArrayHelper::remove($this->inputOptions, 'checked', false);
+            $checked = ArrayHelper::remove($this->_inputOptions, 'checked', false);
         }
         return '<div class="kv-editable-parent">' . ($list ?
-            Html::$input($this->name, $this->value, $this->data, $this->inputOptions) :
+            Html::$input($this->name, $this->value, $this->data, $this->_inputOptions) :
             (($input == 'checkbox' || $input == 'radio') ?
-                Html::$input($this->name, $checked, $this->inputOptions) :
-                Html::$input($this->name, $this->value, $this->inputOptions))) . '</div>';
+                Html::$input($this->name, $checked, $this->_inputOptions) :
+                Html::$input($this->name, $this->value, $this->_inputOptions))) . '</div>';
     }
 
     /**
@@ -447,15 +452,15 @@ class Editable extends InputWidget
             if (isset($this->_form)) {
                 return $this->_form
                     ->field($this->model, $this->attribute, $this->inputFieldConfig)
-                    ->widget($class, $this->inputOptions)
+                    ->widget($class, $this->_inputOptions)
                     ->label(false);
             }
-            $options = ArrayHelper::merge($this->inputOptions, [
+            $options = ArrayHelper::merge($this->_inputOptions, [
                 'model' => $this->model,
                 'attribute' => $this->attribute
             ]);
         } else {
-            $options = ArrayHelper::merge($this->inputOptions, [
+            $options = ArrayHelper::merge($this->_inputOptions, [
                 'name' => $this->name,
                 'value' => $this->value
             ]);
@@ -469,8 +474,9 @@ class Editable extends InputWidget
      */
     protected function initOptions()
     {
+        $this->_inputOptions = $this->options;
+        $this->options = ['id' => $this->options['id']];
         $this->containerOptions['id'] = $this->options['id'] . '-cont';
-        $this->inputOptions['id'] = $this->options['id'];
         if (!isset($this->displayValue)) {
             $this->displayValue = $this->hasModel() ? $this->model[$this->attribute] : $this->value;
         }
@@ -544,7 +550,9 @@ class Editable extends InputWidget
         EditableAsset::register($view);
         $this->pluginOptions = [
             'containerId' => $this->containerOptions['id'],
-            'defaultValue' => $this->valueIfNull
+            'defaultValue' => $this->valueIfNull,
+            'placement' => $this->placement,
+            'target' => $this->format == self::FORMAT_BUTTON ? '.kv-editable-button' : '.kv-editable-link'
         ];
         $this->registerPlugin('editable');
     }
