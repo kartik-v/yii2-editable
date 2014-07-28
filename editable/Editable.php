@@ -508,7 +508,7 @@ class Editable extends InputWidget
             $this->_popoverOptions['header'] = $this->header;
         }
         $this->_popoverOptions['footer'] = $this->renderFooter();
-        $this->_popoverOptions['options']['class'] = 'kv-editable-popover';
+        $this->_popoverOptions['options']['class'] = 'kv-editable-popover skip-export';
         if ($this->format == self::FORMAT_BUTTON) {
             if (empty($this->editableButtonOptions['label'])) {
                 $this->editableButtonOptions['label'] = '<i class="glyphicon glyphicon-pencil"></i>';
