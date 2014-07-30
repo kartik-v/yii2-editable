@@ -253,7 +253,6 @@ class Editable extends InputWidget
         self::INPUT_TYPEAHEAD => '\kartik\widgets\Typeahead',
         self::INPUT_SWITCH => '\kartik\widgets\SwitchInput',
         self::INPUT_SPIN => '\kartik\widgets\TouchSpin',
-        self::INPUT_STAR => '\kartik\widgets\StarRating',
         self::INPUT_DATE => '\kartik\widgets\DatePicker',
         self::INPUT_TIME => '\kartik\widgets\TimePicker',
         self::INPUT_DATETIME => '\kartik\widgets\DateTimePicker',
