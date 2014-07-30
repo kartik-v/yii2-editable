@@ -157,7 +157,7 @@ class Editable extends InputWidget
     public $formClass = '\kartik\widgets\ActiveForm';
 
     /**
-     * @var array the options for the ActiveForm widget class selected in `formClass`.
+     * @var array the configuration options for the ActiveForm widget class selected in `formClass`.
      */
     public $formOptions = [];
 
@@ -201,14 +201,14 @@ class Editable extends InputWidget
     /**
      * @var array the HTML attributes for the form submit button. The following special property
      * is recognized:
-     * - label: string, the label of the button. Defaults to `<i class="glyphicon glyphicon-ok"></i> `.
+     * - label: string, the label of the button. Defaults to `<i class="glyphicon glyphicon-save"></i> Apply`.
      */
     public $submitButton = ['class' => 'btn btn-sm btn-primary'];
 
     /**
      * @var array the HTML attributes for the form reset button. The following special property
      * is recognized:
-     * - label: string, the label of the button. Defaults to `<i class="glyphicon glyphicon-ban-circle"></i> `.
+     * - label: string, the label of the button. Defaults to `<i class="glyphicon glyphicon-ban-repeat"></i> Reset`.
      */
     public $resetButton = ['class' => 'btn btn-sm btn-default'];
 
