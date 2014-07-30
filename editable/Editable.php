@@ -54,7 +54,6 @@ class Editable extends InputWidget
     const INPUT_TYPEAHEAD = '\kartik\widgets\Typeahead';
     const INPUT_SWITCH = '\kartik\widgets\SwitchInput';
     const INPUT_SPIN = '\kartik\widgets\TouchSpin';
-    const INPUT_STAR = '\kartik\widgets\StarRating';
     const INPUT_DATE = '\kartik\widgets\DatePicker';
     const INPUT_TIME = '\kartik\widgets\TimePicker';
     const INPUT_DATETIME = '\kartik\widgets\DateTimePicker';
@@ -78,7 +77,7 @@ class Editable extends InputWidget
 
     /**
      * @var array the HTML attributes for the editable button to be displayed when the format
-     * has been set to 'button'. The following additional options are recognized:
+     * has been set to 'button':
      * - label: string, the editable button label. This is not HTML encoded.
      *   Defaults to <i class="glyphicon glyphicon-pencil"></i>
      */
@@ -157,7 +156,7 @@ class Editable extends InputWidget
     public $formClass = '\kartik\widgets\ActiveForm';
 
     /**
-     * @var array the configuration options for the ActiveForm widget class selected in `formClass`.
+     * @var array the options for the ActiveForm widget class selected in `formClass`.
      */
     public $formOptions = [];
 
@@ -201,14 +200,14 @@ class Editable extends InputWidget
     /**
      * @var array the HTML attributes for the form submit button. The following special property
      * is recognized:
-     * - label: string, the label of the button. Defaults to `<i class="glyphicon glyphicon-save"></i> Apply`.
+     * - label: string, the label of the button. Defaults to `<i class="glyphicon glyphicon-ok"></i> `.
      */
     public $submitButton = ['class' => 'btn btn-sm btn-primary'];
 
     /**
      * @var array the HTML attributes for the form reset button. The following special property
      * is recognized:
-     * - label: string, the label of the button. Defaults to `<i class="glyphicon glyphicon-ban-repeat"></i> Reset`.
+     * - label: string, the label of the button. Defaults to `<i class="glyphicon glyphicon-ban-circle"></i> `.
      */
     public $resetButton = ['class' => 'btn btn-sm btn-default'];
 
