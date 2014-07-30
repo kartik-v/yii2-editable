@@ -78,7 +78,7 @@ class Editable extends InputWidget
 
     /**
      * @var array the HTML attributes for the editable button to be displayed when the format
-     * has been set to 'button':
+     * has been set to 'button'. The following additional options are recognized:
      * - label: string, the editable button label. This is not HTML encoded.
      *   Defaults to <i class="glyphicon glyphicon-pencil"></i>
      */
