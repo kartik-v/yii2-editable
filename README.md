@@ -22,7 +22,7 @@ The extension uses the enhanced [yii2-popover-x](http://demos.krajee.com/popover
    uses the enhanced [bootstrap-popover-x](http://plugins.krajee.com/popover-x) by Krajee.
 8. Easily extend the default editable field by adding more form fields for editing before or after the generated editable input.
 9. Configure your own display value irrespective of the value stored internally.
-10. Configurable css styles and labels for rendering according to your application or theme.
+10. Configurable css styles and labels for rendering editable content according to your application or theme.
    
 > NOTE: This extension depends on the [kartik-v/yii2-popover-x](https://github.com/kartik-v/yii2-popover-x) extension which in turn depends on the 
 [kartik-v/yii2-widgets](https://github.com/kartik-v/yii2-widgets) extension and [yiisoft/yii2-bootstrap](https://github.com/yiisoft/yii2/tree/master/extensions/bootstrap) extension. Check the 
