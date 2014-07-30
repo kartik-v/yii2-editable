@@ -505,7 +505,7 @@ class Editable extends InputWidget
             $this->_popoverOptions['header'] = $this->preHeader .
                 ($this->hasModel() ? $this->model->getAttributeLabel($this->attribute) : '');
         } else {
-            $this->_popoverOptions['header'] = $this->header;
+            $this->_popoverOptions['header'] = $this->preHeader . $this->header;
         }
         $this->_popoverOptions['footer'] = $this->renderFooter();
         $this->_popoverOptions['options']['class'] = 'kv-editable-popover skip-export';
