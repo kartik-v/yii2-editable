@@ -104,6 +104,12 @@
                     url: $form.attr('action'),
                     data: $form.serialize(),
                     dataType: 'json',
+                    /*
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert(xhr.status);
+                        alert(thrownError);
+                    },
+                    */
                     success: function (data) {
                         var out = !isEmpty(data.output) ? data.output : self.$element.val();
                         $popover.popoverX('refreshPosition');
@@ -130,6 +136,7 @@
                                 return;
                             } 
                         });
+                        
                         if (isEmpty(chkError.trim())) {
                             $loading.hide();
                             if (isEmpty(out)) {
@@ -138,6 +145,9 @@
                             if (notActiveForm) {
                                 $parent2.find('.help-block').remove();
                                 $parent2.removeClass('has-error');
+                                $message.html('');
+                                $popover.popoverX('hide');
+                                self.$value.html(out);
                             } else {
                                 $parent.removeClass('has-error');
                                 $message.html('');
