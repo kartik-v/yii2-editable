@@ -7,7 +7,7 @@ The extension uses the enhanced [yii2-popover-x](http://demos.krajee.com/popover
 
 ## Features  
 
-1. Set any readable markup on your view, DetailView, or GridView to be editable.  Refer the [EditableColumn](http://demos.krajee.com/grid#editable-column) details in kartik\grid\GridView for using an editable column in your grid.
+1. Set any readable markup on your view, DetailView, or GridView to be editable. Refer the [EditableColumn](http://demos.krajee.com/grid#editable-column) details in kartik\grid\GridView for using an editable column in your grid.
 2. Provides two display formats for setting up your editable content . 
    - **Link**: Convert the editable content as a clickable link for popover.
    - **Button**: Do not convert the editable content to a link, but rather display a button beside it for editing content.
