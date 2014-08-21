@@ -5,6 +5,8 @@ Easily set any displayed content as editable in Yii Framework 2.0. This is an en
 The extension uses the enhanced [yii2-popover-x](http://demos.krajee.com/popover-x) extension as a popover modal for editing. This extension does not use any external jQuery plugin like X-Editable, instead it uses its own lean and extensible
  jQuery editable plugin - that elaborately reuses functionality available within Yii Framework 2.0.
 
+> NOTE: The latest version of the extension v1.1.0 has been released. Refer the [CHANGE LOG](https://github.com/kartik-v/yii2-editable/blob/master/CHANGE.md) for details.
+
 ## Features  
 
 1. Set any readable markup on your view, DetailView, or GridView to be editable. Refer the [EditableColumn](http://demos.krajee.com/grid#editable-column) details in kartik\grid\GridView for using an editable column in your grid.
@@ -22,6 +24,7 @@ The extension uses the enhanced [yii2-popover-x](http://demos.krajee.com/popover
 8. Easily extend the default editable field by adding more form fields for editing before or after the generated editable input.
 9. Configure your own display value irrespective of the value stored internally.
 10. Configurable css styles and labels for rendering editable content according to your application or theme.
+11. Ability to render and reinitialize automatically the widget via Pjax.
    
 > NOTE: This extension depends on the [kartik-v/yii2-popover-x](https://github.com/kartik-v/yii2-popover-x) extension which in turn depends on the 
 [kartik-v/yii2-widgets](https://github.com/kartik-v/yii2-widgets) extension and [yiisoft/yii2-bootstrap](https://github.com/yiisoft/yii2/tree/master/extensions/bootstrap) extension. Check the 

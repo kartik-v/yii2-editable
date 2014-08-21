@@ -3,14 +3,16 @@
 /**
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014
  * @package yii2-editable
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 namespace kartik\editable;
 
 use Yii;
+use yii\web\View;
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;
+use yii\helpers\Json;
 use yii\helpers\ArrayHelper;
 use kartik\widgets\InputWidget;
 use kartik\popover\PopoverX;
@@ -66,6 +68,14 @@ class Editable extends InputWidget
     const INPUT_SLIDER = '\kartik\slider\Slider';
     const INPUT_MONEY = '\kartik\money\MaskMoney';
     const INPUT_CHECKBOX_X = '\kartik\checkbox\CheckboxX';
+
+    /**
+     * @var string the identifier for the PJAX widget container if the editable
+     * widget is to be rendered inside a PJAX container. This will ensure the
+     * PopoverX plugin is initialized correctly after a PJAX request is completed.
+     * If this is not set, no re-initialization will be done for pjax.
+     */
+    public $pjaxContainerId;
 
     /**
      * @var the display format for the editable. Accepts one of the following values.
@@ -282,11 +292,14 @@ class Editable extends InputWidget
         parent::init();
         $this->initI18N();
         $this->initOptions();
+        $this->_popoverOptions['options']['id'] = $this->options['id'] . '-popover';
+        $this->_popoverOptions['toggleButton']['id'] = $this->options['id'] . '-targ';
         $this->registerAssets();
         echo Html::beginTag('div', $this->containerOptions);
         if ($this->format == self::FORMAT_BUTTON) {
             echo Html::tag('div', $this->displayValue, $this->editableValueOptions);
         }
+
         PopoverX::begin($this->_popoverOptions);
 
         if (!empty($this->formClass) && !class_exists($this->formClass)) {
@@ -517,7 +530,6 @@ class Editable extends InputWidget
             $this->_popoverOptions['toggleButton'] = $this->editableValueOptions;
             $this->_popoverOptions['toggleButton']['label'] = $this->displayValue;
         }
-        $this->_popoverOptions['toggleButton']['id'] = $this->options['id'] . '-targ';
         if (!empty($this->footer)) {
             Html::addCssClass($this->_popoverOptions['options'], 'has-footer');
         }
@@ -553,6 +565,14 @@ class Editable extends InputWidget
             'target' => $this->format == self::FORMAT_BUTTON ? '.kv-editable-button' : '.kv-editable-link'
         ];
         $this->registerPlugin('editable');
+        if (!empty($this->pjaxContainerId)) {
+            EditablePjaxAsset::register($view);
+            $toggleButton = $this->_popoverOptions['toggleButton']['id'];
+            $initPjaxVar = 'kvEdPjax_' . str_replace('-', '_', $this->_popoverOptions['options']['id']);
+            $view->registerJs("var {$initPjaxVar} = false;", View::POS_HEAD);
+            $js = "initEditablePjax('{$this->pjaxContainerId}', '{$toggleButton}', '{$initPjaxVar}');";
+            $view->registerJs($js);
+        }
     }
 
 }

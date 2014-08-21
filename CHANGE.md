@@ -1,3 +1,9 @@
+version 1.1.0
+=============
+**Date:** 21-Aug-2014
+
+1. enh #2: Enhancements to the widget for rendering and processing via Pjax.
+   
 version 1.0.0
 =============
 **Date:** 27-Jul-2014

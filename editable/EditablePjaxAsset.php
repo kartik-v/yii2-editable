@@ -12,21 +12,20 @@ use Yii;
 use kartik\widgets\AssetBundle;
 
 /**
- * Asset bundle for Editable widget. Includes assets from
- * bootstrap-popover-x plugin by Krajee.
+ * Asset bundle for Pjax processing of Editable widget to reinitialize 
+ * bootstrap-popover-x on pjax completion
  *
  * @see http://plugins.krajee.com/popover-x
  * @see http://github.com/kartik-v/bootstrap-popover-x
  * @author Kartik Visweswaran <kartikv2@gmail.com>
  * @since 1.0
  */
-class EditableAsset extends AssetBundle
+class EditablePjaxAsset extends AssetBundle
 {
     public function init()
     {
         $this->setSourcePath('@vendor/kartik-v/yii2-editable/assets');
-        $this->setupAssets('css', ['css/editable']);
-        $this->setupAssets('js', ['js/editable']);
+        $this->setupAssets('js', ['js/editable-pjax']);
         parent::init();
     }
 }
