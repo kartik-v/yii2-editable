@@ -12,7 +12,6 @@
  */
 var initEditablePjax = function (pjaxContainer, toggleButton, initPjaxVar) {
     $('#' + pjaxContainer).on("pjax:complete", function () {
-    setTimeout(function() {
         if (window[initPjaxVar] !== true) {
             $('#' + toggleButton).on('click', function (e) {
                 e.preventDefault();
@@ -36,6 +35,5 @@ var initEditablePjax = function (pjaxContainer, toggleButton, initPjaxVar) {
             });
             window[initPjaxVar] = true;
         }
-    }, 800);
     });
 };
