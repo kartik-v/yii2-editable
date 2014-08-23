@@ -66,11 +66,11 @@
                 $parent2 = $el.parent(), $message = $parent.find('.help-block'),
                 $hasEditable = $form.find('input[name="hasEditable"]'), 
                 notActiveForm = isEmpty($parent.attr('class')) || isEmpty($message.attr('class'));
-            $btnReset.on('click', function (ev) {
-                $hasEditable.val(0);
-                setTimeout(function () {
-                    $form[0].reset();
-                }, 200);
+            $form.on('submit', function(ev) {
+                ev.preventDefault();
+            });
+            $form.on('keyup', function (ev) {
+                ev.which == 13 && $btnSubmit.trigger('click');
             });
             $form.on('reset', function (ev) {
                 setTimeout(function () {
@@ -87,6 +87,12 @@
             });
             $form.find('input, select').on('change', function(ev) {
                 $popover.popoverX('refreshPosition');
+            });
+            $btnReset.on('click', function (ev) {
+                $hasEditable.val(0);
+                setTimeout(function () {
+                    $form[0].reset();
+                }, 200);
             });
             $btnSubmit.on('click', function (ev) {
                 $cont.addClass('kv-editable-processing');
