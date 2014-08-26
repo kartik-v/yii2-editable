@@ -3,7 +3,7 @@
 /**
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014
  * @package yii2-editable
- * @version 1.1.0
+ * @version 1.2.0
  */
 
 namespace kartik\editable;
@@ -146,6 +146,16 @@ class Editable extends InputWidget
      */
     public $displayValue;
 
+    /**
+     * @var array the configuration to auto-calculate display value, based on the 
+     * value of the editable input. This should be a single dimensional array whose 
+     * keys must match the input value, and the array values must be the description
+     * to be displayed. For example, to display user friendly boolean values, you could
+     * configure this as `[0 => 'Inactive', 1 => 'Active']`. If this is set, it will 
+     * override any value set in `displayValue`.
+     */
+    public $displayValueConfig = [];
+    
     /**
      * @var string the value to display if the displayValue is null.
      * Defaults to '<em>(not set)</em>'.
@@ -487,14 +497,18 @@ class Editable extends InputWidget
         $this->_inputOptions = $this->options;
         $this->options = ['id' => $this->options['id']];
         $this->containerOptions['id'] = $this->options['id'] . '-cont';
+        $value = $this->hasModel() ? Html::getAttributeValue($this->model, $this->attribute) : $this->value;
         if (!isset($this->displayValue)) {
-            $this->displayValue = $this->hasModel() ? $this->model[$this->attribute] : $this->value;
+            $this->displayValue = $value;
         }
         if ($this->valueIfNull === null || $this->valueIfNull === '') {
             $this->valueIfNull = '<em>' . Yii::t('kveditable', '(not set)') . '</em>';
         }
         if ($this->displayValue === null || $this->displayValue === '') {
             $this->displayValue = $this->valueIfNull;
+        }
+        if (is_array($this->displayValueConfig) && !empty($this->displayValueConfig[$value])) {
+            $this->displayValue = $this->displayValueConfig[$value];
         }
         Html::addCssClass($this->containerOptions, 'kv-editable');
         Html::addCssClass($this->contentOptions, 'kv-editable-content');
@@ -561,7 +575,8 @@ class Editable extends InputWidget
             'containerId' => $this->containerOptions['id'],
             'defaultValue' => $this->valueIfNull,
             'placement' => $this->placement,
-            'target' => $this->format == self::FORMAT_BUTTON ? '.kv-editable-button' : '.kv-editable-link'
+            'target' => $this->format == self::FORMAT_BUTTON ? '.kv-editable-button' : '.kv-editable-link',
+            'displayValueConfig' => $this->displayValueConfig
         ];
         $this->registerPlugin('editable');
         if (!empty($this->pjaxContainerId)) {

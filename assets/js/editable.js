@@ -1,7 +1,7 @@
 /*!
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014
  * @package yii2-editable
- * @version 1.1.0
+ * @version 1.2.0
  *
  * Editable Extension jQuery plugin
  *
@@ -14,6 +14,10 @@
     var isEmpty = function (value, trim) {
         return value === null || value === undefined || value == []
             || value === '' || trim && $.trim(value) === '';
+    };
+    var isArrayEmpty = function (array) {
+        return typeof array != "undefined" && array != null 
+            && array.length != null && array.length > 0;
     };
 
     var Editable = function (element, options) {
@@ -36,6 +40,7 @@
             self.$target = self.$container.find(options.target);
             self.valueIfNull = options.valueIfNull;
             self.placement = options.placement;
+            self.displayValueConfig = options.displayValueConfig;
         },
         refreshPosition: function() {
             var self = this, $dialog = self.$popover, placement = self.placement, $target = self.$target,
@@ -62,8 +67,8 @@
         listen: function () {
             var self = this, $form = self.$form, $btnSubmit = self.$btnSubmit, $btnReset = self.$btnReset,
                 $cont = $form.parent(), $popover = self.$popover, $loading = self.$loading, $el = self.$element, 
-                valueIfNull = self.valueIfNull, $parent = $el.closest('.field-' + $el.attr('id')),
-                $parent2 = $el.parent(), $message = $parent.find('.help-block'),
+                valueIfNull = self.valueIfNull, $parent = $el.closest('.field-' + $el.attr('id')), $parent2 = $el.parent(), 
+                $message = $parent.find('.help-block'), displayValueConfig = self.displayValueConfig,
                 $hasEditable = $form.find('input[name="hasEditable"]'), 
                 notActiveForm = isEmpty($parent.attr('class')) || isEmpty($message.attr('class'));
             $form.on('submit', function(ev) {
@@ -112,18 +117,19 @@
                     dataType: 'json',
                     success: function (data) {
                         var out = !isEmpty(data.output) ? data.output : self.$element.val(),
-                            $msgBlock = $parent2.find('.help-block');
+                            $msgBlock = $parent2.find('.kv-help-block');
                         $popover.popoverX('refreshPosition');
                         if (!isEmpty(data.message)) {
                             if (notActiveForm) {
                                 if (isEmpty($msgBlock.attr('class'))) {
-                                    $msgBlock = $(document.createElement("div")).attr({class: 'help-block'}).appendTo($parent2);
+                                    $msgBlock = $(document.createElement("div")).attr({class: 'help-block kv-help-block'}).appendTo($parent2);
                                 }
                                 $msgBlock.html(data.message);
                                 $parent2.addClass('has-error');
                             } else {
                                 $parent.addClass('has-error');
                                 $message.html(data.message);
+                                $message.removeClass('kv-help-block').addClass('kv-help-block');
                             }
                             $loading.hide();
                             $cont.removeClass('kv-editable-processing');
@@ -146,6 +152,8 @@
                             $loading.hide();
                             if (isEmpty(out)) {
                                 out = valueIfNull;
+                            } else if (!isArrayEmpty(displayValueConfig) && (out in displayValueConfig)) {
+                                out = displayValueConfig[out];
                             }
                             if (notActiveForm) {
                                 $parent2.find('.help-block').remove();
@@ -193,7 +201,8 @@
     $.fn.editable.defaults = {
         containerId: '',
         valueIfNull: '<em>(not set)</em>',
-        placement: 'right'
+        placement: 'right',
+        displayValueConfig: {}
     };
 
 })(window.jQuery);

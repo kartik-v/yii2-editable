@@ -1,3 +1,11 @@
+version 1.2.0
+=============
+**Date:** 26-Aug-2014
+
+1. enh #4: Better fix to reinitialize form error blocks for each ajax call.
+2. enh #6: Added `displayValueConfig` to auto calculate display value.
+
+
 version 1.1.0
 =============
 **Date:** 21-Aug-2014
