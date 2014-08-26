@@ -110,17 +110,11 @@
                     url: $form.attr('action'),
                     data: $form.serialize(),
                     dataType: 'json',
-                    /*
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        alert(xhr.status);
-                        alert(thrownError);
-                    },
-                    */
                     success: function (data) {
-                        var out = !isEmpty(data.output) ? data.output : self.$element.val();
+                        var out = !isEmpty(data.output) ? data.output : self.$element.val(),
+                            $msgBlock = $parent2.find('.help-block');
                         $popover.popoverX('refreshPosition');
                         if (!isEmpty(data.message)) {
-                            var $msgBlock = $parent2.find('.help-block');
                             if (notActiveForm) {
                                 if (isEmpty($msgBlock.attr('class'))) {
                                     $msgBlock = $(document.createElement("div")).attr({class: 'help-block'}).appendTo($parent2);
@@ -134,6 +128,11 @@
                             $loading.hide();
                             $cont.removeClass('kv-editable-processing');
                             return;
+                        } else if (!isEmpty($msgBlock.attr('class'))) {
+                            $parent.removeClass('has-error');
+                            $msgBlock.html('');
+                            $msgBlock.hide();
+                            $message.html('');
                         }
                         $form.find('.help-block').each(function () {
                             chkError = $(this).text();
