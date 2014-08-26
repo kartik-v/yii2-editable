@@ -12,7 +12,6 @@ use Yii;
 use yii\web\View;
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;
-use yii\helpers\Json;
 use yii\helpers\ArrayHelper;
 use kartik\widgets\InputWidget;
 use kartik\popover\PopoverX;
@@ -78,7 +77,7 @@ class Editable extends InputWidget
     public $pjaxContainerId;
 
     /**
-     * @var the display format for the editable. Accepts one of the following values.
+     * @var string the display format for the editable. Accepts one of the following values.
      * - 'link' or [[Editable::FORMAT_LINK]]: will convert the text to a clickable editable link.
      * - 'button' or [[Editable::FORMAT_BUTTON]]: will display a separate button beside the text.
      * Defaults to [[Editable::FORMAT_LINK]] if you do not set it as [[Editable::FORMAT_BUTTON]].
