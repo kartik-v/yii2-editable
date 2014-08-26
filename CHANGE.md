@@ -3,6 +3,8 @@ version 1.1.0
 **Date:** 21-Aug-2014
 
 1. enh #2: Enhancements to the widget for rendering and processing via Pjax.
+2. enh #4: Reinitialize form error blocks for each ajax call.
+3. enh #5: More correct valueIfNull and displayValue null validation check.
    
 version 1.0.0
 =============
