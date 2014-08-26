@@ -493,7 +493,7 @@ class Editable extends InputWidget
         if ($this->valueIfNull === null || $this->valueIfNull === '') {
             $this->valueIfNull = '<em>' . Yii::t('kveditable', '(not set)') . '</em>';
         }
-        if (empty($this->displayValue)) {
+        if ($this->displayValue === null || $this->displayValue === '') {
             $this->displayValue = $this->valueIfNull;
         }
         Html::addCssClass($this->containerOptions, 'kv-editable');
