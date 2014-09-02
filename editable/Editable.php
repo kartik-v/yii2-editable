@@ -204,13 +204,12 @@ class Editable extends InputWidget
      * @var string|Closure the content to be placed before the rendered input. If not set as a string,
      * this can be passed as a callback function of the following signature:
      * ```
-     * function ($form, $model, $widget) {
-     *    // echo $form->field($model, 'attrib');
+     * function ($form, $widget) {
+     *    // echo $form->field($widget->model, 'attrib');
      * }
      * ```
      * where:
      * - $form mixed is the active form instance for the editable form
-     * - $model mixed is the model instance as set in the `model` property
      * - $widget mixed is the current editable widget instance
      */
     public $beforeInput;
@@ -219,13 +218,12 @@ class Editable extends InputWidget
      * @var string|Closure the content to be placed after the rendered input. If not set as a string,
      * this can be passed as a callback function of the following signature:
      * ```
-     * function ($form, $model, $widget) {
-     *    // echo $form->field($model, 'attrib');
+     * function ($form, $widget) {
+     *    // echo $form->field($widget->model, 'attrib');
      * }
      * ```
      * where:
      * - $form mixed is the active form instance for the editable form
-     * - $model mixed is the model instance as set in the `model` property
      * - $widget mixed is the current editable widget instance
      */
     public $afterInput;
@@ -384,7 +382,7 @@ class Editable extends InputWidget
             if (is_string($this->beforeInput)) {
                 echo $this->beforeInput;
             } else {
-                echo call_user_func($this->beforeInput, $this->_form, $this->model, $this);
+                echo call_user_func($this->beforeInput, $this->_form, $this);
             }
         }
         if ($this->inputType === self::INPUT_HTML5_INPUT) {
@@ -404,7 +402,7 @@ class Editable extends InputWidget
             if (is_string($this->afterInput)) {
                 echo $this->afterInput;
             } else {
-                echo call_user_func($this->afterInput, $this->_form, $this->model, $this);
+                echo call_user_func($this->afterInput, $this->_form, $this);
             }
         }
     }
