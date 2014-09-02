@@ -3,7 +3,7 @@
 /**
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014
  * @package yii2-editable
- * @version 1.2.0
+ * @version 1.3.0
  */
 
 namespace kartik\editable;
@@ -201,12 +201,32 @@ class Editable extends InputWidget
     public $inputFieldConfig = [];
 
     /**
-     * @var string the content to be placed before the rendered input.
+     * @var string|Closure the content to be placed before the rendered input. If not set as a string,
+     * this can be passed as a callback function of the following signature:
+     * ```
+     * function ($form, $model, $widget) {
+     *    // echo $form->field($model, 'attrib');
+     * }
+     * ```
+     * where:
+     * - $model mixed is the model instance as set in the `model` property
+     * - $form mixed is the active form instance for the editable form
+     * - $widget mixed is the current editable widget instance
      */
     public $beforeInput;
 
     /**
-     * @var string the content to be placed after the rendered input.
+     * @var string|Closure the content to be placed after the rendered input. If not set as a string,
+     * this can be passed as a callback function of the following signature:
+     * ```
+     * function ($form, $model, $widget) {
+     *    // echo $form->field($model, 'attrib');
+     * }
+     * ```
+     * where:
+     * - $model mixed is the model instance as set in the `model` property
+     * - $form mixed is the active form instance for the editable form
+     * - $widget mixed is the current editable widget instance
      */
     public $afterInput;
 
@@ -361,7 +381,11 @@ class Editable extends InputWidget
         }
         echo Html::hiddenInput('hasEditable', 0);
         if ($this->beforeInput !== null) {
-            echo $this->beforeInput;
+            if (is_string($this->beforeInput)) {
+                echo $this->beforeInput;
+            } else {
+                echo call_user_func($this->beforeInput, $this->_form, $this->model, $this);
+            }
         }
         if ($this->inputType === self::INPUT_HTML5_INPUT) {
             echo $this->renderHtml5Input();
@@ -377,7 +401,11 @@ class Editable extends InputWidget
             echo $this->renderWidget($class);
         }
         if ($this->afterInput !== null) {
-            echo $this->afterInput;
+            if (is_string($this->afterInput)) {
+                echo $this->afterInput;
+            } else {
+                echo call_user_func($this->afterInput, $this->_form, $this->model, $this);
+            }
         }
     }
 

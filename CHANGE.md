@@ -1,3 +1,9 @@
+version 1.3.0
+=============
+**Date:** 02-Sep-2014
+
+1. enh #8: Enhance `beforeInput` & `afterInput` to be passed as callback functions.
+
 version 1.2.0
 =============
 **Date:** 26-Aug-2014
