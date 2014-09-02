@@ -209,8 +209,8 @@ class Editable extends InputWidget
      * }
      * ```
      * where:
-     * - $model mixed is the model instance as set in the `model` property
      * - $form mixed is the active form instance for the editable form
+     * - $model mixed is the model instance as set in the `model` property
      * - $widget mixed is the current editable widget instance
      */
     public $beforeInput;
@@ -224,8 +224,8 @@ class Editable extends InputWidget
      * }
      * ```
      * where:
-     * - $model mixed is the model instance as set in the `model` property
      * - $form mixed is the active form instance for the editable form
+     * - $model mixed is the model instance as set in the `model` property
      * - $widget mixed is the current editable widget instance
      */
     public $afterInput;
