@@ -1,7 +1,7 @@
 /*!
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014
  * @package yii2-editable
- * @version 1.2.0
+ * @version 1.3.0
  *
  * Editable Extension jQuery plugin
  *
@@ -92,12 +92,14 @@
             });
             $form.find('input, select').on('change', function(ev) {
                 $popover.popoverX('refreshPosition');
+                $el.trigger('editableChange', [$el.val()]);
             });
             $btnReset.on('click', function (ev) {
                 $hasEditable.val(0);
                 setTimeout(function () {
                     $form[0].reset();
                 }, 200);
+                $el.trigger('editableReset');
             });
             $btnSubmit.on('click', function (ev) {
                 $cont.addClass('kv-editable-processing');
@@ -133,6 +135,7 @@
                             }
                             $loading.hide();
                             $cont.removeClass('kv-editable-processing');
+                            $el.trigger('editableError', [$el.val()]);
                             return;
                         } else if (!isEmpty($msgBlock.attr('class'))) {
                             $parent.removeClass('has-error');
@@ -171,10 +174,14 @@
                                     $form.yiiActiveForm(objActiveForm.attributes, objActiveForm.settings);
                                 }
                             }
+                            $el.trigger('editableSuccess', [$el.val()]);
+                        } else {
+                            $el.trigger('editableError', [$el.val()]);
                         }
                         $cont.removeClass('kv-editable-processing');
-                    }
+                    } 
                 });
+                $el.trigger('editableSubmit', [$el.val()]);
             });
         }
     };

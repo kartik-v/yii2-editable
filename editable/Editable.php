@@ -520,8 +520,9 @@ class Editable extends InputWidget
      */
     protected function initOptions()
     {
+        $css = empty($this->options['class']) ? ' form-control' : '';
+        Html::addCssClass($this->options, 'kv-editable-input' . $css);
         $this->_inputOptions = $this->options;
-        $this->options = ['id' => $this->options['id']];
         $this->containerOptions['id'] = $this->options['id'] . '-cont';
         $value = $this->hasModel() ? Html::getAttributeValue($this->model, $this->attribute) : $this->value;
         if (!isset($this->displayValue)) {
