@@ -68,6 +68,7 @@ class Editable extends InputWidget
     const INPUT_MONEY = '\kartik\money\MaskMoney';
     const INPUT_CHECKBOX_X = '\kartik\checkbox\CheckboxX';
 
+	
     /**
      * @var string the identifier for the PJAX widget container if the editable
      * widget is to be rendered inside a PJAX container. This will ensure the
@@ -184,14 +185,18 @@ class Editable extends InputWidget
      * This must be one of the [[Editable::TYPE]] constants.
      */
     public $inputType = self::INPUT_TEXT;
-
+    
+    /**
+     * @var string any custom widget class to use. Will only be used if the `inputType` is 
+	 * set to [[Editable::INPUT_WIDGET]]
+     */
+    public $widgetClass;
+	
     /**
      * @var array the options for the input. If the inputType is one of the HTML inputs, this will
      * capture the HTML attributes. If the `inputType` is set to [[Editable::INPUT_WIDGET]]
      * or set to an input widget from the `\kartik\` namespace, then this will capture the widget
-     * options. For an `inputType` set as [[Editable::INPUT_WIDGET]], the following additional
-     * property must be setup:
-     * `class`: string, the class of the widget to be used.
+     * options. 
      */
     public $options = [];
 
@@ -311,12 +316,26 @@ class Editable extends InputWidget
         self::INPUT_RADIO_LIST => 'radioList',
     ];
 
+	
     /**
      * Initializes the widget
+	 * @throws InvalidConfigException
      */
     public function init()
     {
         parent::init();
+        if (empty($this->inputType)) {
+            throw new InvalidConfigException("The 'type' of editable input must be set.");
+        }
+        if (!in_array($this->inputType, static::$_inputsList) && !in_array($this->inputType, static::$_inputWidgets)) {
+            throw new InvalidConfigException("Invalid input type '{$this->inputType}'.");
+        }
+		if ($this->inputType === self::INPUT_WIDGET && empty($this->widgetClass)) {
+			throw new InvalidConfigException("The 'widgetClass' must be set when the 'inputType' is set to 'widget'.");
+        }
+        if (in_array($this->inputType, static::$_dropDownInputs) && !isset($this->data)) {
+            throw new InvalidConfigException("You must set the 'data' property for '{$this->inputType}'.");
+        }
         $this->initI18N();
         $this->initOptions();
         $this->_popoverOptions['options']['id'] = $this->options['id'] . '-popover';
@@ -371,12 +390,6 @@ class Editable extends InputWidget
      */
     protected function generateFormFields()
     {
-        if (empty($this->inputType)) {
-            throw new InvalidConfigException("The 'type' of editable input must be set.");
-        }
-        if (in_array($this->inputType, static::$_dropDownInputs) && !isset($this->data)) {
-            throw new InvalidConfigException("You must set the 'data' property for '{$this->inputType}'.");
-        }
         echo Html::hiddenInput('hasEditable', 0);
         if ($this->beforeInput !== null) {
             if (is_string($this->beforeInput)) {
@@ -387,16 +400,12 @@ class Editable extends InputWidget
         }
         if ($this->inputType === self::INPUT_HTML5_INPUT) {
             echo $this->renderHtml5Input();
+        } elseif ($this->inputType === self::INPUT_WIDGET) {
+            echo $this->renderWidget($this->widgetClass);
         } elseif (in_array($this->inputType, static::$_inputsList)) {
             echo $this->renderInput();
         } elseif (in_array($this->inputType, static::$_inputWidgets)) {
             echo $this->renderWidget($this->inputType);
-        } elseif ($this->inputType === self::INPUT_WIDGET) {
-            $class = ArrayHelper::remove($this->_inputOptions, 'class', '');
-            if (empty($class)) {
-                throw new InvalidConfigException("The widget class must be set in 'inputOptions[\"class\"]' when the 'type' is set to 'widget'.");
-            }
-            echo $this->renderWidget($class);
         }
         if ($this->afterInput !== null) {
             if (is_string($this->afterInput)) {
