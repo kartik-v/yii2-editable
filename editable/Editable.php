@@ -281,7 +281,6 @@ class Editable extends InputWidget
         self::INPUT_RADIO_LIST => 'radioList',
         self::INPUT_HTML5_INPUT => 'input',
         self::INPUT_FILE => 'fileInput',
-        self::INPUT_WIDGET => 'widget',
     ];
 
     private static $_inputWidgets = [
@@ -392,7 +391,7 @@ class Editable extends InputWidget
         } elseif (in_array($this->inputType, static::$_inputWidgets)) {
             echo $this->renderWidget($this->inputType);
         } elseif ($this->inputType === self::INPUT_WIDGET) {
-            $class = ArrayHelper::remove($this->_inputOptions, 'class', '');
+            $class = ArrayHelper::remove($this->_inputOptions, 'widgetClass', '');
             if (empty($class)) {
                 throw new InvalidConfigException("The widget class must be set in 'inputOptions[\"class\"]' when the 'type' is set to 'widget'.");
             }
