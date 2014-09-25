@@ -68,7 +68,7 @@ class Editable extends InputWidget
     const INPUT_MONEY = '\kartik\money\MaskMoney';
     const INPUT_CHECKBOX_X = '\kartik\checkbox\CheckboxX';
 
-	
+
     /**
      * @var string the identifier for the PJAX widget container if the editable
      * widget is to be rendered inside a PJAX container. This will ensure the
@@ -148,15 +148,15 @@ class Editable extends InputWidget
     public $displayValue;
 
     /**
-     * @var array the configuration to auto-calculate display value, based on the 
-     * value of the editable input. This should be a single dimensional array whose 
+     * @var array the configuration to auto-calculate display value, based on the
+     * value of the editable input. This should be a single dimensional array whose
      * keys must match the input value, and the array values must be the description
      * to be displayed. For example, to display user friendly boolean values, you could
-     * configure this as `[0 => 'Inactive', 1 => 'Active']`. If this is set, it will 
+     * configure this as `[0 => 'Inactive', 1 => 'Active']`. If this is set, it will
      * override any value set in `displayValue`.
      */
     public $displayValueConfig = [];
-    
+
     /**
      * @var string the value to display if the displayValue is null.
      * Defaults to '<em>(not set)</em>'.
@@ -185,18 +185,18 @@ class Editable extends InputWidget
      * This must be one of the [[Editable::TYPE]] constants.
      */
     public $inputType = self::INPUT_TEXT;
-    
+
     /**
-     * @var string any custom widget class to use. Will only be used if the `inputType` is 
-	 * set to [[Editable::INPUT_WIDGET]]
+     * @var string any custom widget class to use. Will only be used if the `inputType` is
+     * set to [[Editable::INPUT_WIDGET]]
      */
     public $widgetClass;
-	
+
     /**
      * @var array the options for the input. If the inputType is one of the HTML inputs, this will
      * capture the HTML attributes. If the `inputType` is set to [[Editable::INPUT_WIDGET]]
      * or set to an input widget from the `\kartik\` namespace, then this will capture the widget
-     * options. 
+     * options.
      */
     public $options = [];
 
@@ -316,10 +316,10 @@ class Editable extends InputWidget
         self::INPUT_RADIO_LIST => 'radioList',
     ];
 
-	
+
     /**
      * Initializes the widget
-	 * @throws InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function init()
     {
@@ -330,8 +330,8 @@ class Editable extends InputWidget
         if (!in_array($this->inputType, static::$_inputsList) && !in_array($this->inputType, static::$_inputWidgets)) {
             throw new InvalidConfigException("Invalid input type '{$this->inputType}'.");
         }
-		if ($this->inputType === self::INPUT_WIDGET && empty($this->widgetClass)) {
-			throw new InvalidConfigException("The 'widgetClass' must be set when the 'inputType' is set to 'widget'.");
+        if ($this->inputType === self::INPUT_WIDGET && empty($this->widgetClass)) {
+            throw new InvalidConfigException("The 'widgetClass' must be set when the 'inputType' is set to 'widget'.");
         }
         if (in_array($this->inputType, static::$_dropDownInputs) && !isset($this->data)) {
             throw new InvalidConfigException("You must set the 'data' property for '{$this->inputType}'.");
@@ -456,9 +456,11 @@ class Editable extends InputWidget
                     ->input($type, $this->_inputOptions)
                     ->label(false);
             }
-            return '<div class="kv-editable-parent">' . Html::activeInput($type, $this->name, $this->value, $this->_inputOptions) . '</div>';
+            return '<div class="kv-editable-parent">' . Html::activeInput($type, $this->name, $this->value,
+                $this->_inputOptions) . '</div>';
         }
-        return '<div class="kv-editable-parent">' . Html::input($type, $this->name, $this->value, $this->_inputOptions) . '</div>';
+        return '<div class="kv-editable-parent">' . Html::input($type, $this->name, $this->value,
+            $this->_inputOptions) . '</div>';
     }
 
     /**
