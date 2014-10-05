@@ -3,7 +3,8 @@ version 1.3.0
 **Date:** 04-Sep-2014
 
 1. enh #8: Enhance `beforeInput` & `afterInput` to be passed as callback functions.
-1. enh #9: Included client plugin events `editableChange`, `editableSubmit`, `editableReset`, `editableSuccess`, and `editableError`.
+2. enh #9: Included client plugin events `editableChange`, `editableSubmit`, `editableReset`, `editableSuccess`, and `editableError`.
+3. PSR4 alias change
 
 version 1.2.0
 =============
