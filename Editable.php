@@ -193,6 +193,11 @@ class Editable extends InputWidget
     public $widgetClass;
 
     /**
+     * @var boolean whether to display any ajax processing errors. Defaults to `true`.
+     */
+    public $showAjaxErrors = true;
+    
+    /**
      * @var array the options for the input. If the inputType is one of the HTML inputs, this will
      * capture the HTML attributes. If the `inputType` is set to [[Editable::INPUT_WIDGET]]
      * or set to an input widget from the `\kartik\` namespace, then this will capture the widget
@@ -614,7 +619,8 @@ class Editable extends InputWidget
             'defaultValue' => $this->valueIfNull,
             'placement' => $this->placement,
             'target' => $this->format == self::FORMAT_BUTTON ? '.kv-editable-button' : '.kv-editable-link',
-            'displayValueConfig' => $this->displayValueConfig
+            'displayValueConfig' => $this->displayValueConfig,
+            'showAjaxErrors' => $this->showAjaxErrors
         ];
         $this->registerPlugin('editable');
         if (!empty($this->pjaxContainerId)) {
