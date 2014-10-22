@@ -3,7 +3,7 @@ version 1.4.0
 **Date:** 22-Oct-2014
 
 1. enh #14: Raise new `editableAjaxError` event for errors faced via ajax
-2. New property `showAjaxErrors` included.
+2. New property `showAjaxErrors` included for the editable jQuery plugin.
 
 version 1.3.0
 =============
