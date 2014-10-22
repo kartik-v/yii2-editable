@@ -1,7 +1,7 @@
 /*!
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014
  * @package yii2-editable
- * @version 1.3.0
+ * @version 1.4.0
  *
  * Editable Extension jQuery plugin
  *
@@ -41,6 +41,7 @@
             self.valueIfNull = options.valueIfNull;
             self.placement = options.placement;
             self.displayValueConfig = options.displayValueConfig;
+            self.showAjaxErrors = options.showAjaxErrors;
         },
         refreshPosition: function() {
             var self = this, $dialog = self.$popover, placement = self.placement, $target = self.$target,
@@ -69,8 +70,24 @@
                 $cont = $form.parent(), $popover = self.$popover, $loading = self.$loading, $el = self.$element, 
                 valueIfNull = self.valueIfNull, $parent = $el.closest('.field-' + $el.attr('id')), $parent2 = $el.parent(), 
                 $message = $parent.find('.help-block'), displayValueConfig = self.displayValueConfig,
-                $hasEditable = $form.find('input[name="hasEditable"]'), 
+                $hasEditable = $form.find('input[name="hasEditable"]'), showError,
                 notActiveForm = isEmpty($parent.attr('class')) || isEmpty($message.attr('class'));
+            showError = function(message) {
+                var $msgBlock = $parent2.find('.kv-help-block');
+                if (notActiveForm) {
+                    if (isEmpty($msgBlock.attr('class'))) {
+                        $msgBlock = $(document.createElement("div")).attr({class: 'help-block kv-help-block'}).appendTo($parent2);
+                    }
+                    $msgBlock.html(message);
+                    $parent2.addClass('has-error');
+                } else {
+                    $parent.addClass('has-error');
+                    $message.html(message);
+                    $message.removeClass('kv-help-block').addClass('kv-help-block');
+                }
+                $loading.hide();
+                $cont.removeClass('kv-editable-processing');
+            };
             $form.on('submit', function(ev) {
                 ev.preventDefault();
             });
@@ -93,6 +110,8 @@
             $form.find('input, select').on('change', function(ev) {
                 $popover.popoverX('refreshPosition');
                 $el.trigger('editableChange', [$el.val()]);
+            });
+            $form.on('afterValidate', function (ev) {
             });
             $btnReset.on('click', function (ev) {
                 $hasEditable.val(0);
@@ -117,24 +136,18 @@
                     url: $form.attr('action'),
                     data: $form.serialize(),
                     dataType: 'json',
+                    error: function (request, status, message) {
+                        if (self.showAjaxErrors) {
+                            showError(message);
+                        }
+                        $el.trigger('editableAjaxError', [request, status, message]);
+                    },
                     success: function (data) {
                         var out = !isEmpty(data.output) ? data.output : self.$element.val(),
                             $msgBlock = $parent2.find('.kv-help-block');
                         $popover.popoverX('refreshPosition');
                         if (!isEmpty(data.message)) {
-                            if (notActiveForm) {
-                                if (isEmpty($msgBlock.attr('class'))) {
-                                    $msgBlock = $(document.createElement("div")).attr({class: 'help-block kv-help-block'}).appendTo($parent2);
-                                }
-                                $msgBlock.html(data.message);
-                                $parent2.addClass('has-error');
-                            } else {
-                                $parent.addClass('has-error');
-                                $message.html(data.message);
-                                $message.removeClass('kv-help-block').addClass('kv-help-block');
-                            }
-                            $loading.hide();
-                            $cont.removeClass('kv-editable-processing');
+                            showError(data.message);
                             $el.trigger('editableError', [$el.val()]);
                             return;
                         } else if (!isEmpty($msgBlock.attr('class'))) {
@@ -150,7 +163,6 @@
                                 return;
                             } 
                         });
-                        
                         if (isEmpty(chkError.trim())) {
                             $loading.hide();
                             if (isEmpty(out)) {
@@ -209,7 +221,8 @@
         containerId: '',
         valueIfNull: '<em>(not set)</em>',
         placement: 'right',
-        displayValueConfig: {}
+        displayValueConfig: {},
+        showAjaxErrors: true
     };
 
 })(window.jQuery);

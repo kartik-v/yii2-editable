@@ -1,3 +1,10 @@
+version 1.4.0
+=============
+**Date:** 22-Oct-2014
+
+1. enh #14: Raise new `editableAjaxError` event for errors faced via ajax
+2. New property `showAjaxErrors` included.
+
 version 1.3.0
 =============
 **Date:** 04-Sep-2014
