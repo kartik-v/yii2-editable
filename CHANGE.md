@@ -1,3 +1,9 @@
+version 1.5.0
+=============
+**Date:** 07-Nov-2014
+
+1.enh #16: Enhance dependency validation using common code base.
+
 version 1.4.0
 =============
 **Date:** 22-Oct-2014

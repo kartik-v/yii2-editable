@@ -5,7 +5,7 @@ Easily set any displayed content as editable in Yii Framework 2.0. This is an en
 The extension uses the enhanced [yii2-popover-x](http://demos.krajee.com/popover-x) extension as a popover modal for editing. This extension does not use any external jQuery plugin like X-Editable, instead it uses its own lean and extensible
  jQuery editable plugin - that elaborately reuses functionality available within Yii Framework 2.0.
 
-> NOTE: The latest version of the extension v1.4.0 has been released. Refer the [CHANGE LOG](https://github.com/kartik-v/yii2-editable/blob/master/CHANGE.md) for details.
+> NOTE: The latest version of the extension v1.5.0 has been released. Refer the [CHANGE LOG](https://github.com/kartik-v/yii2-editable/blob/master/CHANGE.md) for details.
 
 ## Features  
 
@@ -40,7 +40,14 @@ You can see detailed [documentation and examples](http://demos.krajee.com/editab
 
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
 
-> Note: You must set the `minimum-stability` to `dev` in the **composer.json** file in your application root folder before installation of this extension.
+
+> Note: You must set the `minimum-stability` to `dev` in the **composer.json** file in your application root folder before installation of this extension OR
+if your `minimum-stability` is set to `stable`, then set the following in the require section of your composer.json file
+
+```
+    kartik-v/yii2-editable: "@dev",
+    kartik-v/yii2-krajee-base: "@dev"
+```
 
 Either run
 

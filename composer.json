@@ -13,7 +13,7 @@
         }
     ],
     "require": {
-        "kartik-v/yii2-widgets": "*",
+        "kartik-v/yii2-krajee-base": "*",
         "kartik-v/yii2-popover-x": "*"
     },
     "autoload": {

@@ -3,7 +3,7 @@
 /**
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014
  * @package yii2-editable
- * @version 1.4.0
+ * @version 1.5.0
  */
 
 namespace kartik\editable;
@@ -13,7 +13,8 @@ use yii\web\View;
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
-use kartik\widgets\InputWidget;
+use kartik\base\Config;
+use kartik\base\InputWidget;
 use kartik\popover\PopoverX;
 
 /**
@@ -173,7 +174,7 @@ class Editable extends InputWidget
      * @var array the class for the ActiveForm widget to be used. The class must
      * extend from `\yii\widgets\ActiveForm`. This defaults to `\kartik\widgets\ActiveForm`.
      */
-    public $formClass = '\kartik\widgets\ActiveForm';
+    public $formClass = '\yii\widgets\ActiveForm';
 
     /**
      * @var array the options for the ActiveForm widget class selected in `formClass`.
@@ -341,6 +342,7 @@ class Editable extends InputWidget
         if (in_array($this->inputType, static::$_dropDownInputs) && !isset($this->data)) {
             throw new InvalidConfigException("You must set the 'data' property for '{$this->inputType}'.");
         }
+        Config::validateInputWidget($this->inputType);
         $this->initI18N();
         $this->initOptions();
         $this->_popoverOptions['options']['id'] = $this->options['id'] . '-popover';
@@ -354,7 +356,7 @@ class Editable extends InputWidget
         PopoverX::begin($this->_popoverOptions);
 
         if (!empty($this->formClass) && !class_exists($this->formClass)) {
-            throw new InvalidConfigException("The form class '{$class}' does not exist.");
+            throw new InvalidConfigException("The form class '{$this->formClass}' does not exist.");
         }
         $class = $this->formClass;
         echo Html::beginTag('div', $this->contentOptions);

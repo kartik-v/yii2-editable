@@ -3,13 +3,13 @@
 /**
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014
  * @package yii2-editable
- * @version 1.4.0
+ * @version 1.5.0
  */
 
 namespace kartik\editable;
 
 use Yii;
-use kartik\widgets\AssetBundle;
+use kartik\base\AssetBundle;
 
 /**
  * Asset bundle for Pjax processing of Editable widget to reinitialize 
