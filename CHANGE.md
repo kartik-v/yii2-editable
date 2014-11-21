@@ -1,3 +1,10 @@
+version 1.6.0
+=============
+**Date:** 22-Nov-2014
+
+1. bug #20: Fix widgets for use in Editable.
+2. enh #21: Enhancements for rendering widgets and related styling.
+
 version 1.5.0
 =============
 **Date:** 07-Nov-2014

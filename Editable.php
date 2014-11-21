@@ -3,7 +3,7 @@
 /**
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014
  * @package yii2-editable
- * @version 1.5.0
+ * @version 1.6.0
  */
 
 namespace kartik\editable;
@@ -12,6 +12,7 @@ use Yii;
 use yii\web\View;
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;
+use yii\helpers\Json;
 use yii\helpers\ArrayHelper;
 use kartik\base\Config;
 use kartik\base\InputWidget;
@@ -51,20 +52,20 @@ class Editable extends InputWidget
     const INPUT_WIDGET = 'widget';
 
     // input widget classes
-    const INPUT_DEPDROP = '\kartik\widgets\DepDrop';
-    const INPUT_SELECT2 = '\kartik\widgets\Select2';
-    const INPUT_TYPEAHEAD = '\kartik\widgets\Typeahead';
-    const INPUT_SWITCH = '\kartik\widgets\SwitchInput';
-    const INPUT_SPIN = '\kartik\widgets\TouchSpin';
-    const INPUT_DATE = '\kartik\widgets\DatePicker';
-    const INPUT_TIME = '\kartik\widgets\TimePicker';
-    const INPUT_DATETIME = '\kartik\widgets\DateTimePicker';
+    const INPUT_DEPDROP = '\kartik\depdrop\DepDrop';
+    const INPUT_SELECT2 = '\kartik\select2\Select2';
+    const INPUT_TYPEAHEAD = '\kartik\typeahead\Typeahead';
+    const INPUT_SWITCH = '\kartik\switchinput\SwitchInput';
+    const INPUT_SPIN = '\kartik\touchspin\TouchSpin';
+    const INPUT_DATE = '\kartik\date\DatePicker';
+    const INPUT_TIME = '\kartik\time\TimePicker';
+    const INPUT_DATETIME = '\kartik\datetime\DateTimePicker';
     const INPUT_DATE_RANGE = '\kartik\daterange\DateRangePicker';
     const INPUT_SORTABLE = '\kartik\sortinput\SortableInput';
-    const INPUT_RANGE = '\kartik\widgets\RangeInput';
-    const INPUT_COLOR = '\kartik\widgets\ColorInput';
-    const INPUT_RATING = '\kartik\widgets\StarRating';
-    const INPUT_FILEINPUT = '\kartik\widgets\FileInput';
+    const INPUT_RANGE = '\kartik\range\RangeInput';
+    const INPUT_COLOR = '\kartik\color\ColorInput';
+    const INPUT_RATING = '\kartik\rating\StarRating';
+    const INPUT_FILEINPUT = '\kartik\file\FileInput';
     const INPUT_SLIDER = '\kartik\slider\Slider';
     const INPUT_MONEY = '\kartik\money\MaskMoney';
     const INPUT_CHECKBOX_X = '\kartik\checkbox\CheckboxX';
@@ -279,49 +280,6 @@ class Editable extends InputWidget
      */
     protected $_form;
 
-    private static $_inputsList = [
-        self::INPUT_HIDDEN => 'hiddenInput',
-        self::INPUT_TEXT => 'textInput',
-        self::INPUT_PASSWORD => 'passwordInput',
-        self::INPUT_TEXTAREA => 'textArea',
-        self::INPUT_CHECKBOX => 'checkbox',
-        self::INPUT_RADIO => 'radio',
-        self::INPUT_LIST_BOX => 'listBox',
-        self::INPUT_DROPDOWN_LIST => 'dropDownList',
-        self::INPUT_CHECKBOX_LIST => 'checkboxList',
-        self::INPUT_RADIO_LIST => 'radioList',
-        self::INPUT_HTML5_INPUT => 'input',
-        self::INPUT_FILE => 'fileInput',
-        self::INPUT_WIDGET => 'widget',
-    ];
-
-    private static $_inputWidgets = [
-        self::INPUT_DEPDROP => '\kartik\widgets\DepDrop',
-        self::INPUT_SELECT2 => '\kartik\widgets\Select2',
-        self::INPUT_TYPEAHEAD => '\kartik\widgets\Typeahead',
-        self::INPUT_SWITCH => '\kartik\widgets\SwitchInput',
-        self::INPUT_SPIN => '\kartik\widgets\TouchSpin',
-        self::INPUT_DATE => '\kartik\widgets\DatePicker',
-        self::INPUT_TIME => '\kartik\widgets\TimePicker',
-        self::INPUT_DATETIME => '\kartik\widgets\DateTimePicker',
-        self::INPUT_DATE_RANGE => '\kartik\widgets\DateRangePicker',
-        self::INPUT_SORTABLE => '\kartik\widgets\Sortable',
-        self::INPUT_RANGE => '\kartik\widgets\RangeInput',
-        self::INPUT_COLOR => '\kartik\widgets\ColorInput',
-        self::INPUT_RATING => '\kartik\widgets\StarRating',
-        self::INPUT_FILEINPUT => '\kartik\widgets\FileInput',
-        self::INPUT_SLIDER => '\kartik\slider\Slider',
-        self::INPUT_MONEY => '\kartik\money\MaskMoney',
-        self::INPUT_CHECKBOX_X => '\kartik\checkbox\CheckboxX',
-    ];
-
-    private static $_dropDownInputs = [
-        self::INPUT_LIST_BOX => 'listBox',
-        self::INPUT_DROPDOWN_LIST => 'dropDownList',
-        self::INPUT_CHECKBOX_LIST => 'checkboxList',
-        self::INPUT_RADIO_LIST => 'radioList',
-    ];
-
 
     /**
      * Initializes the widget
@@ -333,13 +291,13 @@ class Editable extends InputWidget
         if (empty($this->inputType)) {
             throw new InvalidConfigException("The 'type' of editable input must be set.");
         }
-        if (!in_array($this->inputType, static::$_inputsList) && !in_array($this->inputType, static::$_inputWidgets)) {
+        if (!Config::isValidInput($this->inputType)) {
             throw new InvalidConfigException("Invalid input type '{$this->inputType}'.");
         }
         if ($this->inputType === self::INPUT_WIDGET && empty($this->widgetClass)) {
             throw new InvalidConfigException("The 'widgetClass' must be set when the 'inputType' is set to 'widget'.");
         }
-        if (in_array($this->inputType, static::$_dropDownInputs) && !isset($this->data)) {
+        if (Config::isDropdownInput($this->inputType) && !isset($this->data)) {
             throw new InvalidConfigException("You must set the 'data' property for '{$this->inputType}'.");
         }
         Config::validateInputWidget($this->inputType);
@@ -409,9 +367,9 @@ class Editable extends InputWidget
             echo $this->renderHtml5Input();
         } elseif ($this->inputType === self::INPUT_WIDGET) {
             echo $this->renderWidget($this->widgetClass);
-        } elseif (in_array($this->inputType, static::$_inputsList)) {
+        } elseif (Config::isHtmlInput($this->inputType)) {
             echo $this->renderInput();
-        } elseif (in_array($this->inputType, static::$_inputWidgets)) {
+        } elseif (Config::isInputWidget($this->inputType)) {
             echo $this->renderWidget($this->inputType);
         }
         if ($this->afterInput !== null) {
@@ -463,10 +421,10 @@ class Editable extends InputWidget
                     ->input($type, $this->_inputOptions)
                     ->label(false);
             }
-            return '<div class="kv-editable-parent">' . Html::activeInput($type, $this->name, $this->value,
+            return '<div class="kv-editable-parent form-group">' . Html::activeInput($type, $this->name, $this->value,
                 $this->_inputOptions) . '</div>';
         }
-        return '<div class="kv-editable-parent">' . Html::input($type, $this->name, $this->value,
+        return '<div class="kv-editable-parent form-group">' . Html::input($type, $this->name, $this->value,
             $this->_inputOptions) . '</div>';
     }
 
@@ -498,7 +456,7 @@ class Editable extends InputWidget
             $this->options['value'] = $this->value;
             $checked = ArrayHelper::remove($this->_inputOptions, 'checked', false);
         }
-        return '<div class="kv-editable-parent">' . ($list ?
+        return '<div class="kv-editable-parent form-group">' . ($list ?
             Html::$input($this->name, $this->value, $this->data, $this->_inputOptions) :
             (($input == 'checkbox' || $input == 'radio') ?
                 Html::$input($this->name, $checked, $this->_inputOptions) :
@@ -529,7 +487,8 @@ class Editable extends InputWidget
                 'value' => $this->value
             ]);
         }
-        return '<div class="kv-editable-parent">' . $class::widget($options) . '</div>';
+        return "<div class='kv-editable-parent form-group'>\n" . 
+            $class::widget($options) . "\n</div>";
     }
 
     /**
@@ -540,6 +499,9 @@ class Editable extends InputWidget
     {
         $css = empty($this->options['class']) ? ' form-control' : '';
         Html::addCssClass($this->options, 'kv-editable-input' . $css);
+        if (!Config::isHtmlInput($this->inputType) && empty($this->options['options']['id'])) {
+            $this->options['options']['id'] = $this->options['id'];
+        }
         $this->_inputOptions = $this->options;
         $this->containerOptions['id'] = $this->options['id'] . '-cont';
         $value = $this->hasModel() ? Html::getAttributeValue($this->model, $this->attribute) : $this->value;
@@ -617,7 +579,6 @@ class Editable extends InputWidget
         $view = $this->getView();
         EditableAsset::register($view);
         $this->pluginOptions = [
-            'containerId' => $this->containerOptions['id'],
             'defaultValue' => $this->valueIfNull,
             'placement' => $this->placement,
             'target' => $this->format == self::FORMAT_BUTTON ? '.kv-editable-button' : '.kv-editable-link',
@@ -634,5 +595,4 @@ class Editable extends InputWidget
             $view->registerJs($js);
         }
     }
-
 }

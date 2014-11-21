@@ -1,7 +1,7 @@
 /*!
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014
  * @package yii2-editable
- * @version 1.5.0
+ * @version 1.6.0
  *
  * Editable Extension jQuery plugin
  *
@@ -30,7 +30,7 @@
         constructor: Editable,
         init: function (options) {
             var self = this;
-            self.$container = $('#' + options.containerId);
+            self.$container = $('#' + self.$element.attr('id') + '-cont');
             self.$form = self.$container.find('.kv-editable-form');
             self.$value = self.$container.find('.kv-editable-value');
             self.$popover = self.$container.find('.kv-editable-popover');
@@ -68,7 +68,7 @@
         listen: function () {
             var self = this, $form = self.$form, $btnSubmit = self.$btnSubmit, $btnReset = self.$btnReset,
                 $cont = $form.parent(), $popover = self.$popover, $loading = self.$loading, $el = self.$element, 
-                valueIfNull = self.valueIfNull, $parent = $el.closest('.field-' + $el.attr('id')), $parent2 = $el.parent(), 
+                valueIfNull = self.valueIfNull, $parent = $el.closest('.field-' + $el.attr('id')), $parent2 = $el.closest('.form-group'), 
                 $message = $parent.find('.help-block'), displayValueConfig = self.displayValueConfig,
                 $hasEditable = $form.find('input[name="hasEditable"]'), showError,
                 notActiveForm = isEmpty($parent.attr('class')) || isEmpty($message.attr('class'));
@@ -218,7 +218,6 @@
     };
 
     $.fn.editable.defaults = {
-        containerId: '',
         valueIfNull: '<em>(not set)</em>',
         placement: 'right',
         displayValueConfig: {},

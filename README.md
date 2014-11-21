@@ -5,7 +5,7 @@ Easily set any displayed content as editable in Yii Framework 2.0. This is an en
 The extension uses the enhanced [yii2-popover-x](http://demos.krajee.com/popover-x) extension as a popover modal for editing. This extension does not use any external jQuery plugin like X-Editable, instead it uses its own lean and extensible
  jQuery editable plugin - that elaborately reuses functionality available within Yii Framework 2.0.
 
-> NOTE: The latest version of the extension v1.5.0 has been released. Refer the [CHANGE LOG](https://github.com/kartik-v/yii2-editable/blob/master/CHANGE.md) for details.
+> NOTE: The latest version of the extension v1.6.0 has been released. Refer the [CHANGE LOG](https://github.com/kartik-v/yii2-editable/blob/master/CHANGE.md) for details.
 
 ## Features  
 
@@ -25,13 +25,9 @@ The extension uses the enhanced [yii2-popover-x](http://demos.krajee.com/popover
 9. Configure your own display value irrespective of the value stored internally.
 10. Configurable css styles and labels for rendering editable content according to your application or theme.
 11. Ability to render and reinitialize automatically the widget via Pjax.
-   
-> NOTE: This extension depends on the [kartik-v/yii2-popover-x](https://github.com/kartik-v/yii2-popover-x) extension which in turn depends on the 
-[kartik-v/yii2-widgets](https://github.com/kartik-v/yii2-widgets) extension and [yiisoft/yii2-bootstrap](https://github.com/yiisoft/yii2/tree/master/extensions/bootstrap) extension. Check the 
-[composer.json](https://github.com/kartik-v/yii2-editable/blob/master/composer.json) for this extension's requirements and dependencies. 
-Note: Yii 2 framework is still in active development, and until a fully stable Yii2 release, your core yii2-bootstrap packages (and its dependencies) 
-may be updated when you install or update this extension. You may need to lock your composer package versions for your specific app, and test 
-for extension break if you do not wish to auto update dependencies.
+ 
+> Note: Check the [composer.json](https://github.com/kartik-v/yii2-money/blob/master/composer.json) for this extension's requirements and dependencies. 
+Read this [web tip /wiki](http://webtips.krajee.com/setting-composer-minimum-stability-application/) on setting the `minimum-stability` settings for your application's composer.json.
 
 ## Demo
 You can see detailed [documentation and examples](http://demos.krajee.com/editable) on usage of the extension.

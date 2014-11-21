@@ -12,6 +12,7 @@
             "homepage": "http://www.krajee.com/"
         }
     ],
+    "stability": "stable",
     "require": {
         "kartik-v/yii2-krajee-base": "*",
         "kartik-v/yii2-popover-x": "*"

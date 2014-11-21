@@ -3,7 +3,7 @@
 /**
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014
  * @package yii2-editable
- * @version 1.5.0
+ * @version 1.6.0
  */
 
 namespace kartik\editable;
