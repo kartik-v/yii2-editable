@@ -435,7 +435,7 @@ class Editable extends InputWidget
      */
     protected function renderInput()
     {
-        $list = in_array($this->inputType, static::$_dropDownInputs);
+        $list = Config::isDropdownInput($this->inputType);
         $input = $this->inputType;
         if ($this->hasModel()) {
             if (isset($this->_form)) {
