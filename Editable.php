@@ -70,7 +70,8 @@ class Editable extends InputWidget
     const INPUT_MONEY = '\kartik\money\MaskMoney';
     const INPUT_CHECKBOX_X = '\kartik\checkbox\CheckboxX';
 
-
+    const CSS_PARENT = "kv-editable-parent form-group";
+    
     /**
      * @var string the identifier for the PJAX widget container if the editable
      * widget is to be rendered inside a PJAX container. This will ensure the
@@ -104,7 +105,13 @@ class Editable extends InputWidget
      * @var array the HTML attributes for the editable container
      */
     public $containerOptions = [];
-
+    
+    /**
+     * @var array the HTML attributes for the input container 
+     * applicable only when not using with ActiveForm
+     */
+    public $inputContainerOptions = [];
+    
     /**
      * @var string the popover contextual type. Must be one of the [[PopoverX::TYPE]] constants
      * Defaults to `PopoverX::TYPE_DEFAULT` or `default`.
@@ -414,6 +421,7 @@ class Editable extends InputWidget
     protected function renderHtml5Input()
     {
         $type = ArrayHelper::remove($this->_inputOptions, 'type', 'text');
+        $field = Html::input($type, $this->name, $this->value, $this->_inputOptions);
         if ($this->hasModel()) {
             if (isset($this->_form)) {
                 return $this->_form
@@ -421,11 +429,9 @@ class Editable extends InputWidget
                     ->input($type, $this->_inputOptions)
                     ->label(false);
             }
-            return '<div class="kv-editable-parent form-group">' . Html::activeInput($type, $this->name, $this->value,
-                $this->_inputOptions) . '</div>';
+            $field = Html::activeInput($type, $this->name, $this->value, $this->_inputOptions);
         }
-        return '<div class="kv-editable-parent form-group">' . Html::input($type, $this->name, $this->value,
-            $this->_inputOptions) . '</div>';
+        return Html::tag('div', $field, $this->inputContainerOptions);
     }
 
     /**
@@ -456,11 +462,14 @@ class Editable extends InputWidget
             $this->options['value'] = $this->value;
             $checked = ArrayHelper::remove($this->_inputOptions, 'checked', false);
         }
-        return '<div class="kv-editable-parent form-group">' . ($list ?
-            Html::$input($this->name, $this->value, $this->data, $this->_inputOptions) :
-            (($input == 'checkbox' || $input == 'radio') ?
+        if ($list) {
+            $field = Html::$input($this->name, $this->value, $this->data, $this->_inputOptions);
+        } else {
+            $field = ($input == 'checkbox' || $input == 'radio') ?
                 Html::$input($this->name, $checked, $this->_inputOptions) :
-                Html::$input($this->name, $this->value, $this->_inputOptions))) . '</div>';
+                Html::$input($this->name, $this->value, $this->_inputOptions);
+        }
+        return Html::tag('div', $field, $this->inputContainerOptions);
     }
 
     /**
@@ -487,8 +496,8 @@ class Editable extends InputWidget
                 'value' => $this->value
             ]);
         }
-        return "<div class='kv-editable-parent form-group'>\n" . 
-            $class::widget($options) . "\n</div>";
+        $field = $class::widget($options);
+        return Html::tag('div', $field, $this->inputContainerOptions);
     }
 
     /**
@@ -499,6 +508,12 @@ class Editable extends InputWidget
     {
         $css = empty($this->options['class']) ? ' form-control' : '';
         Html::addCssClass($this->options, 'kv-editable-input' . $css);
+        Html::addCssClass($this->inputContainerOptions, self::CSS_PARENT);
+        if ($this->hasModel()) {
+            $options = ArrayHelper::getValue($this->inputFieldConfig, 'options', []);
+            Html::addCssClass($options, self::CSS_PARENT);
+            $this->inputFieldConfig['options'] = $options;
+        }
         if (!Config::isHtmlInput($this->inputType) && empty($this->options['options']['id'])) {
             $this->options['options']['id'] = $this->options['id'];
         }

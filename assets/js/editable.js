@@ -68,7 +68,7 @@
         listen: function () {
             var self = this, $form = self.$form, $btnSubmit = self.$btnSubmit, $btnReset = self.$btnReset,
                 $cont = $form.parent(), $popover = self.$popover, $loading = self.$loading, $el = self.$element, 
-                valueIfNull = self.valueIfNull, $parent = $el.closest('.field-' + $el.attr('id')), $parent2 = $el.closest('.form-group'), 
+                valueIfNull = self.valueIfNull, $parent = $el.closest('.field-' + $el.attr('id')), $parent2 = $el.closest('.kv-editable-parent'), 
                 $message = $parent.find('.help-block'), displayValueConfig = self.displayValueConfig,
                 $hasEditable = $form.find('input[name="hasEditable"]'), showError,
                 notActiveForm = isEmpty($parent.attr('class')) || isEmpty($message.attr('class'));
@@ -143,7 +143,7 @@
                         $el.trigger('editableAjaxError', [request, status, message]);
                     },
                     success: function (data) {
-                        var out = !isEmpty(data.output) ? data.output : self.$element.val(),
+                        var out = !isEmpty(data.output) ? data.output : $el.val(),
                             $msgBlock = $parent2.find('.kv-help-block');
                         $popover.popoverX('refreshPosition');
                         if (!isEmpty(data.message)) {

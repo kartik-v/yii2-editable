@@ -7,14 +7,20 @@ version 1.6.0
 3. bug #18: Add Italian language translations.
 4. bug #20: Fix widgets for use in Editable.
 5. enh #21: Enhancements for rendering widgets and related styling.
+6. enh #22: Revamp extension to work better with model validation and in EditableColumn.
+
+version 1.5.0
+=============
+**Date:** 07-Nov-2014
+
+1.enh #16: Enhance dependency validation using common code base.
 
 version 1.4.0
 =============
 **Date:** 22-Oct-2014
 
-1. enh #12: Add French language translations.
-2. enh #14: Raise new `editableAjaxError` event for errors faced via ajax
-3. New property `showAjaxErrors` included for the editable jQuery plugin.
+1. enh #14: Raise new `editableAjaxError` event for errors faced via ajax
+2. New property `showAjaxErrors` included for the editable jQuery plugin.
 
 version 1.3.0
 =============
