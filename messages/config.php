@@ -7,7 +7,7 @@ return [
     'messagePath' => __DIR__ . DIRECTORY_SEPARATOR . 'messages',
     // array, required, list of language codes that the extracted messages
     // should be translated to. For example, ['zh-CN', 'de'].
-    'languages' => ['da', 'en', 'ru','it'],
+    'languages' => ['da', 'en', 'ru','it', 'es'],
     // string, the name of the function for translating messages.
     // Defaults to 'Yii::t'. This is used as a mark to find the messages to be
     // translated. You may use a string for single function name or an array for
