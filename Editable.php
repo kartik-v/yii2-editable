@@ -1,9 +1,10 @@
 <?php
 
 /**
+ * @package   yii2-editable
+ * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014
- * @package yii2-editable
- * @version 1.6.0
+ * @version   1.7.0
  */
 
 namespace kartik\editable;
@@ -71,7 +72,7 @@ class Editable extends InputWidget
     const INPUT_CHECKBOX_X = '\kartik\checkbox\CheckboxX';
 
     const CSS_PARENT = "kv-editable-parent form-group";
-    
+
     /**
      * @var string the identifier for the PJAX widget container if the editable
      * widget is to be rendered inside a PJAX container. This will ensure the
@@ -105,13 +106,13 @@ class Editable extends InputWidget
      * @var array the HTML attributes for the editable container
      */
     public $containerOptions = [];
-    
+
     /**
-     * @var array the HTML attributes for the input container 
+     * @var array the HTML attributes for the input container
      * applicable only when not using with ActiveForm
      */
     public $inputContainerOptions = [];
-    
+
     /**
      * @var string the popover contextual type. Must be one of the [[PopoverX::TYPE]] constants
      * Defaults to `PopoverX::TYPE_DEFAULT` or `default`.
@@ -205,7 +206,7 @@ class Editable extends InputWidget
      * @var boolean whether to display any ajax processing errors. Defaults to `true`.
      */
     public $showAjaxErrors = true;
-    
+
     /**
      * @var array the options for the input. If the inputType is one of the HTML inputs, this will
      * capture the HTML attributes. If the `inputType` is set to [[Editable::INPUT_WIDGET]]
@@ -268,11 +269,6 @@ class Editable extends InputWidget
     public $resetButton = ['class' => 'btn btn-sm btn-default'];
 
     /**
-     * @var array the the internalization configuration for this module
-     */
-    public $i18n = [];
-
-    /**
      * @var array the generated configuration for the `kartik\popover\PopoverX` widget.
      */
     protected $_popoverOptions = [];
@@ -287,13 +283,14 @@ class Editable extends InputWidget
      */
     protected $_form;
 
-
     /**
      * Initializes the widget
+     *
      * @throws InvalidConfigException
      */
     public function init()
     {
+        $this->_msgCat = 'kveditable';
         parent::init();
         if (empty($this->inputType)) {
             throw new InvalidConfigException("The 'type' of editable input must be set.");
@@ -330,174 +327,6 @@ class Editable extends InputWidget
             throw new InvalidConfigException("The form class '{$class}' MUST extend from \yii\widgets\ActiveForm.");
         }
 
-    }
-
-    /**
-     * Renders the widget
-     *
-     * @return string|void
-     */
-    public function run()
-    {
-        $class = $this->formClass;
-        echo $this->generateFormFields();
-        $class::end();
-        echo '</div>'; // content options
-        PopoverX::end();
-        echo '</div>'; // options
-    }
-
-    /**
-     * Gets the form instance for use at runtime
-     *
-     * @return \yii\widgets\ActiveForm
-     */
-    public function getForm()
-    {
-        return $this->_form;
-    }
-
-    /**
-     * Generates the editable form fields
-     */
-    protected function generateFormFields()
-    {
-        echo Html::hiddenInput('hasEditable', 0);
-        if ($this->beforeInput !== null) {
-            if (is_string($this->beforeInput)) {
-                echo $this->beforeInput;
-            } else {
-                echo call_user_func($this->beforeInput, $this->_form, $this);
-            }
-        }
-        if ($this->inputType === self::INPUT_HTML5_INPUT) {
-            echo $this->renderHtml5Input();
-        } elseif ($this->inputType === self::INPUT_WIDGET) {
-            echo $this->renderWidget($this->widgetClass);
-        } elseif (Config::isHtmlInput($this->inputType)) {
-            echo $this->renderInput();
-        } elseif (Config::isInputWidget($this->inputType)) {
-            echo $this->renderWidget($this->inputType);
-        }
-        if ($this->afterInput !== null) {
-            if (is_string($this->afterInput)) {
-                echo $this->afterInput;
-            } else {
-                echo call_user_func($this->afterInput, $this->_form, $this);
-            }
-        }
-    }
-
-    /**
-     * Generates the popover footer
-     *
-     * @return string
-     */
-    protected function renderFooter()
-    {
-        $submitLabel = ArrayHelper::remove($this->submitButton, 'label',
-            '<i class="glyphicon glyphicon-save"></i> ' . Yii::t('kveditable', 'Apply')
-        );
-        $resetLabel = ArrayHelper::remove($this->resetButton, 'label',
-            '<i class="glyphicon glyphicon-repeat"></i> ' . Yii::t('kveditable', 'Reset')
-        );
-        $this->submitButton['type'] = 'button';
-        $this->resetButton['type'] = 'button';
-        Html::addCssClass($this->submitButton, 'kv-editable-submit');
-        Html::addCssClass($this->resetButton, 'kv-editable-reset');
-        $buttons = Html::button($submitLabel, $this->submitButton) .
-            Html::button($resetLabel, $this->resetButton);
-        return Html::tag('div', '&nbsp;', ['class' => 'kv-editable-loading', 'style' => 'display:none;']) .
-        strtr($this->footer, [
-            '{buttons}' => $buttons
-        ]);
-    }
-
-    /**
-     * Renders the HTML 5 input
-     *
-     * @return string
-     */
-    protected function renderHtml5Input()
-    {
-        $type = ArrayHelper::remove($this->_inputOptions, 'type', 'text');
-        $field = Html::input($type, $this->name, $this->value, $this->_inputOptions);
-        if ($this->hasModel()) {
-            if (isset($this->_form)) {
-                return $this->_form
-                    ->field($this->model, $this->attribute, $this->inputFieldConfig)
-                    ->input($type, $this->_inputOptions)
-                    ->label(false);
-            }
-            $field = Html::activeInput($type, $this->name, $this->value, $this->_inputOptions);
-        }
-        return Html::tag('div', $field, $this->inputContainerOptions);
-    }
-
-    /**
-     * Renders all other HTML inputs (except HTML5)
-     *
-     * @return string
-     */
-    protected function renderInput()
-    {
-        $list = Config::isDropdownInput($this->inputType);
-        $input = $this->inputType;
-        if ($this->hasModel()) {
-            if (isset($this->_form)) {
-                return $list ?
-                    $this->_form
-                        ->field($this->model, $this->attribute, $this->inputFieldConfig)
-                        ->$input($this->data, $this->_inputOptions)
-                        ->label(false) :
-                    $this->_form
-                        ->field($this->model, $this->attribute, $this->inputFieldConfig)
-                        ->$input($this->_inputOptions)
-                        ->label(false);
-            }
-            $input = 'active' . ucfirst($this->inputType);
-        }
-        $checked = false;
-        if ($input == 'radio' || $input == 'checkbox') {
-            $this->options['value'] = $this->value;
-            $checked = ArrayHelper::remove($this->_inputOptions, 'checked', false);
-        }
-        if ($list) {
-            $field = Html::$input($this->name, $this->value, $this->data, $this->_inputOptions);
-        } else {
-            $field = ($input == 'checkbox' || $input == 'radio') ?
-                Html::$input($this->name, $checked, $this->_inputOptions) :
-                Html::$input($this->name, $this->value, $this->_inputOptions);
-        }
-        return Html::tag('div', $field, $this->inputContainerOptions);
-    }
-
-    /**
-     * Renders a widget
-     *
-     * @return string
-     */
-    protected function renderWidget($class)
-    {
-        if ($this->hasModel()) {
-            if (isset($this->_form)) {
-                return $this->_form
-                    ->field($this->model, $this->attribute, $this->inputFieldConfig)
-                    ->widget($class, $this->_inputOptions)
-                    ->label(false);
-            }
-            $options = ArrayHelper::merge($this->_inputOptions, [
-                'model' => $this->model,
-                'attribute' => $this->attribute
-            ]);
-        } else {
-            $options = ArrayHelper::merge($this->_inputOptions, [
-                'name' => $this->name,
-                'value' => $this->value
-            ]);
-        }
-        $field = $class::widget($options);
-        return Html::tag('div', $field, $this->inputContainerOptions);
     }
 
     /**
@@ -548,8 +377,13 @@ class Editable extends InputWidget
             $this->preHeader = '<i class="glyphicon glyphicon-edit"></i> ' . Yii::t('kveditable', 'Edit') . ' ';
         }
         if ($this->header == null) {
+            $attribute = $this->attribute;
+            if (strpos($attribute, ']') > 0) {
+                $tags = explode(']', $attribute);
+                $attribute = array_pop($tags);
+            }
             $this->_popoverOptions['header'] = $this->preHeader .
-                ($this->hasModel() ? $this->model->getAttributeLabel($this->attribute) : '');
+                ($this->hasModel() ? $this->model->getAttributeLabel($attribute) : '');
         } else {
             $this->_popoverOptions['header'] = $this->preHeader . $this->header;
         }
@@ -571,19 +405,28 @@ class Editable extends InputWidget
     }
 
     /**
-     * Initialize i18n settings for the extension
+     * Generates the popover footer
+     *
+     * @return string
      */
-    public function initI18N()
+    protected function renderFooter()
     {
-        Yii::setAlias('@kveditable', dirname(__FILE__));
-        if (empty($this->i18n)) {
-            $this->i18n = [
-                'class' => 'yii\i18n\PhpMessageSource',
-                'basePath' => '@kveditable/messages',
-                'forceTranslation' => true
-            ];
-        }
-        Yii::$app->i18n->translations['kveditable'] = $this->i18n;
+        $submitLabel = ArrayHelper::remove($this->submitButton, 'label',
+            '<i class="glyphicon glyphicon-save"></i> ' . Yii::t('kveditable', 'Apply')
+        );
+        $resetLabel = ArrayHelper::remove($this->resetButton, 'label',
+            '<i class="glyphicon glyphicon-repeat"></i> ' . Yii::t('kveditable', 'Reset')
+        );
+        $this->submitButton['type'] = 'button';
+        $this->resetButton['type'] = 'button';
+        Html::addCssClass($this->submitButton, 'kv-editable-submit');
+        Html::addCssClass($this->resetButton, 'kv-editable-reset');
+        $buttons = Html::button($submitLabel, $this->submitButton) .
+            Html::button($resetLabel, $this->resetButton);
+        return Html::tag('div', '&nbsp;', ['class' => 'kv-editable-loading', 'style' => 'display:none;']) .
+        strtr($this->footer, [
+            '{buttons}' => $buttons
+        ]);
     }
 
     /**
@@ -609,5 +452,149 @@ class Editable extends InputWidget
             $js = "initEditablePjax('{$this->pjaxContainerId}', '{$toggleButton}', '{$initPjaxVar}');";
             $view->registerJs($js);
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function run()
+    {
+        $class = $this->formClass;
+        echo $this->renderFormFields();
+        $class::end();
+        echo "</div>\n"; // content options
+        PopoverX::end();
+        echo "</div>\n"; // options
+    }
+
+    /**
+     * Renders the editable form fields
+     *
+     * @return string
+     */
+    protected function renderFormFields()
+    {
+        $out = Html::hiddenInput('hasEditable', 0) . "\n";
+        if ($this->beforeInput !== null) {
+            if (is_string($this->beforeInput)) {
+                $out .= $this->beforeInput . "\n";
+            } else {
+                $out .= call_user_func($this->beforeInput, $this->_form, $this) . "\n";
+            }
+        }
+        if ($this->inputType === self::INPUT_HTML5_INPUT) {
+            $out .= $this->renderHtml5Input() . "\n";
+        } elseif ($this->inputType === self::INPUT_WIDGET) {
+            $out .= $this->renderWidget($this->widgetClass) . "\n";
+        } elseif (Config::isHtmlInput($this->inputType)) {
+            $out .= $this->renderInput() . "\n";
+        } elseif (Config::isInputWidget($this->inputType)) {
+            $out .= $this->renderWidget($this->inputType) . "\n";
+        }
+        if ($this->afterInput !== null) {
+            if (is_string($this->afterInput)) {
+                $out .= $this->afterInput . "\n";
+            } else {
+                $out .= call_user_func($this->afterInput, $this->_form, $this) . "\n";
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * Renders the HTML 5 input
+     *
+     * @return string
+     */
+    protected function renderHtml5Input()
+    {
+        $type = ArrayHelper::remove($this->_inputOptions, 'type', 'text');
+        $field = Html::input($type, $this->name, $this->value, $this->_inputOptions);
+        if ($this->hasModel()) {
+            if (isset($this->_form)) {
+                return $this->_form
+                    ->field($this->model, $this->attribute, $this->inputFieldConfig)
+                    ->input($type, $this->_inputOptions)
+                    ->label(false);
+            }
+            $field = Html::activeInput($type, $this->name, $this->value, $this->_inputOptions);
+        }
+        return Html::tag('div', $field, $this->inputContainerOptions);
+    }
+
+    /**
+     * Renders a widget
+     *
+     * @return string
+     */
+    protected function renderWidget($class)
+    {
+        if ($this->hasModel()) {
+            if (isset($this->_form)) {
+                return $this->_form
+                    ->field($this->model, $this->attribute, $this->inputFieldConfig)
+                    ->widget($class, $this->_inputOptions)
+                    ->label(false);
+            }
+            $options = ArrayHelper::merge($this->_inputOptions, [
+                'model' => $this->model,
+                'attribute' => $this->attribute
+            ]);
+        } else {
+            $options = ArrayHelper::merge($this->_inputOptions, [
+                'name' => $this->name,
+                'value' => $this->value
+            ]);
+        }
+        $field = $class::widget($options);
+        return Html::tag('div', $field, $this->inputContainerOptions);
+    }
+
+    /**
+     * Renders all other HTML inputs (except HTML5)
+     *
+     * @return string
+     */
+    protected function renderInput()
+    {
+        $list = Config::isDropdownInput($this->inputType);
+        $input = $this->inputType;
+        if ($this->hasModel()) {
+            if (isset($this->_form)) {
+                return $list ?
+                    $this->_form
+                        ->field($this->model, $this->attribute, $this->inputFieldConfig)
+                        ->$input($this->data, $this->_inputOptions)
+                        ->label(false) :
+                    $this->_form
+                        ->field($this->model, $this->attribute, $this->inputFieldConfig)
+                        ->$input($this->_inputOptions)
+                        ->label(false);
+            }
+            $input = 'active' . ucfirst($this->inputType);
+        }
+        $checked = false;
+        if ($input == 'radio' || $input == 'checkbox') {
+            $this->options['value'] = $this->value;
+            $checked = ArrayHelper::remove($this->_inputOptions, 'checked', false);
+        }
+        if ($list) {
+            $field = Html::$input($this->name, $this->value, $this->data, $this->_inputOptions);
+        } else {
+            $field = ($input == 'checkbox' || $input == 'radio') ?
+                Html::$input($this->name, $checked, $this->_inputOptions) :
+                Html::$input($this->name, $this->value, $this->_inputOptions);
+        }
+        return Html::tag('div', $field, $this->inputContainerOptions);
+    }
+
+    /**
+     * Gets the form instance for use at runtime
+     *
+     * @return \yii\widgets\ActiveForm
+     */
+    public function getForm()
+    {
+        return $this->_form;
     }
 }
