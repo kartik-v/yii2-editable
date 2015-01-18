@@ -16,10 +16,6 @@
         return value === null || value === undefined || value == []
             || value === '' || trim && $.trim(value) === '';
     };
-    var isArrayEmpty = function (array) {
-        return typeof array != "undefined" && array != null 
-            && array.length != null && array.length > 0;
-    };
 
     var Editable = function (element, options) {
         this.$element = $(element);
@@ -168,8 +164,10 @@
                             $loading.hide();
                             if (isEmpty(out)) {
                                 out = valueIfNull;
-                            } else if (!isArrayEmpty(displayValueConfig) && (out in displayValueConfig)) {
-                                out = displayValueConfig[out];
+                            } else {
+                                if (displayValueConfig[out] !== undefined) {
+                                    out = displayValueConfig[out];
+                                }
                             }
                             if (notActiveForm) {
                                 $parent2.find('.help-block').remove();
