@@ -1,3 +1,9 @@
+version 1.7.1
+=============
+**Date:** 18-Jan-2015
+
+1. (bug #24): More correct `displayValueConfig` validation.
+
 version 1.7.0
 =============
 **Date:** 12-Jan-2015
