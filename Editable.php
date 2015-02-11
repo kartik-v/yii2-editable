@@ -4,7 +4,7 @@
  * @package   yii2-editable
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014
- * @version   1.7.0
+ * @version   1.7.1
  */
 
 namespace kartik\editable;
@@ -201,6 +201,12 @@ class Editable extends InputWidget
      * set to [[Editable::INPUT_WIDGET]]
      */
     public $widgetClass;
+
+    /**
+     * @var boolean additional ajax settings to pass to the plugin.
+     * @see http://api.jquery.com/jquery
+     */
+    public $ajaxSettings = [];
 
     /**
      * @var boolean whether to display any ajax processing errors. Defaults to `true`.
@@ -441,7 +447,8 @@ class Editable extends InputWidget
             'placement' => $this->placement,
             'target' => $this->format == self::FORMAT_BUTTON ? '.kv-editable-button' : '.kv-editable-link',
             'displayValueConfig' => $this->displayValueConfig,
-            'showAjaxErrors' => $this->showAjaxErrors
+            'showAjaxErrors' => $this->showAjaxErrors,
+            'ajaxSettings' => $this->ajaxSettings
         ];
         $this->registerPlugin('editable');
         if (!empty($this->pjaxContainerId)) {

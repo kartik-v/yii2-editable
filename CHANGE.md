@@ -1,8 +1,14 @@
 version 1.7.1
 =============
-**Date:** 18-Jan-2015
+**Date:** 11-Feb-2015
 
 1. (bug #24): More correct `displayValueConfig` validation.
+2. (enh #32): Pass additional data to various editable events
+    - `editableSubmit`: pass the editable form jquery element in addition to editable input element value
+    - `editableSuccess`: pass ajax response data and editable form jquery element in addition to editable input element value
+    - `editableError`: pass ajax response data editable form jquery elementin addition to editable input element value 
+3. (enh #33): New `ajaxSettings` property that can be used to merge additional ajax settings/options for editable submission.
+4. (enh #34): Various enhancements to plugin code.
 
 version 1.7.0
 =============
