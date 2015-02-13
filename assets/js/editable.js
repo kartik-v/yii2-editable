@@ -1,14 +1,14 @@
 /*!
  * @package   yii2-editable
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015
  * @version   1.7.1
  *
  * Editable Extension jQuery plugin
  *
  * Built for Yii Framework 2.0
  * Author: Kartik Visweswaran
- * Year: 2014
+ * Year: 2015
  * For more Yii related demos visit http://demos.krajee.com
  */
 (function ($) {
