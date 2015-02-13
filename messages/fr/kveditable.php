@@ -20,5 +20,5 @@ return [
     'Apply' => 'Appliquer',
     'Reset' => 'Réinitialiser',
     'Edit' => 'Modifier',
-    '(not set)' => 'Non défini',
+    '(not set)' => '(non défini)',
 ];
