@@ -1,3 +1,9 @@
+version 1.7.2
+=============
+**Date:** 24-Feb-2015
+
+1. (enh #37): Ability to override `ajaxSettings`.
+
 version 1.7.1
 =============
 **Date:** 13-Feb-2015
