@@ -148,7 +148,7 @@ class Editable extends InputWidget
      * {buttons} - string, will be replaced with the submit and reset button.
      * If this is set to null or an empty string, it will not be displayed.
      */
-    public $footer = '{buttons}';
+    public $footer = '{submit}{reset}';
 
     /**
      * @var string the value to be displayed. If not set, this will default to the
@@ -417,22 +417,26 @@ class Editable extends InputWidget
      */
     protected function renderFooter()
     {
-        $submitLabel = ArrayHelper::remove($this->submitButton, 'label',
-            '<i class="glyphicon glyphicon-save"></i> ' . Yii::t('kveditable', 'Apply')
-        );
-        $resetLabel = ArrayHelper::remove($this->resetButton, 'label',
-            '<i class="glyphicon glyphicon-repeat"></i> ' . Yii::t('kveditable', 'Reset')
-        );
+        $submitLabel = ArrayHelper::remove($this->submitButton, 'label', '<i class="glyphicon glyphicon-save"></i> ' . Yii::t('kveditable', 'Apply'));
+
         $this->submitButton['type'] = 'button';
-        $this->resetButton['type'] = 'button';
+
         Html::addCssClass($this->submitButton, 'kv-editable-submit');
+
+        $tr['{submit}'] = Html::button($submitLabel, $this->submitButton);
+
+        $resetLabel = ArrayHelper::remove($this->resetButton, 'label', '<i class="glyphicon glyphicon-repeat"></i> ' . Yii::t('kveditable', 'Reset'));
+
+        $this->resetButton['type'] = 'button';
+
         Html::addCssClass($this->resetButton, 'kv-editable-reset');
-        $buttons = Html::button($submitLabel, $this->submitButton) .
-            Html::button($resetLabel, $this->resetButton);
-        return Html::tag('div', '&nbsp;', ['class' => 'kv-editable-loading', 'style' => 'display:none;']) .
-        strtr($this->footer, [
-            '{buttons}' => $buttons
-        ]);
+
+        $tr['{reset}'] = Html::button($resetLabel, $this->resetButton);
+
+        // For backward compatibility
+        $tr['{buttons}'] = $tr['{submit}'] . $tr['{reset}'];
+
+        return Html::tag('div', '&nbsp;', ['class' => 'kv-editable-loading', 'style' => 'display:none;']) . strtr($this->footer, $tr);
     }
 
     /**
