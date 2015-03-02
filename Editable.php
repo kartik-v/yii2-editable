@@ -311,7 +311,7 @@ class Editable extends InputWidget
             throw new InvalidConfigException("You must set the 'data' property for '{$this->inputType}'.");
         }
         Config::validateInputWidget($this->inputType);
-        $this->initI18N();
+        $this->initI18N(__DIR__);
         $this->initOptions();
         $this->_popoverOptions['options']['id'] = $this->options['id'] . '-popover';
         $this->_popoverOptions['toggleButton']['id'] = $this->options['id'] . '-targ';
@@ -355,6 +355,9 @@ class Editable extends InputWidget
         $this->_inputOptions = $this->options;
         $this->containerOptions['id'] = $this->options['id'] . '-cont';
         $value = $this->hasModel() ? Html::getAttributeValue($this->model, $this->attribute) : $this->value;
+        if ($value === null && !empty($this->valueIfNull)) {
+            $value = $this->valueIfNull;
+        }
         if (!isset($this->displayValue)) {
             $this->displayValue = $value;
         }

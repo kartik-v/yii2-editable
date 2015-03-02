@@ -120,7 +120,7 @@
                 $form.find('input, select').each(function () {
                     $(this).trigger('change');
                 });
-                settings = $.extend({
+                settings = $.extend(self.ajaxSettings, {
                     type: $form.attr('method'),
                     url: $form.attr('action'),
                     data: $form.serialize(),
@@ -182,7 +182,7 @@
                         }
                         $cont.removeClass('kv-editable-processing');
                     }
-                }, self.ajaxSettings);
+                });
                 $.ajax(settings);
                 $el.trigger('editableSubmit', [$el.val(), $form]);
             });

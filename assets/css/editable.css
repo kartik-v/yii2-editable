@@ -30,10 +30,23 @@
     margin-right: 5px;
 }
 
-.kv-editable-button.btn-sm {
+.kv-editable-button.btn-sm,
+button[disabled].kv-editable-button
+ {
     border-radius: 15px;
     width: 30px;
     padding: 5px;
+}
+
+button[disabled].kv-editable-button
+{
+    opacity: 0.65;
+    filter: alpha(opacity=65);
+    pointer-events: none;
+    cursor: not-allowed;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border: 1px solid #ddd;
 }
 
 .kv-editable-footer {

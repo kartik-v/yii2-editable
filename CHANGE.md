@@ -1,8 +1,10 @@
 version 1.7.2
 =============
-**Date:** 24-Feb-2015
+**Date:** 02-Mar-2015
 
-1. (enh #37): Ability to override `ajaxSettings`.
+1. (enh #39): Better validation for `valueIfNull`.
+2. (enh #40): Enhanced styling for disabled editable button.
+3. (enh #41): Improve validation to retrieve the right translation messages folder.
 
 version 1.7.1
 =============
