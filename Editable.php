@@ -446,7 +446,7 @@ class Editable extends InputWidget
         $view = $this->getView();
         EditableAsset::register($view);
         $this->pluginOptions = [
-            'defaultValue' => $this->valueIfNull,
+            'valueIfNull' => $this->valueIfNull,
             'placement' => $this->placement,
             'target' => $this->format == self::FORMAT_BUTTON ? '.kv-editable-button' : '.kv-editable-link',
             'displayValueConfig' => $this->displayValueConfig,
