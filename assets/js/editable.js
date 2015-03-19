@@ -17,7 +17,7 @@
             return value === null || value === undefined || value.length === 0 || (trim && $.trim(value) === '');
         },
         Editable = function (element, options) {
-            this.$element = $(element);
+            this.$container = $(element);
             this.init(options);
             this.listen();
         };
@@ -26,7 +26,7 @@
         constructor: Editable,
         init: function (options) {
             var self = this;
-            self.$container = $('#' + self.$element.attr('id') + '-cont');
+            self.$input = self.$container.find('.kv-editable-input');
             self.$form = self.$container.find('.kv-editable-form');
             self.$value = self.$container.find('.kv-editable-value');
             self.$popover = self.$container.find('.kv-editable-popover');
@@ -64,8 +64,8 @@
         },
         listen: function () {
             var self = this, $form = self.$form, $btnSubmit = self.$btnSubmit, $btnReset = self.$btnReset,
-                $cont = $form.parent(), $popover = self.$popover, $loading = self.$loading, $el = self.$element,
-                $parent = $el.closest('.field-' + $el.attr('id')), $parent2 = $el.closest('.kv-editable-parent'),
+                $cont = $form.parent(), $el = self.$container, $popover = self.$popover, $loading = self.$loading, $input = self.$input,
+                $parent = $input.closest('.field-' + $input.attr('id')), $parent2 = $input.closest('.kv-editable-parent'),
                 $message = $parent.find('.help-block'), displayValueConfig = self.displayValueConfig, settings,
                 $hasEditable = $form.find('input[name="hasEditable"]'), showError, chkError = '', out = '',
                 objActiveForm = self.$form.data('yiiActiveForm'), $msgBlock = $parent2.find('.kv-help-block'),
@@ -104,7 +104,7 @@
             });
             $form.find('input, select').on('change', function () {
                 $popover.popoverX('refreshPosition');
-                $el.trigger('editableChange', [$el.val()]);
+                $el.trigger('editableChange', [$input.val()]);
             });
             $btnReset.on('click', function () {
                 $hasEditable.val(0);
@@ -132,11 +132,11 @@
                         $el.trigger('editableAjaxError', [request, status, message]);
                     },
                     success: function (data) {
-                        out = !isEmpty(data.output) ? data.output : $el.val();
+                        out = !isEmpty(data.output) ? data.output : $cont.val();
                         $popover.popoverX('refreshPosition');
                         if (!isEmpty(data.message)) {
                             showError(data.message);
-                            $el.trigger('editableError', [$el.val(), $form, data]);
+                            $el.trigger('editableError', [$input.val(), $form, data]);
                             return;
                         } else {
                             if (!isEmpty($msgBlock.attr('class'))) {
@@ -176,15 +176,15 @@
                                     $form.yiiActiveForm(objActiveForm.attributes, objActiveForm.settings);
                                 }
                             }
-                            $el.trigger('editableSuccess', [$el.val(), $form, data]);
+                            $el.trigger('editableSuccess', [$input.val(), $form, data]);
                         } else {
-                            $el.trigger('editableError', [$el.val(), $form, data]);
+                            $el.trigger('editableError', [$input.val(), $form, data]);
                         }
                         $cont.removeClass('kv-editable-processing');
                     }
                 });
                 $.ajax(settings);
-                $el.trigger('editableSubmit', [$el.val(), $form]);
+                $el.trigger('editableSubmit', [$input.val(), $form]);
             });
         }
     };

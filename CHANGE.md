@@ -1,10 +1,11 @@
 version 1.7.2
 =============
-**Date:** 02-Mar-2015
+**Date:** 19-Mar-2015
 
 1. (enh #39): Better validation for `valueIfNull`.
 2. (enh #40): Enhanced styling for disabled editable button.
 3. (enh #41): Improve validation to retrieve the right translation messages folder.
+4. (enh #44): Revamp editable widget initialization and auto detection of input.
 
 version 1.7.1
 =============
