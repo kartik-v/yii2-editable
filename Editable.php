@@ -453,7 +453,7 @@ class Editable extends InputWidget
             'showAjaxErrors' => $this->showAjaxErrors,
             'ajaxSettings' => $this->ajaxSettings
         ];
-        $this->registerPlugin('editable');
+        $this->registerPlugin('editable', 'jQuery("#' . $this->containerOptions['id'] . '")');
         if (!empty($this->pjaxContainerId)) {
             EditablePjaxAsset::register($view);
             $toggleButton = $this->_popoverOptions['toggleButton']['id'];

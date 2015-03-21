@@ -86,7 +86,7 @@
             $form.on('submit', function (ev) {
                 ev.preventDefault();
             }).on('keyup', function (ev) {
-                if (ev.which === 13) {
+                if (ev.which === 13 && ($(ev.target)[0] != $("textarea")[0])) {
                     $btnSubmit.trigger('click');
                 }
             }).on('reset', function () {
