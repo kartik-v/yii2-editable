@@ -86,7 +86,7 @@
             $form.on('submit', function (ev) {
                 ev.preventDefault();
             }).on('keyup', function (ev) {
-                if (ev.which === 13 && ($(ev.target)[0] != $("textarea")[0])) {
+                if (ev.which === 13 && self.submitOnEnter) {
                     $btnSubmit.trigger('click');
                 }
             }).on('reset', function () {
@@ -211,7 +211,8 @@
         placement: 'right',
         displayValueConfig: {},
         ajaxSettings: {},
-        showAjaxErrors: true
+        showAjaxErrors: true,
+        submitOnEnter: true
     };
 
     $.fn.editable.Constructor = Editable;

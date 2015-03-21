@@ -214,6 +214,11 @@ class Editable extends InputWidget
     public $showAjaxErrors = true;
 
     /**
+     * @var boolean whether to auto submit/save the form on pressing ENTER key. Defaults to `true`.
+     */
+    public $submitOnEnter = true;
+
+    /**
      * @var array the options for the input. If the inputType is one of the HTML inputs, this will
      * capture the HTML attributes. If the `inputType` is set to [[Editable::INPUT_WIDGET]]
      * or set to an input widget from the `\kartik\` namespace, then this will capture the widget
@@ -451,7 +456,8 @@ class Editable extends InputWidget
             'target' => $this->format == self::FORMAT_BUTTON ? '.kv-editable-button' : '.kv-editable-link',
             'displayValueConfig' => $this->displayValueConfig,
             'showAjaxErrors' => $this->showAjaxErrors,
-            'ajaxSettings' => $this->ajaxSettings
+            'ajaxSettings' => $this->ajaxSettings,
+            'submitOnEnter' => $this->submitOnEnter
         ];
         $this->registerPlugin('editable', 'jQuery("#' . $this->containerOptions['id'] . '")');
         if (!empty($this->pjaxContainerId)) {
