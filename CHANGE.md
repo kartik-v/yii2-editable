@@ -7,6 +7,7 @@ version 1.7.2
 3. (enh #41): Improve validation to retrieve the right translation messages folder.
 4. (enh #44): Revamp editable widget initialization and auto detection of input.
 5. (enh #47, #48): New property `submitOnEnter` to control save on ENTER key press.
+6. (bug #49): Throw exception when an array value is passed as key to `displayValueConfig`.
 
 version 1.7.1
 =============

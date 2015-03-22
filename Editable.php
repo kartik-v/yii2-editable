@@ -343,6 +343,8 @@ class Editable extends InputWidget
     /**
      * Initializes the widget options.
      * This method sets the default values for various widget options.
+     *
+     * @throws InvalidConfigException
      */
     protected function initOptions()
     {
@@ -372,7 +374,11 @@ class Editable extends InputWidget
         if ($this->displayValue === null || $this->displayValue === '') {
             $this->displayValue = $this->valueIfNull;
         }
-        if (is_array($this->displayValueConfig) && !empty($this->displayValueConfig[$value])) {
+        $hasDisplayConfig = is_array($this->displayValueConfig) && !empty($this->displayValueConfig);
+        if ($hasDisplayConfig && (is_array($this->value) || is_object($this->value))) {
+            throw new InvalidConfigException("Your editable value cannot be an array or object for parsing with 'displayValueConfig'. The array keys in 'displayValueConfig' must be a simple string or number. For advanced display value calculations, you must use your controller AJAX action to return 'output' as a JSON encoded response which will be used as a display value.");
+        }
+        if ($hasDisplayConfig && !empty($this->displayValueConfig[$value])) {
             $this->displayValue = $this->displayValueConfig[$value];
         }
         Html::addCssClass($this->containerOptions, 'kv-editable');
