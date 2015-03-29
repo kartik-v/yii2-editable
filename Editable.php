@@ -258,6 +258,16 @@ class Editable extends InputWidget
      * - $widget mixed is the current editable widget instance
      */
     public $afterInput;
+    
+    /**
+     * @var boolean whether to auto guess the input type and set the editable input options. When 
+     * this is set to `true` the Editable widget will automatically detect the core input options
+     * for common input types (including HTML input types, krajee widgets and DateControl) and append 
+     * the `kv-editable-input` class to the input. You can set this to false to set the `kv-editable-input`
+     * class manually for any other custom/third party widgets. You would do this typically when you set 
+     * inputType to `Editable::INPUT_WIDGET`. Defaults to `true`.
+     */
+    public $autoGuessInput = true;
 
     /**
      * @var boolean whether you wish to automatically display the form submit and reset buttons.
@@ -354,7 +364,7 @@ class Editable extends InputWidget
             Html::addCssClass($options, self::CSS_PARENT);
             $this->inputFieldConfig['options'] = $options;
         }
-        if (!Config::isHtmlInput($this->inputType)) {
+        if (!Config::isHtmlInput($this->inputType) && $this->autoGuessInput) {
             if ($this->widgetClass === 'kartik\datecontrol\DateControl') {
                 $options = ArrayHelper::getValue($this->options, 'options.options', []);
                 Html::addCssClass($options, 'kv-editable-input');

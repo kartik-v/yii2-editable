@@ -9,6 +9,7 @@ version 1.7.2
 5. (enh #47, #48): New property `submitOnEnter` to control save on ENTER key press.
 6. (bug #49): Throw exception when an array value is passed as key to `displayValueConfig`.
 7. (enh #53): Auto initialize `kv-editable-input` CSS for various input types and widgets.
+8. (enh #54): Auto guess input and set input options based on input type.
 
 version 1.7.1
 =============
