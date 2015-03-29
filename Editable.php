@@ -348,16 +348,25 @@ class Editable extends InputWidget
      */
     protected function initOptions()
     {
-        $css = empty($this->options['class']) ? ' form-control' : '';
-        Html::addCssClass($this->options, 'kv-editable-input' . $css);
         Html::addCssClass($this->inputContainerOptions, self::CSS_PARENT);
         if ($this->hasModel()) {
             $options = ArrayHelper::getValue($this->inputFieldConfig, 'options', []);
             Html::addCssClass($options, self::CSS_PARENT);
             $this->inputFieldConfig['options'] = $options;
         }
-        if (!Config::isHtmlInput($this->inputType) && empty($this->options['options']['id'])) {
-            $this->options['options']['id'] = $this->options['id'];
+        if (!Config::isHtmlInput($this->inputType)) {
+            if ($this->widgetClass === 'kartik\datecontrol\DateControl') {
+                $options = ArrayHelper::getValue($this->options, 'options.options', []);
+                Html::addCssClass($options, 'kv-editable-input');
+                $this->options['options']['options'] = $options;
+            } elseif ($this->inputType !== self::INPUT_WIDGET) {
+                $options = ArrayHelper::getValue($this->options, 'options', []);
+                Html::addCssClass($options, 'kv-editable-input');
+                $this->options['options'] = $options;
+            }
+        } else {
+            $css = empty($this->options['class']) ? ' form-control' : '';
+            Html::addCssClass($this->options, 'kv-editable-input' . $css);
         }
         $this->_inputOptions = $this->options;
         $this->containerOptions['id'] = $this->options['id'] . '-cont';

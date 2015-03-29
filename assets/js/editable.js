@@ -132,7 +132,7 @@
                         $el.trigger('editableAjaxError', [request, status, message]);
                     },
                     success: function (data) {
-                        out = !isEmpty(data.output) ? data.output : $cont.val();
+                        out = !isEmpty(data.output) ? data.output : $input.val();
                         $popover.popoverX('refreshPosition');
                         if (!isEmpty(data.message)) {
                             showError(data.message);
