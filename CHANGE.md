@@ -1,6 +1,23 @@
+version 1.7.3
+=============
+**Date:** 15-Apr-2015
+
+1. (enh #54): Auto guess input and set input options based on input type.
+2. (enh #56): Reset/Clear help-block error messages before next validation.
+3. (enh #57): Added translation support for Lithuanian language.
+4. (enh #3, #58): Ability to render editable content INLINE as an alternative to a POPOVER. 
+    - New `asPopover` boolean property added.
+    - Enhanced inline form styles
+    - INLINE templates and settings to control how content should be rendered
+    - Two built in inline templates
+5. (enh #59): New `buttonsTemplate` property for rendering editable form action buttons (reset and submit).
+6. (enh #60): Ability to configure action button `icon` and `label` separately.
+7. (enh #61): New boolean property `showButtonLabels` to control the display of action button labels (will show the label as title on hover).
+8. (enh #62): Enhance footer property to include tags for '{loading}' and '{buttons}'.
+
 version 1.7.2
 =============
-**Date:** 19-Mar-2015
+**Date:** 29-Mar-2015
 
 1. (enh #39): Better validation for `valueIfNull`.
 2. (enh #40): Enhanced styling for disabled editable button.
@@ -9,7 +26,6 @@ version 1.7.2
 5. (enh #47, #48): New property `submitOnEnter` to control save on ENTER key press.
 6. (bug #49): Throw exception when an array value is passed as key to `displayValueConfig`.
 7. (enh #53): Auto initialize `kv-editable-input` CSS for various input types and widgets.
-8. (enh #54): Auto guess input and set input options based on input type.
 
 version 1.7.1
 =============

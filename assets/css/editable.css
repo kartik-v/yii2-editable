@@ -2,7 +2,7 @@
  * @package   yii2-editable
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015
- * @version   1.7.2
+ * @version   1.7.3
  *
  * Styling for the Editable widget
  * Built for Yii Framework 2.0
@@ -23,7 +23,6 @@
     text-decoration: none;
     cursor: pointer;
     border-bottom: 1px dashed;
-    text-decoration: none;
 }
 
 .kv-editable-value {
@@ -31,15 +30,13 @@
 }
 
 .kv-editable-button.btn-sm,
-button[disabled].kv-editable-button
- {
+button[disabled].kv-editable-button {
     border-radius: 15px;
     width: 30px;
     padding: 5px;
 }
 
-button[disabled].kv-editable-button
-{
+button[disabled].kv-editable-button {
     opacity: 0.65;
     filter: alpha(opacity=65);
     pointer-events: none;
@@ -47,19 +44,6 @@ button[disabled].kv-editable-button
     -webkit-box-shadow: none;
     box-shadow: none;
     border: 1px solid #ddd;
-}
-
-.kv-editable-footer {
-    background-color: #fbfbfb;
-    margin: 10px -14px -9px -14px;
-    border-radius: 0 0 5px 5px;
-    border-top: 1px solid #ebebeb;
-    padding: 4px;
-    text-align: right;
-}
-
-.kv-editable-footer .btn {
-    margin-left: 4px;
 }
 
 .kv-editable-link:hover, .kv-editable:focus {
@@ -166,4 +150,100 @@ button[disabled].kv-editable-button
 .kv-editable-processing {
     opacity: 0.5;
     cursor: wait;
+}
+
+.kv-editable-inline .panel-footer {
+    text-align: right;
+    padding: 5px;
+}
+
+.kv-editable-inline .panel-footer .btn {
+    margin-left: 4px;
+}
+
+@media (min-width: 768px) {
+    .kv-editable-form-inline .form-group {
+        display: inline-block;
+        margin-bottom: 0;
+        vertical-align: top;
+    }
+
+    .kv-editable-form-inline .form-control {
+        display: inline-block;
+        width: auto;
+        vertical-align: top;
+    }
+
+    .kv-editable-form-inline .form-control-static {
+        display: inline-block;
+    }
+
+    .kv-editable-form-inline .input-group {
+        display: inline-table;
+        vertical-align: top;
+    }
+
+    .kv-editable-form-inline .input-group .input-group-addon,
+    .kv-editable-form-inline .input-group .input-group-btn,
+    .kv-editable-form-inline .input-group .form-control {
+        width: auto;
+    }
+
+    .kv-editable-form-inline .input-group > .form-control {
+        width: 100%;
+    }
+
+    .kv-editable-form-inline .control-label {
+        margin-bottom: 0;
+        vertical-align: middle;
+    }
+
+    .kv-editable-form-inline .radio,
+    .kv-editable-form-inline .checkbox {
+        display: inline-block;
+        margin-top: 0;
+        margin-bottom: 0;
+        vertical-align: middle;
+    }
+
+    .kv-editable-form-inline .radio label,
+    .kv-editable-form-inline .checkbox label {
+        padding-left: 0;
+    }
+
+    .kv-editable-form-inline .radio input[type="radio"],
+    .kv-editable-form-inline .checkbox input[type="checkbox"] {
+        position: relative;
+        margin-left: 0;
+    }
+
+    .kv-editable-form-inline .has-feedback .form-control-feedback {
+        top: 0;
+    }
+}
+
+.kv-editable-inline-1 .kv-editable-inline,
+.kv-editable-inline-2 .kv-editable-inline,
+.kv-editable-inline-button .kv-editable-button {
+    display: inline-block;
+}
+
+.kv-editable-inline-1 {
+    margin-top: -10px;
+}
+
+.kv-editable-inline-1 .kv-inline-open {
+    margin-top: 20px;
+}
+
+.panel .kv-editable-form-inline {
+    padding: 0 5px 5px 0;
+}
+
+.kv-editable-form-inline .btn-sm {
+    margin: 2px 4px 0 0;
+}
+
+.kv-editable-form-inline .kv-editable-close {
+    margin-top: 6px;
 }

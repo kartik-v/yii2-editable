@@ -18,8 +18,9 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Apply' => 'Thiết lập',
-    'Reset' => 'Gán giá trị mặc định',
-    'Edit' =>  'Sửa',
     '(not set)' => '(chưa thiết lập)',
+    'Apply' => 'Thiết lập',
+    'Close' => '',
+    'Edit' =>  'Sửa',
+    'Reset' => 'Gán giá trị mặc định',
 ];

@@ -17,8 +17,9 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Apply' => 'Alkalmaz',
-    'Reset' => 'Alaphelyzet',
-    'Edit' => 'Szerkesztés',
     '(not set)' => '(nincs beállítva)',
+    'Apply' => 'Alkalmaz',
+    'Close' => '',
+    'Edit' => 'Szerkesztés',
+    'Reset' => 'Alaphelyzet',
 ];

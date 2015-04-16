@@ -17,8 +17,9 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Apply' => 'Applica',
-    'Reset' => 'Resetta',
-    'Edit' => 'Modifica',
     '(not set)' => '(non impostato)',
+    'Apply' => 'Applica',
+    'Close' => '',
+    'Edit' => 'Modifica',
+    'Reset' => 'Resetta',
 ];

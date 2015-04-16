@@ -17,8 +17,9 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Apply' => 'Применить',
-    'Reset' => 'Сбросить',
-    'Edit' => 'Редактировать',
     '(not set)' => '(не задано)',
+    'Apply' => 'Применить',
+    'Close' => '',
+    'Edit' => 'Редактировать',
+    'Reset' => 'Сбросить',
 ];
