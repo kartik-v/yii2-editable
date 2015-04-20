@@ -15,6 +15,7 @@ version 1.7.3
 7. (enh #61): New boolean property `showButtonLabels` to control the display of action button labels (will show the label as title on hover).
 8. (enh #62): Enhance footer property to include tags for '{loading}' and '{buttons}'.
 9. (bug #63): Fix renderActionButtons to correctly parse submit & reset button options.
+10. (enh #64): Better reset of error container help-block content.
 
 version 1.7.2
 =============

@@ -143,6 +143,9 @@
                 addCss($wrapper, 'kv-editable-processing');
                 $loading.show();
                 $hasEditable.val(1);
+                $form.find('.help-block').each(function () {
+                    $(this).html('');
+                });
                 $form.find('input, select').each(function () {
                     $(this).trigger('change');
                 });
