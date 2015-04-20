@@ -1,6 +1,6 @@
 version 1.7.3
 =============
-**Date:** 15-Apr-2015
+**Date:** 20-Apr-2015
 
 1. (enh #54): Auto guess input and set input options based on input type.
 2. (enh #56): Reset/Clear help-block error messages before next validation.
@@ -14,6 +14,7 @@ version 1.7.3
 6. (enh #60): Ability to configure action button `icon` and `label` separately.
 7. (enh #61): New boolean property `showButtonLabels` to control the display of action button labels (will show the label as title on hover).
 8. (enh #62): Enhance footer property to include tags for '{loading}' and '{buttons}'.
+9. (bug #63): Fix renderActionButtons to correctly parse submit & reset button options.
 
 version 1.7.2
 =============

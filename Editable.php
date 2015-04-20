@@ -579,16 +579,18 @@ HTML;
      */
     protected function renderActionButtons()
     {
-        $submitIcon = ArrayHelper::remove($this->submitButton, 'icon', '<i class="glyphicon glyphicon-save"></i>');
-        $resetIcon = ArrayHelper::remove($this->resetButton, 'icon', '<i class="glyphicon glyphicon-ban-circle"></i>');
-        $submitLabel = ArrayHelper::remove($this->submitButton, 'label', Yii::t('kveditable', 'Apply'));
-        $resetLabel = ArrayHelper::remove($this->resetButton, 'label', Yii::t('kveditable', 'Reset'));
+        $submitOpts = $this->submitButton;
+        $resetOpts = $this->resetButton;
+        $submitIcon = ArrayHelper::remove($submitOpts, 'icon', '<i class="glyphicon glyphicon-save"></i>');
+        $resetIcon = ArrayHelper::remove($resetOpts, 'icon', '<i class="glyphicon glyphicon-ban-circle"></i>');
+        $submitLabel = ArrayHelper::remove($submitOpts, 'label', Yii::t('kveditable', 'Apply'));
+        $resetLabel = ArrayHelper::remove($resetOpts, 'label', Yii::t('kveditable', 'Reset'));
         if ($this->showButtonLabels === false) {
-            if (empty($this->submitButton['title'])) {
-                $this->submitButton['title'] = $submitLabel;
+            if (empty($submitOpts['title'])) {
+                $submitOpts['title'] = $submitLabel;
             }
-            if (empty($this->resetButton['title'])) {
-                $this->resetButton['title'] = $resetLabel;
+            if (empty($resetOpts['title'])) {
+                $resetOpts['title'] = $resetLabel;
             }
             $submitLabel = $submitIcon;
             $resetLabel = $resetIcon;
@@ -597,13 +599,13 @@ HTML;
             $resetLabel = $resetIcon . ' ' . Html::encode($resetLabel);
         }
 
-        $this->submitButton['type'] = 'button';
-        $this->resetButton['type'] = 'button';
-        Html::addCssClass($this->submitButton, 'kv-editable-submit');
-        Html::addCssClass($this->resetButton, 'kv-editable-reset');
+        $submitOpts['type'] = 'button';
+        $resetOpts['type'] = 'button';
+        Html::addCssClass($submitOpts, 'kv-editable-submit');
+        Html::addCssClass($resetOpts, 'kv-editable-reset');
         return strtr($this->buttonsTemplate, [
-            '{reset}' => Html::button($resetLabel, $this->resetButton),
-            '{submit}' => Html::button($submitLabel, $this->submitButton)
+            '{reset}' => Html::button($resetLabel, $resetOpts),
+            '{submit}' => Html::button($submitLabel, $submitOpts)
         ]);
     }
 
@@ -662,12 +664,15 @@ HTML;
         if ($this->asPopover) {
             return '';
         }
-        return strtr($this->inlineSettings[$template], [
+        $out = strtr($this->inlineSettings[$template], [
             '{header}' => $this->_popoverOptions['header'],
             '{close}' => $this->inlineSettings['closeButton'],
-            '{loading}' => self::LOAD_INDICATOR,
-            '{buttons}' => $this->renderActionButtons()
+            '{loading}' => self::LOAD_INDICATOR
         ]);
+        if (strpos($out, '{buttons}') === false) {
+            return $out;
+        }
+        return strtr($out,  ['{buttons}' => $this->renderActionButtons()]);
     }
 
     /**
