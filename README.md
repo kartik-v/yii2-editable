@@ -1,6 +1,12 @@
 yii2-editable
 =============
 
+[![Latest Stable Version](https://poser.pugx.org/kartik-v/yii2-editable/v/stable)](https://packagist.org/packages/kartik-v/yii2-editable)
+[![License](https://poser.pugx.org/kartik-v/yii2-editable/license)](https://packagist.org/packages/kartik-v/yii2-editable)
+[![Total Downloads](https://poser.pugx.org/kartik-v/yii2-editable/downloads)](https://packagist.org/packages/kartik-v/yii2-editable)
+[![Monthly Downloads](https://poser.pugx.org/kartik-v/yii2-editable/d/monthly)](https://packagist.org/packages/kartik-v/yii2-editable)
+[![Daily Downloads](https://poser.pugx.org/kartik-v/yii2-editable/d/daily)](https://packagist.org/packages/kartik-v/yii2-editable)
+
 Easily set any displayed content as editable in Yii Framework 2.0. This is an enhanced editable widget for Yii 2.0 that allows easy editing of displayed data, using inputs, widgets and more with numerous configuration possibilities. The extension uses the enhanced [yii2-popover-x](http://demos.krajee.com/popover-x) extension as a popover modal for editing. With release v1.7.3, this extension also allows you to render the editable content inline and offers advanced inline templates for configuration. This extension does not use any external jQuery plugin like X-Editable, instead it uses its own lean and extensible
  jQuery editable plugin - that elaborately reuses functionality available within Yii Framework 2.0.
 
