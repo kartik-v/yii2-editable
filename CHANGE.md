@@ -1,6 +1,6 @@
 version 1.7.3
 =============
-**Date:** 20-Apr-2015
+**Date:** 12-May-2015
 
 1. (enh #54): Auto guess input and set input options based on input type.
 2. (enh #56): Reset/Clear help-block error messages before next validation.
@@ -16,6 +16,7 @@ version 1.7.3
 8. (enh #62): Enhance footer property to include tags for '{loading}' and '{buttons}'.
 9. (bug #63): Fix renderActionButtons to correctly parse submit & reset button options.
 10. (enh #64): Better reset of error container help-block content.
+11. (enh #69): Generate default `en` message translation file.
 
 version 1.7.2
 =============
