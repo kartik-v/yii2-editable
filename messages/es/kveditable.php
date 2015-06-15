@@ -17,9 +17,9 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    '(not set)' => '(vacio)',
+    '(not set)' => '(vacío)',
     'Apply' => 'Aplicar',
-    'Close' => '',
+    'Close' => 'Cerrar',
     'Edit' => 'Editar',
     'Reset' => 'Reiniciar',
 ];
