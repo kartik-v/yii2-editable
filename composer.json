@@ -4,7 +4,7 @@
     "keywords": ["bootstrap", "editable", "input", "widget", "popover-x", "popover", "jquery"],
     "homepage": "https://github.com/kartik-v/yii2-editable",
     "type": "yii2-extension",
-    "license": "BSD 3-Clause",
+    "license": "BSD-3-Clause",
     "authors": [
         {
             "name": "Kartik Visweswaran",
