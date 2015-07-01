@@ -13,6 +13,7 @@
  */
 (function ($) {
     "use strict";
+
     var isEmpty = function (value, trim) {
             return value === null || value === undefined || value.length === 0 || (trim && $.trim(value) === '');
         },
@@ -20,25 +21,26 @@
             $el.removeClass(css).addClass(css);
         },
         Editable = function (element, options) {
-            this.$container = $(element);
-            this.init(options);
-            this.listen();
+            var self = this;
+            self.$container = $(element);
+            self.init(options);
+            self.listen();
         };
 
     Editable.prototype = {
         constructor: Editable,
         init: function (options) {
-            var self = this;
-            self.$input = self.$container.find('.kv-editable-input');
-            self.$form = self.$container.find('.kv-editable-form');
-            self.$value = self.$container.find('.kv-editable-value');
-            self.$close = self.$container.find('.kv-editable-close');
-            self.$popover = self.$container.find('.kv-editable-popover');
-            self.$inline = self.$container.find('.kv-editable-inline');
-            self.$btnSubmit = self.$container.find('button.kv-editable-submit');
-            self.$btnReset = self.$container.find('button.kv-editable-reset');
-            self.$loading = self.$container.find('.kv-editable-loading');
-            self.$target = self.$container.find(options.target);
+            var self = this, $el = self.$container;
+            self.$input = $el.find('.kv-editable-input');
+            self.$form = $el.find('.kv-editable-form');
+            self.$value = $el.find('.kv-editable-value');
+            self.$close = $el.find('.kv-editable-close');
+            self.$popover = $el.find('.kv-editable-popover');
+            self.$inline = $el.find('.kv-editable-inline');
+            self.$btnSubmit = $el.find('button.kv-editable-submit');
+            self.$btnReset = $el.find('button.kv-editable-reset');
+            self.$loading = $el.find('.kv-editable-loading');
+            self.$target = $el.find(options.target);
             $.each(options, function (key, value) {
                 self[key] = value;
             });
@@ -77,11 +79,11 @@
             var self = this, $form = self.$form, $btnSubmit = self.$btnSubmit, $btnReset = self.$btnReset,
                 $cont = $form.parent(), $el = self.$container, $popover = self.$popover, $close = self.$close,
                 $target = self.target === '.kv-editable-button' ? self.$target : self.$value, $inline = self.$inline,
-                $loading = self.$loading, $input = self.$input,
+                $loading = self.$loading, $input = self.$input, showError, chkError = '', out = '',
                 $parent = $input.closest('.field-' + $input.attr('id')), $parent2 = $input.closest('.kv-editable-parent'),
                 $message = $parent.find('.help-block'), displayValueConfig = self.displayValueConfig, settings,
-                $hasEditable = $form.find('input[name="hasEditable"]'), showError, chkError = '', out = '',
-                objActiveForm = self.$form.data('yiiActiveForm'), $msgBlock = $parent2.find('.kv-help-block'),
+                $hasEditable = $form.find('input[name="hasEditable"]'), $msgBlock = $parent2.find('.kv-help-block'),
+                objActiveForm = self.$form.data('yiiActiveForm'),
                 notActiveForm = isEmpty($parent.attr('class')) || isEmpty($message.attr('class'));
             showError = function (message) {
                 if (notActiveForm) {

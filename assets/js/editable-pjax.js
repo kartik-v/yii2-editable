@@ -11,7 +11,8 @@
  * Year: 2015
  * For more Yii related demos visit http://demos.krajee.com
  */
-var initEditablePjax;
+var initEditablePjax = function() {
+};
 (function ($) {
     "use strict";
     initEditablePjax = function (pjaxContainer, toggleButton, initPjaxVar) {

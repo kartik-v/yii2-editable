@@ -37,6 +37,7 @@ Easily set any displayed content as editable in Yii Framework 2.0. This is an en
 Read this [web tip /wiki](http://webtips.krajee.com/setting-composer-minimum-stability-application/) on setting the `minimum-stability` settings for your application's composer.json.
 
 ## Demo
+
 You can see detailed [documentation and examples](http://demos.krajee.com/editable) on usage of the extension.
 
 ## Installation
@@ -44,24 +45,19 @@ You can see detailed [documentation and examples](http://demos.krajee.com/editab
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
 
 
-> Note: You must set the `minimum-stability` to `dev` in the **composer.json** file in your application root folder before installation of this extension OR
-if your `minimum-stability` is set to `stable`, then set the following in the require section of your composer.json file
-
-```
-    kartik-v/yii2-editable: "@dev",
-    kartik-v/yii2-krajee-base: "@dev"
-```
+> Note: Check the [composer.json](https://github.com/kartik-v/yii2-editable/blob/master/composer.json) for this extension's requirements and dependencies. 
+Read this [web tip /wiki](http://webtips.krajee.com/setting-composer-minimum-stability-application/) on setting the `minimum-stability` settings for your application's composer.json.
 
 Either run
 
 ```
-$ php composer.phar require kartik-v/yii2-editable "dev-master"
+$ php composer.phar require kartik-v/yii2-editable "@dev"
 ```
 
 or add
 
 ```
-"kartik-v/yii2-editable": "dev-master"
+"kartik-v/yii2-editable": "@dev"
 ```
 
 to the ```require``` section of your `composer.json` file.
@@ -73,12 +69,12 @@ to the ```require``` section of your `composer.json` file.
 ```php
 use kartik\editable\Editable;
 echo Editable::widget([
-    'model'=>$model, 
+    'model' => $model, 
     'attribute' => 'rating',
-    'type'=>'primary',
-    'size'=>'lg',
-    'inputType'=>Editable::INPUT_RATING,
-    'editableValueOptions'=>['class'=>'text-success h3']
+    'type' => 'primary',
+    'size'=> 'lg',
+    'inputType' => Editable::INPUT_RATING,
+    'editableValueOptions' => ['class' => 'text-success h3']
 ]);
 ```
 

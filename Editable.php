@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package   yii2-editable
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
