@@ -1,5 +1,17 @@
-version 1.7.3
-=============
+Change Log: `yii2-editable`
+===========================
+
+## Version 1.7.4
+
+**Date:** 15-Aug-2015
+
+1. (enh #84): Update Portugese translations.
+2. (enh #85): Add Greek translations.
+3. (enh #88): Update Russian translations.
+4. Better fix for #64 in resetting errors.
+
+## Version 1.7.3
+
 **Date:** 01-Jul-2015
 
 1. (enh #54): Auto guess input and set input options based on input type.
@@ -22,8 +34,8 @@ version 1.7.3
 14. (enh #76): Improved Spanish translations.
 15. (enh #78): Added Chinese translations.
 
-version 1.7.2
-=============
+## Version 1.7.2
+
 **Date:** 29-Mar-2015
 
 1. (enh #39): Better validation for `valueIfNull`.
@@ -34,8 +46,8 @@ version 1.7.2
 6. (bug #49): Throw exception when an array value is passed as key to `displayValueConfig`.
 7. (enh #53): Auto initialize `kv-editable-input` CSS for various input types and widgets.
 
-version 1.7.1
-=============
+## Version 1.7.1
+
 **Date:** 13-Feb-2015
 
 1. (bug #24): More correct `displayValueConfig` validation.
@@ -48,8 +60,8 @@ version 1.7.1
 5. (enh #35): Add French translations.
 6. Set copyright year to current.
 
-version 1.7.0
-=============
+## Version 1.7.0
+
 **Date:** 12-Jan-2015
 
 1. (bug #25): Fix options setting for PopoverX.
@@ -57,8 +69,8 @@ version 1.7.0
 3. Revamp to use new Krajee base Module and TranslationTrait.
 4. Code formatting updates as per Yii2 coding style.
 
-version 1.6.0
-=============
+## Version 1.6.0
+
 **Date:** 22-Nov-2014
 
 1. (enh #15): Add Vietnamese language translations.
@@ -68,39 +80,39 @@ version 1.6.0
 5. (enh #21): Enhancements for rendering widgets and related styling.
 6. (enh #22): Revamp extension to work better with model validation and in EditableColumn.
 
-version 1.4.0
-=============
+## Version 1.4.0
+
 **Date:** 22-Oct-2014
 
 1. (enh #14): Raise new `editableAjaxError` event for errors faced via ajax
 2. New property `showAjaxErrors` included for the editable jQuery plugin.
 
-version 1.3.0
-=============
+## Version 1.3.0
+
 **Date:** 04-Sep-2014
 
 1. (enh #8): Enhance `beforeInput` & `afterInput` to be passed as callback functions.
 2. (enh #9): Included client plugin events `editableChange`, `editableSubmit`, `editableReset`, `editableSuccess`, and `editableError`.
 3. PSR4 alias change
 
-version 1.2.0
-=============
+## Version 1.2.0
+
 **Date:** 26-Aug-2014
 
 1. (enh #4): Better fix to reinitialize form error blocks for each ajax call.
 2. (enh #6): Added `displayValueConfig` to auto calculate display value.
 
 
-version 1.1.0
-=============
+## Version 1.1.0
+
 **Date:** 21-Aug-2014
 
 1. (enh #2): Enhancements to the widget for rendering and processing via Pjax.
 2. (enh #4): Reinitialize form error blocks for each ajax call.
 3. (enh #5): More correct valueIfNull and displayValue null validation check.
    
-version 1.0.0
-=============
+## Version 1.0.0
+
 **Date:** 27-Jul-2014
 
 ### Initial release

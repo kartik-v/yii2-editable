@@ -2,7 +2,7 @@
  * @package   yii2-editable
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015
- * @version   1.7.3
+ * @version   1.7.4
  *
  * Editable Extension jQuery plugin
  *
@@ -83,7 +83,7 @@
                 $parent = $input.closest('.field-' + $input.attr('id')), $parent2 = $input.closest('.kv-editable-parent'),
                 $message = $parent.find('.help-block'), displayValueConfig = self.displayValueConfig, settings,
                 $hasEditable = $form.find('input[name="hasEditable"]'), $msgBlock = $parent2.find('.kv-help-block'),
-                objActiveForm = self.$form.data('yiiActiveForm'),
+                objActiveForm = $form.data('yiiActiveForm'),
                 notActiveForm = isEmpty($parent.attr('class')) || isEmpty($message.attr('class'));
             showError = function (message) {
                 if (notActiveForm) {
@@ -148,8 +148,15 @@
                 $form.find('.help-block').each(function () {
                     $(this).html('');
                 });
+                $form.find('.has-error').removeClass('has-error');
                 $form.find('input, select').each(function () {
-                    $(this).trigger('change');
+                    var $el = $(this), v = $el.val(), v1 = v;
+                    if ($.isArray(v)) {
+                        v1.push('-');
+                    } else {
+                        v1 = v1 + '-';
+                    }
+                    $el.val(v1).trigger('blur').val(v).trigger('blur');
                 });
                 settings = $.extend({
                     type: $form.attr('method'),
@@ -216,8 +223,10 @@
                         $wrapper.removeClass('kv-editable-processing');
                     }
                 }, self.ajaxSettings);
-                $.ajax(settings);
-                $el.trigger('editableSubmit', [$input.val(), $form]);
+                setTimeout(function() {
+                    $.ajax(settings);
+                    $el.trigger('editableSubmit', [$input.val(), $form]);
+                }, 1000);
             });
         }
     };
