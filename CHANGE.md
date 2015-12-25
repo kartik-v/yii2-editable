@@ -3,12 +3,14 @@ Change Log: `yii2-editable`
 
 ## Version 1.7.4
 
-**Date:** 15-Aug-2015
+**Date:** 25-Dec-2015
 
 1. (enh #84): Update Portugese translations.
 2. (enh #85): Add Greek translations.
 3. (enh #88): Update Russian translations.
 4. Better fix for #64 in resetting errors.
+5. (enh #91): Add plugin option `encodeOutput` to encode HTML output.
+6. (enh #103): Add Czech Translations.
 
 ## Version 1.7.3
 

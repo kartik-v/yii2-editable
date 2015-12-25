@@ -46,6 +46,16 @@
             });
             self.asPopover = self.asPopover == 1 || self.asPopover === 'true';
         },
+        htmlEncode: function(data) {
+            if (!this.encodeOutput) {
+                return data;
+            }
+            return data.replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&apos;');
+        },
         toggle: function (show, delay) {
             var self = this, $value = self.$value, $inline = self.$inline;
             delay = delay || 'fast';
@@ -171,7 +181,7 @@
                     },
                     success: function (data) {
                         chkError = '';
-                        out = !isEmpty(data.output) ? data.output : $input.val();
+                        out = !isEmpty(data.output) ? data.output : self.htmlEncode($input.val());
                         self.refreshPopover();
                         if (!isEmpty(data.message)) {
                             showError(data.message);
@@ -255,7 +265,8 @@
         ajaxSettings: {},
         showAjaxErrors: true,
         submitOnEnter: true,
-        asPopover: true
+        asPopover: true,
+        encodeOutput: true
     };
 
     $.fn.editable.Constructor = Editable;
