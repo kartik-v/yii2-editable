@@ -24,7 +24,8 @@
             var self = this;
             self.$container = $(element);
             self.init(options);
-            self.listen();
+            self.destroy();
+            self.create();
         };
 
     Editable.prototype = {
@@ -44,7 +45,6 @@
             $.each(options, function (key, value) {
                 self[key] = value;
             });
-            self.asPopover = self.asPopover == 1 || self.asPopover === 'true';
         },
         htmlEncode: function(data) {
             if (!this.encodeOutput) {
@@ -85,16 +85,28 @@
                 self.$popover.popoverX('refreshPosition');
             }
         },
-        listen: function () {
+        raise: function($el, ev, params) {
+            params = params || [];
+            $el.trigger(ev, params);
+        },
+        destroy: function() {
+            var self = this, $target = self.target === '.kv-editable-button' ? self.$target : self.$value;
+            self.$form.off('.editable');
+            self.$form.find('input, select').off('.editable');
+            self.$close.off('.editable');
+            self.$btnSubmit.off('.editable');
+            self.$btnReset.off('.editable');
+            $target.off('.editable');
+        },
+        create: function () {
             var self = this, $form = self.$form, $btnSubmit = self.$btnSubmit, $btnReset = self.$btnReset,
-                $cont = $form.parent(), $el = self.$container, $popover = self.$popover, $close = self.$close,
-                $target = self.target === '.kv-editable-button' ? self.$target : self.$value, $inline = self.$inline,
-                $loading = self.$loading, $input = self.$input, showError, chkError = '', out = '',
-                $parent = $input.closest('.field-' + $input.attr('id')), $parent2 = $input.closest('.kv-editable-parent'),
-                $message = $parent.find('.help-block'), displayValueConfig = self.displayValueConfig, settings,
-                $hasEditable = $form.find('input[name="hasEditable"]'), $msgBlock = $parent2.find('.kv-help-block'),
-                objActiveForm = $form.data('yiiActiveForm'),
-                notActiveForm = isEmpty($parent.attr('class')) || isEmpty($message.attr('class'));
+                $cont = $form.parent(), $el = self.$container, $close = self.$close, $inline = self.$inline,
+                $target = self.target === '.kv-editable-button' ? self.$target : self.$value,  $loading = self.$loading,
+                $input = self.$input, showError, chkError = '', out = '', objActiveForm = $form.data('yiiActiveForm'),
+                $parent = $input.closest('.field-' + $input.attr('id')), $message = $parent.find('.help-block'),
+                $parent2 = $input.closest('.kv-editable-parent'), displayValueConfig = self.displayValueConfig,
+                notActiveForm = isEmpty($parent.attr('class')) || isEmpty($message.attr('class')), settings,
+                $hasEditable = $form.find('input[name="hasEditable"]'), $msgBlock = $parent2.find('.kv-help-block');
             showError = function (message) {
                 if (notActiveForm) {
                     if (isEmpty($msgBlock.attr('class'))) {
@@ -109,13 +121,13 @@
                 $loading.hide();
                 $cont.removeClass('kv-editable-processing');
             };
-            $form.on('submit', function (ev) {
+            $form.on('submit.editable', function (ev) {
                 ev.preventDefault();
-            }).on('keyup', function (ev) {
+            }).on('keyup.editable', function (ev) {
                 if (ev.which === 13 && self.submitOnEnter) {
-                    $btnSubmit.trigger('click');
+                    self.raise($btnSubmit, 'click.editable');
                 }
-            }).on('reset', function () {
+            }).on('reset.editable', function () {
                 setTimeout(function () {
                     $form.data('kvEditableSubmit', false);
                     if (notActiveForm) {
@@ -128,21 +140,21 @@
                     self.refreshPopover();
                 }, 200);
             });
-            $form.find('input, select').on('change', function () {
+            $form.find('input, select').on('change.editable', function () {
                 self.refreshPopover();
-                $el.trigger('editableChange', [$input.val()]);
+                self.raise($el, 'editableChange', [$input.val()]);
             });
-            $btnReset.on('click', function () {
+            $btnReset.on('click.editable', function () {
                 $hasEditable.val(0);
                 setTimeout(function () {
                     $form[0].reset();
                 }, 200);
-                $el.trigger('editableReset');
+                self.raise($el, 'editableReset');
             });
-            $close.on('click', function () {
+            $close.on('click.editable', function () {
                 self.toggle(false);
             });
-            $target.on('click', function () {
+            $target.on('click.editable', function () {
                 if (self.asPopover) {
                     self.toggle(true);
                     return;
@@ -150,7 +162,7 @@
                 var status = !self.$inline.is(':visible');
                 self.toggle(status);
             });
-            $btnSubmit.on('click', function () {
+            $btnSubmit.on('click.editable', function () {
                 var $wrapper = self.asPopover ? $cont : $inline;
                 addCss($wrapper, 'kv-editable-processing');
                 $loading.show();
@@ -166,7 +178,10 @@
                     } else {
                         v1 = v1 + '-';
                     }
-                    $el.val(v1).trigger('blur').val(v).trigger('blur');
+                    $el.val(v1);
+                    self.raise($el, 'blur');
+                    $el.val(v);
+                    self.raise($el, 'blur');
                 });
                 settings = $.extend({
                     type: $form.attr('method'),
@@ -177,7 +192,7 @@
                         if (self.showAjaxErrors) {
                             showError(message);
                         }
-                        $el.trigger('editableAjaxError', [request, status, message]);
+                        self.raise($el, 'editableAjaxError', [request, status, message]);
                     },
                     success: function (data) {
                         chkError = '';
@@ -185,7 +200,7 @@
                         self.refreshPopover();
                         if (!isEmpty(data.message)) {
                             showError(data.message);
-                            $el.trigger('editableError', [$input.val(), $form, data]);
+                            self.raise($el, 'editableError', [$input.val(), $form, data]);
                             return;
                         } else {
                             if (!isEmpty($msgBlock.attr('class'))) {
@@ -226,16 +241,16 @@
                                     $form.yiiActiveForm(objActiveForm.attributes, objActiveForm.settings);
                                 }
                             }
-                            $el.trigger('editableSuccess', [$input.val(), $form, data]);
+                            self.raise($el, 'editableSuccess', [$input.val(), $form, data]);
                         } else {
-                            $el.trigger('editableError', [$input.val(), $form, data]);
+                            self.raise($el, 'editableError', [$input.val(), $form, data]);
                         }
                         $wrapper.removeClass('kv-editable-processing');
                     }
                 }, self.ajaxSettings);
                 setTimeout(function() {
                     $.ajax(settings);
-                    $el.trigger('editableSubmit', [$input.val(), $form]);
+                    self.raise($el, 'editableSubmit', [$input.val(), $form]);
                 }, 1000);
             });
         }

@@ -9,14 +9,15 @@
 namespace kartik\editable;
 
 use Yii;
+use Closure;
 use yii\web\View;
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;
-use yii\helpers\Json;
 use yii\helpers\ArrayHelper;
 use kartik\base\Config;
 use kartik\base\InputWidget;
 use kartik\popover\PopoverX;
+use yii\widgets\ActiveForm;
 
 /**
  * An extended editable widget for Yii Framework 2.
@@ -106,10 +107,9 @@ HTML;
     const CSS_PARENT = "kv-editable-parent form-group";
 
     /**
-     * @var string the identifier for the PJAX widget container if the editable
-     * widget is to be rendered inside a PJAX container. This will ensure the
-     * PopoverX plugin is initialized correctly after a PJAX request is completed.
-     * If this is not set, no re-initialization will be done for pjax.
+     * @var string the identifier for the PJAX widget container if the editable widget is to be rendered inside a PJAX
+     *     container. This will ensure the PopoverX plugin is initialized correctly after a PJAX request is completed.
+     *     If this is not set, no re-initialization will be done for pjax.
      */
     public $pjaxContainerId;
 
@@ -122,39 +122,36 @@ HTML;
     public $format = self::FORMAT_LINK;
 
     /**
-     * @var boolean whether to show the editable input as a popover. Defaults to `true`.
-     * If set to `false`, it will be rendered inline.
+     * @var bool whether to show the editable input as a popover. Defaults to `true`. If set to `false`, it will be
+     *     rendered inline.
      */
     public $asPopover = true;
 
     /**
-     * @var array the settings for the inline editable when `asPopover` is `false`.
-     * The following properties are recognized:
-     * - options: array, the HTML attributes for the `div` panel container that will enclose the inline content.
-     *   By default the options will be set to `['class' => 'panel panel-default']`.
-     * - closeButton: string, the markup for rendering the close button to close the inline panel. Note the
-     *   markup must have the CSS class `kv-editable-close` to trigger the closure of the inline panel. The
-     *   `closeButton` defaults to `<button class="kv-editable-close close">&times;</button>`.
-     * - templateBefore: string, he template for inline content rendered before the input.
-     *   Defaults to `Editable::INLINE_BEFORE_1`.
-     * - templateAfter: string, he template for inline content rendered after the input.
-     *   Defaults to `Editable::INLINE_AFTER_1`.
-     *   The following tags in the templates above will be automatically replaced:
+     * @var array the settings for the inline editable when `asPopover` is `false`. The following properties are
+     *     recognized:
+     * - options: array, the HTML attributes for the `div` panel container that will enclose the inline content. By
+     *     default the options will be set to `['class' => 'panel panel-default']`.
+     * - closeButton: string, the markup for rendering the close button to close the inline panel. Note the markup must
+     *     have the CSS class `kv-editable-close` to trigger the closure of the inline panel. The `closeButton`
+     *     defaults to `<button class="kv-editable-close close">&times;</button>`.
+     * - templateBefore: string, he template for inline content rendered before the input. Defaults to
+     *     `Editable::INLINE_BEFORE_1`.
+     * - templateAfter: string, he template for inline content rendered after the input. Defaults to
+     *     `Editable::INLINE_AFTER_1`. The following tags in the templates above will be automatically replaced:
      *      - '{header}': the header generated via `preHeader` and `header` properties.
-     *      - '{inputs}': the main form input content (combining `beforeInput`, the input/widget
-     *         generated based on `inputType`, and `afterInput`)
+     *      - '{inputs}': the main form input content (combining `beforeInput`, the input/widget generated based on
+     *     `inputType`, and `afterInput`)
      *      - '{buttons}': the form action buttons (submit and reset).
      *      - '{loading}': the loading indicator.
-     *      - '{close}': the close button to close the inline content as set in
-     *        `inlineSettings['closeButton']`.
+     *      - '{close}': the close button to close the inline content as set in `inlineSettings['closeButton']`.
      */
     public $inlineSettings = [];
 
     /**
-     * @var array the HTML attributes for the editable button to be displayed when the format
-     * has been set to 'button':
-     * - label: string, the editable button label. This is not HTML encoded.
-     *   Defaults to <i class="glyphicon glyphicon-pencil"></i>
+     * @var array the HTML attributes for the editable button to be displayed when the format has been set to 'button':
+     * - label: string, the editable button label. This is not HTML encoded. Defaults to
+     *     `<i class="glyphicon glyphicon-pencil"></i>
      */
     public $editableButtonOptions = ['class' => 'btn btn-sm btn-default'];
 
@@ -169,84 +166,76 @@ HTML;
     public $containerOptions = [];
 
     /**
-     * @var array the HTML attributes for the input container
-     * applicable only when not using with ActiveForm
+     * @var array the HTML attributes for the input container applicable only when not using with ActiveForm
      */
     public $inputContainerOptions = [];
 
     /**
-     * @var string the popover contextual type. Must be one of the [[PopoverX::TYPE]] constants
-     * Defaults to `PopoverX::TYPE_DEFAULT` or `default`. This will be applied only if `asPopover`
-     * is `true`.
+     * @var string the popover contextual type. Must be one of the [[PopoverX::TYPE]] constants Defaults to
+     *     `PopoverX::TYPE_DEFAULT` or `default`. This will be applied only if `asPopover` is `true`.
      */
     public $type = PopoverX::TYPE_DEFAULT;
 
     /**
-     * @var string the size of the popover window. One of the [[PopoverX::SIZE]] constants.
-     * This will be applied only if `asPopover` is `true`.
+     * @var string the size of the popover window. One of the [[PopoverX::SIZE]] constants. This will be applied only
+     *     if `asPopover` is `true`.
      */
     public $size;
 
     /**
-     * @var string the popover placement. Must be one of the [[PopoverX::ALIGN]] constants
-     * Defaults to `PopoverX::ALIGN_RIGHT` or `right`. This will be applied only if `asPopover`
-     * is `true`.
+     * @var string the popover placement. Must be one of the [[PopoverX::ALIGN]] constants Defaults to
+     *     `PopoverX::ALIGN_RIGHT` or `right`. This will be applied only if `asPopover` is `true`.
      */
     public $placement = PopoverX::ALIGN_RIGHT;
 
     /**
-     * @var string the header content placed before the header text in the popover dialog or inline panel.
-     * This defaults to `<i class="glyphicon glyphicon-edit"></i> Edit`;
+     * @var string the header content placed before the header text in the popover dialog or inline panel. This
+     *     defaults to `<i class="glyphicon glyphicon-edit"></i> Edit`.
      */
     public $preHeader;
 
     /**
-     * @var string the header content in the popover dialog or inline panel. If not set, this
-     * will be auto generated based on the attribute label or set to null.
+     * @var string the header content in the popover dialog or inline panel. If not set, this will be auto generated
+     *     based on the attribute label or set to null.
      */
     public $header;
 
     /**
-     * @var string the footer content in the popover dialog or inline panel. The following special
-     * tags/variables will be parsed and replaced in the footer:
-     * {loading} - string, will be replaced with the loading indicator.
-     * {buttons} - string, will be replaced with the submit and reset button.
-     * If this is set to null or an empty string, it will not be displayed.
+     * @var string the footer content in the popover dialog or inline panel. The following special tags/variables will
+     *     be parsed and replaced in the footer:
+     * - `{loading}`: string, will be replaced with the loading indicator.
+     * - `{buttons}`: string, will be replaced with the submit and reset button. If this is set to null or an empty
+     *     string, it will not be displayed.
      */
     public $footer = '{loading}{buttons}';
 
     /**
-     * @var string the value to be displayed. If not set, this will default to the
-     * attribute value. If the attribute value is null, then this will display the
-     * value as set in [[valueIfNull]].
+     * @var string the value to be displayed. If not set, this will default to the attribute value. If the attribute
+     *     value is null, then this will display the value as set in [[valueIfNull]].
      */
     public $displayValue;
 
     /**
-     * @var array the configuration to auto-calculate display value, based on the
-     * value of the editable input. This should be a single dimensional array whose
-     * keys must match the input value, and the array values must be the description
-     * to be displayed. For example, to display user friendly boolean values, you could
-     * configure this as `[0 => 'Inactive', 1 => 'Active']`. If this is set, it will
-     * override any value set in `displayValue`.
+     * @var array the configuration to auto-calculate display value, based on the value of the editable input. This
+     *     should be a single dimensional array whose keys must match the input value, and the array values must be the
+     *     description to be displayed. For example, to display user friendly bool values, you could configure this as
+     *     `[0 => 'Inactive', 1 => 'Active']`. If this is set, it will override any value set in `displayValue`.
      */
     public $displayValueConfig = [];
 
     /**
-     * @var string the value to display if the displayValue is null.
-     * Defaults to '<em>(not set)</em>'.
+     * @var string the value to display if the displayValue is null. Defaults to '<em>(not set)</em>'.
      */
     public $valueIfNull;
 
     /**
-     * @var array the HTML attributes for the container enclosing the main content
-     * in the popover dialog.
+     * @var array the HTML attributes for the container enclosing the main content in the popover dialog.
      */
     public $contentOptions = [];
 
     /**
-     * @var array the class for the ActiveForm widget to be used. The class must
-     * extend from `\yii\widgets\ActiveForm`. This defaults to `\kartik\widgets\ActiveForm`.
+     * @var array the class for the ActiveForm widget to be used. The class must extend from `\yii\widgets\ActiveForm`.
+     *     This defaults to `\yii\widgets\ActiveForm`.
      */
     public $formClass = '\yii\widgets\ActiveForm';
 
@@ -256,38 +245,44 @@ HTML;
     public $formOptions = [];
 
     /**
-     * @var array the input type to render for the editing the input in the editable form.
-     * This must be one of the [[Editable::TYPE]] constants.
+     * @var array the input type to render for the editing the input in the editable form. This must be one of the
+     *     [[Editable::TYPE]] constants.
      */
     public $inputType = self::INPUT_TEXT;
 
     /**
-     * @var string any custom widget class to use. Will only be used if the `inputType` is
-     * set to [[Editable::INPUT_WIDGET]]
+     * @var string any custom widget class to use. Will only be used if the `inputType` is set to
+     *     [[Editable::INPUT_WIDGET]]
      */
     public $widgetClass;
 
     /**
-     * @var boolean additional ajax settings to pass to the plugin.
+     * @var bool additional ajax settings to pass to the plugin.
      * @see http://api.jquery.com/jquery
      */
     public $ajaxSettings = [];
 
     /**
-     * @var boolean whether to display any ajax processing errors. Defaults to `true`.
+     * @var bool whether to display any ajax processing errors. Defaults to `true`.
      */
     public $showAjaxErrors = true;
 
     /**
-     * @var boolean whether to auto submit/save the form on pressing ENTER key. Defaults to `true`.
+     * @var bool whether to auto submit/save the form on pressing ENTER key. Defaults to `true`.
      */
     public $submitOnEnter = true;
 
     /**
-     * @var array the options for the input. If the inputType is one of the HTML inputs, this will
-     * capture the HTML attributes. If the `inputType` is set to [[Editable::INPUT_WIDGET]]
-     * or set to an input widget from the `\kartik\` namespace, then this will capture the widget
-     * options.
+     * @var bool whether to HTML encode the output via javascript after editable update. Defaults to `true`. Note that
+     *     this is only applied, if you do not return an output value via your AJAX response action. If you return an
+     *     output value via AJAX it will not be HTML encoded.
+     */
+    public $encodeOutput = true;
+
+    /**
+     * @var array the options for the input. If the inputType is one of the HTML inputs, this will capture the HTML
+     *     attributes. If the `inputType` is set to [[Editable::INPUT_WIDGET]] or set to an input widget from the
+     *     `\kartik\` namespace, then this will capture the widget options.
      */
     public $options = [];
 
@@ -297,41 +292,40 @@ HTML;
     public $inputFieldConfig = [];
 
     /**
-     * @var string|Closure the content to be placed before the rendered input. If not set as a string,
-     * this can be passed as a callback function of the following signature:
+     * @var string|Closure the content to be placed before the rendered input. If not set as a string, this can be
+     *     passed as a callback function of the following signature:
      * ```
      * function ($form, $widget) {
      *    // echo $form->field($widget->model, 'attrib');
      * }
      * ```
      * where:
-     * - $form mixed is the active form instance for the editable form
-     * - $widget mixed is the current editable widget instance
+     * - $form ActiveForm is the active form instance for the editable form
+     * - $widget Editable is the current editable widget instance
      */
     public $beforeInput;
 
     /**
-     * @var string|Closure the content to be placed after the rendered input. If not set as a string,
-     * this can be passed as a callback function of the following signature:
+     * @var string|Closure the content to be placed after the rendered input. If not set as a string, this can be
+     *     passed as a callback function of the following signature:
      * ```
      * function ($form, $widget) {
      *    // echo $form->field($widget->model, 'attrib');
      * }
      * ```
      * where:
-     * - $form mixed is the active form instance for the editable form
-     * - $widget mixed is the current editable widget instance
+     * - $form ActiveForm is the active form instance for the editable form
+     * - $widget Editable is the current editable widget instance
      */
     public $afterInput;
 
     /**
-     * @var boolean whether you wish to automatically display the form submit and reset buttons.
-     * Defaults to `true`.
+     * @var bool whether you wish to automatically display the form submit and reset buttons. Defaults to `true`.
      */
     public $showButtons = true;
 
     /**
-     * @var boolean whether you want to show the button labels. Defaults to `false`.
+     * @var bool whether you want to show the button labels. Defaults to `false`.
      */
     public $showButtonLabels = false;
 
@@ -341,20 +335,20 @@ HTML;
     public $buttonsTemplate = "{reset}{submit}";
 
     /**
-     * @var array the HTML attributes for the form submit button. The following special properties
-     * are additionally recognized:
+     * @var array the HTML attributes for the form submit button. The following special properties are additionally
+     *     recognized:
      * - icon: string, the icon for the button. Defaults to `<i class="glyphicon glyphicon-ok"></i> `.
-     * - label: string, the label of the button. This is Html encoded. Defaults to 'Apply' and is
-     *   translated via yii i18n message files.
+     * - label: string, the label of the button. This is Html encoded. Defaults to 'Apply' and is translated via yii
+     *     i18n message files.
      */
     public $submitButton = ['class' => 'btn btn-sm btn-primary'];
 
     /**
-     * @var array the HTML attributes for the form reset button. The following special properties
-     * are additionally recognized:
+     * @var array the HTML attributes for the form reset button. The following special properties are additionally
+     *     recognized:
      * - icon: string, the icon for the button. Defaults to `<i class="glyphicon glyphicon-ban-circle"></i> `.
-     * - label: string, the label of the button. This is Html encoded. Defaults to 'Reset' and is
-     *   translated via yii i18n message files.
+     * - label: string, the label of the button. This is Html encoded. Defaults to 'Reset' and is translated via yii
+     *     i18n message files.
      */
     public $resetButton = ['class' => 'btn btn-sm btn-default'];
 
@@ -374,14 +368,34 @@ HTML;
     protected $_form;
 
     /**
+     * @var string the i18n message category
+     */
+    protected $_msgCat = 'kveditable';
+
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        parent::init();
+        $this->initEditable();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function run()
+    {
+        $this->runEditable();
+    }
+
+    /**
      * Initializes the widget
      *
      * @throws InvalidConfigException
      */
-    public function init()
+    protected function initEditable()
     {
-        $this->_msgCat = 'kveditable';
-        parent::init();
         if (empty($this->inputType)) {
             throw new InvalidConfigException("The 'type' of editable input must be set.");
         }
@@ -413,22 +427,28 @@ HTML;
             echo $this->renderToggleButton();
         }
         echo Html::beginTag('div', $this->contentOptions);
+        /**
+         * @var ActiveForm $class
+         */
         $class = $this->formClass;
         $this->_form = $class::begin($this->formOptions);
-        if (!$this->_form instanceof \yii\widgets\ActiveForm) {
-            throw new InvalidConfigException("The form class '{$class}' MUST extend from \yii\widgets\ActiveForm.");
+        if (!$this->_form instanceof ActiveForm) {
+            throw new InvalidConfigException("The form class '{$class}' MUST extend from '\yii\widgets\ActiveForm'.");
         }
     }
 
     /**
-     * @inheritdoc
+     * Runs the editable widget
      */
-    public function run()
+    protected function runEditable()
     {
         if (!$this->asPopover) {
             echo Html::beginTag('div', $this->inlineSettings['options']);
         }
         echo $this->renderFormFields();
+        /**
+         * @var ActiveForm $class
+         */
         $class = $this->formClass;
         $class::end();
         if (!$this->asPopover) {
@@ -443,6 +463,11 @@ HTML;
         echo "</div>\n"; // options
     }
 
+    /**
+     * Renders the toggle button
+     *
+     * @return string
+     */
     protected function renderToggleButton()
     {
         $options = $this->_popoverOptions['toggleButton'];
@@ -469,8 +494,7 @@ HTML;
     }
 
     /**
-     * Initializes the widget options.
-     * This method sets the default values for various widget options.
+     * Initializes the widget options. This method sets the default values for various widget options.
      *
      * @throws InvalidConfigException
      */
@@ -632,11 +656,12 @@ HTML;
             'valueIfNull' => $this->valueIfNull,
             'asPopover' => $this->asPopover,
             'placement' => $this->placement,
-            'target' => $this->format == self::FORMAT_BUTTON ? '.kv-editable-button' : '.kv-editable-link',
+            'target' => $this->format === self::FORMAT_BUTTON ? '.kv-editable-button' : '.kv-editable-link',
             'displayValueConfig' => $this->displayValueConfig,
             'showAjaxErrors' => $this->showAjaxErrors,
             'ajaxSettings' => $this->ajaxSettings,
-            'submitOnEnter' => $this->submitOnEnter
+            'submitOnEnter' => $this->submitOnEnter,
+            'encodeOutput' => $this->encodeOutput
         ];
         $this->registerPlugin('editable', 'jQuery("#' . $this->containerOptions['id'] . '")');
         if (!empty($this->pjaxContainerId)) {
@@ -671,7 +696,7 @@ HTML;
         if (strpos($out, '{buttons}') === false) {
             return $out;
         }
-        return strtr($out,  ['{buttons}' => $this->renderActionButtons()]);
+        return strtr($out, ['{buttons}' => $this->renderActionButtons()]);
     }
 
     /**
@@ -683,12 +708,10 @@ HTML;
     {
         echo $this->parseTemplate('templateBefore');
         echo Html::hiddenInput('hasEditable', 0) . "\n";
-        if ($this->beforeInput !== null) {
-            if (is_string($this->beforeInput)) {
-                echo $this->beforeInput . "\n";
-            } else {
-                echo call_user_func($this->beforeInput, $this->_form, $this) . "\n";
-            }
+        $before = $this->beforeInput;
+        $after = $this->afterInput;
+        if ($before !== null && is_string($before) || is_callable($before)) {
+            echo (is_callable($before) ? call_user_func($before, $this->_form, $this) : $before) . "\n";
         }
         if ($this->inputType === self::INPUT_HTML5_INPUT) {
             echo $this->renderHtml5Input() . "\n";
@@ -699,12 +722,8 @@ HTML;
         } elseif (Config::isInputWidget($this->inputType)) {
             echo $this->renderWidget($this->inputType) . "\n";
         }
-        if ($this->afterInput !== null) {
-            if (is_string($this->afterInput)) {
-                echo $this->afterInput . "\n";
-            } else {
-                echo call_user_func($this->afterInput, $this->_form, $this) . "\n";
-            }
+        if ($after !== null && is_string($after) || is_callable($after)) {
+            echo (is_callable($after) ? call_user_func($after, $this->_form, $this) : $after) . "\n";
         }
         echo $this->parseTemplate('templateAfter');
     }
@@ -717,7 +736,7 @@ HTML;
     protected function renderHtml5Input()
     {
         $type = ArrayHelper::remove($this->_inputOptions, 'type', 'text');
-        $field = Html::input($type, $this->name, $this->value, $this->_inputOptions);
+        $out = Html::input($type, $this->name, $this->value, $this->_inputOptions);
         if ($this->hasModel()) {
             if (isset($this->_form)) {
                 return $this->_form
@@ -725,13 +744,15 @@ HTML;
                     ->input($type, $this->_inputOptions)
                     ->label(false);
             }
-            $field = Html::activeInput($type, $this->name, $this->value, $this->_inputOptions);
+            $out = Html::activeInput($this->type, $this->model, $this->attribute, $this->_inputOptions);
         }
-        return Html::tag('div', $field, $this->inputContainerOptions);
+        return Html::tag('div', $out, $this->inputContainerOptions);
     }
 
     /**
      * Renders a widget
+     *
+     * @param string $class the input widget class name
      *
      * @return string
      */
@@ -744,16 +765,15 @@ HTML;
                     ->widget($class, $this->_inputOptions)
                     ->label(false);
             }
-            $options = ArrayHelper::merge($this->_inputOptions, [
-                'model' => $this->model,
-                'attribute' => $this->attribute
-            ]);
+            $defaults = ['model' => $this->model, 'attribute' => $this->attribute];
+
         } else {
-            $options = ArrayHelper::merge($this->_inputOptions, [
-                'name' => $this->name,
-                'value' => $this->value
-            ]);
+            $defaults = ['name' => $this->name, 'value' => $this->value];
         }
+        $options = ArrayHelper::merge($this->_inputOptions, $defaults);
+        /**
+         * @var InputWidget $class
+         */
         $field = $class::widget($options);
         return Html::tag('div', $field, $this->inputContainerOptions);
     }
