@@ -14,6 +14,10 @@ Change Log: `yii2-editable`
 7. (enh #100): New `initEditablePopover` method to initialize popover for AJAX replaced editables.
 8. (enh #103): Add Czech Translations.
 9. Code optimizations for widget and JS plugin.
+10. (enh #104): Enhance jQuery events
+    - New event `editableBeforeSubmit` that submits before ajax request
+    - Enable events to be aborted and prevent default behavior by `event.preventDefault()` (applicable for most critical editable events)
+    - Incorporate event namespace `.editable` on the critical events
 
 ## Version 1.7.3
 

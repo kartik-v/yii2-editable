@@ -47,8 +47,14 @@
             });
         },
         htmlEncode: function(data) {
-            if (!this.encodeOutput) {
+            var self = this;
+            if (!self.encodeOutput) {
                 return data;
+            }
+            if (typeof data === 'object') {
+                $.each(data, function(key, value) {
+                   data[key] = self.htmlEncode(value);
+                });
             }
             return data.replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
@@ -85,9 +91,14 @@
                 self.$popover.popoverX('refreshPosition');
             }
         },
-        raise: function($el, ev, params) {
-            params = params || [];
-            $el.trigger(ev, params);
+        raise: function($el, event, params) {
+            var e = $.Event(event);
+            if (params !== undefined) {
+                $el.trigger(e, params);
+            } else {
+                $el.trigger(e);
+            }
+            return !e.isDefaultPrevented();
         },
         destroy: function() {
             var self = this, $target = self.target === '.kv-editable-button' ? self.$target : self.$value;
@@ -141,15 +152,17 @@
                 }, 200);
             });
             $form.find('input, select').on('change.editable', function () {
-                self.refreshPopover();
-                self.raise($el, 'editableChange', [$input.val()]);
+                if (self.raise($el, 'editableChange', [$input.val()])) {
+                    self.refreshPopover();
+                }
             });
             $btnReset.on('click.editable', function () {
-                $hasEditable.val(0);
-                setTimeout(function () {
-                    $form[0].reset();
-                }, 200);
-                self.raise($el, 'editableReset');
+                if (self.raise($el, 'editableReset')) {
+                    $hasEditable.val(0);
+                    setTimeout(function () {
+                        $form[0].reset();
+                    }, 200);
+                }
             });
             $close.on('click.editable', function () {
                 self.toggle(false);
@@ -188,19 +201,24 @@
                     url: $form.attr('action'),
                     data: $form.serialize(),
                     dataType: 'json',
-                    error: function (request, status, message) {
-                        if (self.showAjaxErrors) {
+                    beforeSend: function (jqXHR) {
+                        if (!self.raise($el, 'editableBeforeSubmit', [jqXHR])) {
+                            jqXHR.abort();
+                        }
+                    },
+                    error: function (jqXHR, status, message) {
+                        if (self.raise($el, 'editableAjaxError', [jqXHR, status, message]) && self.showAjaxErrors) {
                             showError(message);
                         }
-                        self.raise($el, 'editableAjaxError', [request, status, message]);
                     },
-                    success: function (data) {
+                    success: function (data, status, jqXHR) {
                         chkError = '';
                         out = !isEmpty(data.output) ? data.output : self.htmlEncode($input.val());
                         self.refreshPopover();
                         if (!isEmpty(data.message)) {
-                            showError(data.message);
-                            self.raise($el, 'editableError', [$input.val(), $form, data]);
+                            if (self.raise($el, 'editableError', [$input.val(), $form, data])) {
+                                showError(data.message);
+                            }
                             return;
                         } else {
                             if (!isEmpty($msgBlock.attr('class'))) {
@@ -217,31 +235,33 @@
                             }
                         });
                         if (isEmpty(chkError)) {
-                            $loading.hide();
-                            if (isEmpty(out)) {
-                                out = self.valueIfNull;
-                            } else {
-                                if (displayValueConfig[out] !== undefined) {
-                                    out = displayValueConfig[out];
+                            if (self.raise($el, 'editableSuccess', [$input.val(), $form, data, status, jqXHR])) {
+                                $loading.hide();
+                                if (isEmpty(out)) {
+                                    out = self.valueIfNull;
+                                } else {
+                                    if (displayValueConfig[out] !== undefined) {
+                                        out = displayValueConfig[out];
+                                    }
+                                }
+                                if (notActiveForm) {
+                                    $parent2.find('.help-block').remove();
+                                    $parent2.removeClass('has-error');
+                                    $message.html('');
+                                    self.toggle(false);
+                                    self.$value.html(out);
+                                } else {
+                                    $parent.removeClass('has-error');
+                                    $message.html('');
+                                    self.toggle(false);
+                                    self.$value.html(out);
+                                    if (objActiveForm) {
+                                        $form.yiiActiveForm('destroy');
+                                        $form.yiiActiveForm(objActiveForm.attributes, objActiveForm.settings);
+                                    }
                                 }
                             }
-                            if (notActiveForm) {
-                                $parent2.find('.help-block').remove();
-                                $parent2.removeClass('has-error');
-                                $message.html('');
-                                self.toggle(false);
-                                self.$value.html(out);
-                            } else {
-                                $parent.removeClass('has-error');
-                                $message.html('');
-                                self.toggle(false);
-                                self.$value.html(out);
-                                if (objActiveForm) {
-                                    $form.yiiActiveForm('destroy');
-                                    $form.yiiActiveForm(objActiveForm.attributes, objActiveForm.settings);
-                                }
-                            }
-                            self.raise($el, 'editableSuccess', [$input.val(), $form, data]);
+
                         } else {
                             self.raise($el, 'editableError', [$input.val(), $form, data]);
                         }
@@ -249,8 +269,9 @@
                     }
                 }, self.ajaxSettings);
                 setTimeout(function() {
-                    $.ajax(settings);
-                    self.raise($el, 'editableSubmit', [$input.val(), $form]);
+                    if (self.raise($el, 'editableSubmit', [$input.val(), $form])) {
+                        $.ajax(settings);
+                    }
                 }, 1000);
             });
         }
@@ -260,9 +281,7 @@
         var args = Array.apply(null, arguments);
         args.shift();
         return this.each(function () {
-            var $this = $(this),
-                data = $this.data('editable'),
-                options = typeof option === 'object' && option;
+            var $this = $(this), data = $this.data('editable'), options = typeof option === 'object' && option;
             if (!data) {
                 data = new Editable(this, $.extend({}, $.fn.editable.defaults, options, $(this).data()));
                 $this.data('editable', data);
@@ -285,4 +304,5 @@
     };
 
     $.fn.editable.Constructor = Editable;
+
 })(window.jQuery);
