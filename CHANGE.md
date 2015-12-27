@@ -3,7 +3,7 @@ Change Log: `yii2-editable`
 
 ## Version 1.7.4
 
-**Date:** 25-Dec-2015
+**Date:** 27-Dec-2015
 
 1. (enh #84): Update Portugese translations.
 2. (enh #85): Add Greek translations.
