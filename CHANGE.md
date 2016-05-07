@@ -5,7 +5,11 @@ Change Log: `yii2-editable`
 
 **Date:** 08-May-2016
 
+- (enh #105): Add Indonesian translations.
+- (enh #108): Add Dutch translations.
 - (enh #113): Allow ability to configure `valueOptions['class']` in link mode.
+- (enh #120): Add Estonian translations.
+- (enh #121): Add Ukranian translations.
 
 ## Version 1.7.4
 

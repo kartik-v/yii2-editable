@@ -3,7 +3,7 @@
  * @package   yii2-editable
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015
- * @version   1.7.4
+ * @version   1.7.5
  */
 
 namespace kartik\editable;
