@@ -1,6 +1,12 @@
 Change Log: `yii2-editable`
 ===========================
 
+## Version 1.7.5
+
+**Date:** 08-May-2016
+
+- (enh #113): Allow ability to configure `valueOptions['class']` in link mode.
+
 ## Version 1.7.4
 
 **Date:** 27-Dec-2015

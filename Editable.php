@@ -8,15 +8,15 @@
 
 namespace kartik\editable;
 
-use Yii;
 use Closure;
-use yii\web\View;
-use yii\base\InvalidConfigException;
-use yii\helpers\Html;
-use yii\helpers\ArrayHelper;
 use kartik\base\Config;
 use kartik\base\InputWidget;
 use kartik\popover\PopoverX;
+use Yii;
+use yii\base\InvalidConfigException;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\web\View;
 use yii\widgets\ActiveForm;
 
 /**
@@ -548,6 +548,7 @@ HTML;
         Html::addCssClass($this->containerOptions, 'kv-editable');
         Html::addCssClass($this->contentOptions, 'kv-editable-content');
         Html::addCssClass($this->formOptions['options'], 'kv-editable-form');
+        $class = 'kv-editable-value';
         if ($this->format == self::FORMAT_BUTTON) {
             if (!$this->asPopover) {
                 if ($this->inlineSettings['templateBefore'] === self::INLINE_BEFORE_1) {
@@ -557,10 +558,10 @@ HTML;
                 }
             }
             Html::addCssClass($this->editableButtonOptions, 'kv-editable-button');
-            Html::addCssClass($this->editableValueOptions, 'kv-editable-value');
-        } else {
-            Html::addCssClass($this->editableValueOptions, 'kv-editable-value kv-editable-link');
+        } elseif (empty($this->editableValueOptions['class'])) {
+            $class = ['kv-editable-value', 'kv-editable-link'];
         }
+        Html::addCssClass($this->editableValueOptions, $class);
         $this->_popoverOptions['type'] = $this->type;
         $this->_popoverOptions['placement'] = $this->placement;
         $this->_popoverOptions['size'] = $this->size;
