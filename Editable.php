@@ -557,10 +557,8 @@ HTML;
                 }
             }
             Html::addCssClass($this->editableButtonOptions, 'kv-editable-button');
-            Html::addCssClass($this->editableValueOptions, 'kv-editable-value');
-        } else {
-            Html::addCssClass($this->editableValueOptions, 'kv-editable-value kv-editable-link');
         }
+        Html::addCssClass($this->editableValueOptions, 'kv-editable-value');
         $this->_popoverOptions['type'] = $this->type;
         $this->_popoverOptions['placement'] = $this->placement;
         $this->_popoverOptions['size'] = $this->size;
