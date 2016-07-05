@@ -120,9 +120,9 @@
                 $hasEditable = $form.find('input[name="hasEditable"]'), $msgBlock = $parent2.find('.kv-help-block');
             showError = function (message) {
                 if (notActiveForm) {
-                    if (isEmpty($msgBlock.attr('class'))) {
+                    //if (isEmpty($msgBlock.attr('class'))) {
                         $msgBlock = $(document.createElement("div")).attr({class: 'help-block kv-help-block'}).appendTo($parent2);
-                    }
+                    //}
                     $msgBlock.html(message);
                 } else {
                     $message.html(message);
