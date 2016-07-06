@@ -1,7 +1,7 @@
 /*!
  * @package   yii2-editable
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2016
  * @version   1.7.5
  *
  * Editable Extension jQuery plugin
@@ -46,14 +46,14 @@
                 self[key] = value;
             });
         },
-        htmlEncode: function(data) {
+        htmlEncode: function (data) {
             var self = this;
             if (!self.encodeOutput) {
                 return data;
             }
             if (typeof data === 'object') {
-                $.each(data, function(key, value) {
-                   data[key] = self.htmlEncode(value);
+                $.each(data, function (key, value) {
+                    data[key] = self.htmlEncode(value);
                 });
             }
             return data.replace(/&/g, '&amp;')
@@ -91,7 +91,7 @@
                 self.$popover.popoverX('refreshPosition');
             }
         },
-        raise: function($el, event, params) {
+        raise: function ($el, event, params) {
             var e = $.Event(event);
             if (params !== undefined) {
                 $el.trigger(e, params);
@@ -100,7 +100,7 @@
             }
             return !e.isDefaultPrevented();
         },
-        destroy: function() {
+        destroy: function () {
             var self = this, $target = self.target === '.kv-editable-button' ? self.$target : self.$value;
             self.$form.off('.editable');
             self.$form.find('input, select').off('.editable');
@@ -112,21 +112,22 @@
         create: function () {
             var self = this, $form = self.$form, $btnSubmit = self.$btnSubmit, $btnReset = self.$btnReset,
                 $cont = $form.parent(), $el = self.$container, $close = self.$close, $inline = self.$inline,
-                $target = self.target === '.kv-editable-button' ? self.$target : self.$value,  $loading = self.$loading,
+                $target = self.target === '.kv-editable-button' ? self.$target : self.$value, $loading = self.$loading,
                 $input = self.$input, showError, chkError = '', out = '', objActiveForm = $form.data('yiiActiveForm'),
                 $parent = $input.closest('.field-' + $input.attr('id')), $message = $parent.find('.help-block'),
                 $parent2 = $input.closest('.kv-editable-parent'), displayValueConfig = self.displayValueConfig,
-                notActiveForm = isEmpty($parent.attr('class')) || isEmpty($message.attr('class')), settings,
+                notActiveForm = isEmpty($parent.attr('class')) || isEmpty($message.attr('class')),
                 $hasEditable = $form.find('input[name="hasEditable"]'), $msgBlock = $parent2.find('.kv-help-block');
             showError = function (message) {
                 if (notActiveForm) {
-                    if (isEmpty($msgBlock.attr('class'))) {
-                        $msgBlock = $(document.createElement("div")).attr({class: 'help-block kv-help-block'}).appendTo($parent2);
+                    if (!$msgBlock.length) {
+                        $msgBlock = $(document.createElement("div")).attr({class: 'help-block kv-help-block'})
+                            .appendTo($parent2);
                     }
-                    $msgBlock.html(message);
+                    $msgBlock.html(message).show();
                 } else {
-                    $message.html(message);
                     addCss($message, 'kv-help-block');
+                    $message.html(message).show();
                 }
                 addCss($parent2, 'has-error');
                 $loading.hide();
@@ -176,7 +177,7 @@
                 self.toggle(status);
             });
             $btnSubmit.on('click.editable', function () {
-                var $wrapper = self.asPopover ? $cont : $inline;
+                var $wrapper = self.asPopover ? $cont : $inline, hasFiles = false, settings;
                 addCss($wrapper, 'kv-editable-processing');
                 $loading.show();
                 $hasEditable.val(1);
@@ -185,21 +186,29 @@
                 });
                 $form.find('.has-error').removeClass('has-error');
                 $form.find('input, select').each(function () {
-                    var $el = $(this), v = $el.val(), v1 = v;
-                    if ($.isArray(v)) {
-                        v1.push('-');
-                    } else {
-                        v1 = v1 + '-';
+                    var $el = $(this), v = $el.val(), v1 = v, isFile = $el.attr('type') === 'file';
+                    if (!hasFiles) {
+                        hasFiles = isFile;
                     }
-                    $el.val(v1);
-                    self.raise($el, 'blur');
-                    $el.val(v);
-                    self.raise($el, 'blur');
+                    if (!$el.attr('disabled')) {
+                        if (isFile) {
+                            self.raise($el, 'blur');
+                        } else {
+                            if ($.isArray(v)) {
+                                v1.push('-');
+                            } else {
+                                v1 = v1 + '-';
+                            }
+                            $el.val(v1);
+                            self.raise($el, 'blur');
+                            $el.val(v);
+                            self.raise($el, 'blur');
+                        }
+                    }
                 });
-                settings = $.extend({
+                settings = {
                     type: $form.attr('method'),
                     url: $form.attr('action'),
-                    data: $form.serialize(),
                     dataType: 'json',
                     beforeSend: function (jqXHR) {
                         if (!self.raise($el, 'editableBeforeSubmit', [jqXHR])) {
@@ -267,12 +276,21 @@
                         }
                         $wrapper.removeClass('kv-editable-processing');
                     }
-                }, self.ajaxSettings);
-                setTimeout(function() {
+                };
+                if (hasFiles && window.FormData) {
+                    $form.attr('enctype', 'multipart/form-data');
+                    settings.data = new FormData($form[0]);
+                    settings.contentType = false;
+                    settings.processData = false;
+                    settings.cache = false;
+                } else {
+                    settings.data = $form.serialize();
+                }
+                setTimeout(function () {
                     if (self.raise($el, 'editableSubmit', [$input.val(), $form])) {
-                        $.ajax(settings);
+                        $.ajax($.extend(true, settings, self.ajaxSettings));
                     }
-                }, 1000);
+                }, self.validationDelay);
             });
         }
     };
@@ -300,7 +318,8 @@
         showAjaxErrors: true,
         submitOnEnter: true,
         asPopover: true,
-        encodeOutput: true
+        encodeOutput: true,
+        validationDelay: 500
     };
 
     $.fn.editable.Constructor = Editable;

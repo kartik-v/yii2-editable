@@ -2,7 +2,7 @@
 /**
  * @package   yii2-editable
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2016
  * @version   1.7.5
  */
 
@@ -390,6 +390,47 @@ HTML;
     }
 
     /**
+     * Registers the needed assets
+     */
+    public function registerAssets()
+    {
+        $view = $this->getView();
+        EditableAsset::register($view);
+        $this->pluginOptions = [
+            'valueIfNull' => $this->valueIfNull,
+            'asPopover' => $this->asPopover,
+            'placement' => $this->placement,
+            'target' => $this->format === self::FORMAT_BUTTON ? '.kv-editable-button' : '.kv-editable-link',
+            'displayValueConfig' => $this->displayValueConfig,
+            'showAjaxErrors' => $this->showAjaxErrors,
+            'ajaxSettings' => $this->ajaxSettings,
+            'submitOnEnter' => $this->submitOnEnter,
+            'encodeOutput' => $this->encodeOutput,
+        ];
+        $this->registerPlugin('editable', 'jQuery("#' . $this->containerOptions['id'] . '")');
+        if (!empty($this->pjaxContainerId)) {
+            EditablePjaxAsset::register($view);
+            $toggleButton = $this->_popoverOptions['toggleButton']['id'];
+            $initPjaxVar = 'kvEdPjax_' . str_replace('-', '_', $this->_popoverOptions['options']['id']);
+            $view->registerJs("var {$initPjaxVar} = false;", View::POS_HEAD);
+            if ($this->asPopover) {
+                $js = "initEditablePjax('{$this->pjaxContainerId}', '{$toggleButton}', '{$initPjaxVar}');";
+                $view->registerJs($js);
+            }
+        }
+    }
+
+    /**
+     * Gets the form instance for use at runtime
+     *
+     * @return \yii\widgets\ActiveForm
+     */
+    public function getForm()
+    {
+        return $this->_form;
+    }
+
+    /**
      * Initializes the widget
      *
      * @throws InvalidConfigException
@@ -483,12 +524,14 @@ HTML;
     protected function initInlineOptions()
     {
         $title = Yii::t('kveditable', 'Close');
-        $this->inlineSettings = array_replace_recursive([
-            'templateBefore' => self::INLINE_BEFORE_1,
-            'templateAfter' => self::INLINE_AFTER_1,
-            'options' => ['class' => 'panel panel-default'],
-            'closeButton' => "<button class='kv-editable-close close' title='{$title}'>&times;</button>"
-        ], $this->inlineSettings);
+        $this->inlineSettings = array_replace_recursive(
+            [
+                'templateBefore' => self::INLINE_BEFORE_1,
+                'templateAfter' => self::INLINE_AFTER_1,
+                'options' => ['class' => 'panel panel-default'],
+                'closeButton' => "<button class='kv-editable-close close' title='{$title}'>&times;</button>",
+            ], $this->inlineSettings
+        );
         Html::addCssClass($this->contentOptions, 'kv-editable-inline');
         Html::addCssStyle($this->contentOptions, 'display:none');
     }
@@ -540,7 +583,9 @@ HTML;
         }
         $hasDisplayConfig = is_array($this->displayValueConfig) && !empty($this->displayValueConfig);
         if ($hasDisplayConfig && (is_array($this->value) || is_object($this->value))) {
-            throw new InvalidConfigException("Your editable value cannot be an array or object for parsing with 'displayValueConfig'. The array keys in 'displayValueConfig' must be a simple string or number. For advanced display value calculations, you must use your controller AJAX action to return 'output' as a JSON encoded response which will be used as a display value.");
+            throw new InvalidConfigException(
+                "Your editable value cannot be an array or object for parsing with 'displayValueConfig'. The array keys in 'displayValueConfig' must be a simple string or number. For advanced display value calculations, you must use your controller AJAX action to return 'output' as a JSON encoded response which will be used as a display value."
+            );
         }
         if ($hasDisplayConfig && !empty($this->displayValueConfig[$value])) {
             $this->displayValue = $this->displayValueConfig[$value];
@@ -627,10 +672,12 @@ HTML;
         $resetOpts['type'] = 'button';
         Html::addCssClass($submitOpts, 'kv-editable-submit');
         Html::addCssClass($resetOpts, 'kv-editable-reset');
-        return strtr($this->buttonsTemplate, [
+        return strtr(
+            $this->buttonsTemplate, [
             '{reset}' => Html::button($resetLabel, $resetOpts),
-            '{submit}' => Html::button($submitLabel, $submitOpts)
-        ]);
+            '{submit}' => Html::button($submitLabel, $submitOpts),
+        ]
+        );
     }
 
     /**
@@ -640,41 +687,12 @@ HTML;
      */
     protected function renderFooter()
     {
-        return strtr($this->footer, [
+        return strtr(
+            $this->footer, [
             '{loading}' => self::LOAD_INDICATOR,
-            '{buttons}' => $this->renderActionButtons()
-        ]);
-    }
-
-    /**
-     * Registers the needed assets
-     */
-    public function registerAssets()
-    {
-        $view = $this->getView();
-        EditableAsset::register($view);
-        $this->pluginOptions = [
-            'valueIfNull' => $this->valueIfNull,
-            'asPopover' => $this->asPopover,
-            'placement' => $this->placement,
-            'target' => $this->format === self::FORMAT_BUTTON ? '.kv-editable-button' : '.kv-editable-link',
-            'displayValueConfig' => $this->displayValueConfig,
-            'showAjaxErrors' => $this->showAjaxErrors,
-            'ajaxSettings' => $this->ajaxSettings,
-            'submitOnEnter' => $this->submitOnEnter,
-            'encodeOutput' => $this->encodeOutput
-        ];
-        $this->registerPlugin('editable', 'jQuery("#' . $this->containerOptions['id'] . '")');
-        if (!empty($this->pjaxContainerId)) {
-            EditablePjaxAsset::register($view);
-            $toggleButton = $this->_popoverOptions['toggleButton']['id'];
-            $initPjaxVar = 'kvEdPjax_' . str_replace('-', '_', $this->_popoverOptions['options']['id']);
-            $view->registerJs("var {$initPjaxVar} = false;", View::POS_HEAD);
-            if ($this->asPopover) {
-                $js = "initEditablePjax('{$this->pjaxContainerId}', '{$toggleButton}', '{$initPjaxVar}');";
-                $view->registerJs($js);
-            }
-        }
+            '{buttons}' => $this->renderActionButtons(),
+        ]
+        );
     }
 
     /**
@@ -689,11 +707,13 @@ HTML;
         if ($this->asPopover) {
             return '';
         }
-        $out = strtr($this->inlineSettings[$template], [
+        $out = strtr(
+            $this->inlineSettings[$template], [
             '{header}' => $this->_popoverOptions['header'],
             '{close}' => $this->inlineSettings['closeButton'],
-            '{loading}' => self::LOAD_INDICATOR
-        ]);
+            '{loading}' => self::LOAD_INDICATOR,
+        ]
+        );
         if (strpos($out, '{buttons}') === false) {
             return $out;
         }
@@ -793,11 +813,15 @@ HTML;
                 return $list ?
                     $this->_form
                         ->field($this->model, $this->attribute, $this->inputFieldConfig)
-                        ->$input($this->data, $this->_inputOptions)
+                        ->$input(
+                            $this->data, $this->_inputOptions
+                        )
                         ->label(false) :
                     $this->_form
                         ->field($this->model, $this->attribute, $this->inputFieldConfig)
-                        ->$input($this->_inputOptions)
+                        ->$input(
+                            $this->_inputOptions
+                        )
                         ->label(false);
             }
             $input = 'active' . ucfirst($this->inputType);
@@ -815,15 +839,5 @@ HTML;
                 Html::$input($this->name, $this->value, $this->_inputOptions);
         }
         return Html::tag('div', $field, $this->inputContainerOptions);
-    }
-
-    /**
-     * Gets the form instance for use at runtime
-     *
-     * @return \yii\widgets\ActiveForm
-     */
-    public function getForm()
-    {
-        return $this->_form;
     }
 }
