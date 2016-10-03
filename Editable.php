@@ -122,6 +122,12 @@ HTML;
     public $format = self::FORMAT_LINK;
 
     /**
+     * @var array of the additional data to be passed via ajax request.
+     * Array should be associative array of key=>value pairs.
+     */
+    public $additionalData = [];
+
+    /**
      * @var bool whether to show the editable input as a popover. Defaults to `true`. If set to `false`, it will be
      *     rendered inline.
      */
@@ -729,6 +735,9 @@ HTML;
     {
         echo $this->parseTemplate('templateBefore');
         echo Html::hiddenInput('hasEditable', 0) . "\n";
+        foreach ($this->additionalData as $additionalField => $fieldValue) {
+            echo Html::hiddenInput($additionalField, $fieldValue) . "\n";
+        }
         $before = $this->beforeInput;
         $after = $this->afterInput;
         if ($before !== null && is_string($before) || is_callable($before)) {
