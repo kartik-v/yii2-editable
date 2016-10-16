@@ -587,7 +587,7 @@ HTML;
                 "Your editable value cannot be an array or object for parsing with 'displayValueConfig'. The array keys in 'displayValueConfig' must be a simple string or number. For advanced display value calculations, you must use your controller AJAX action to return 'output' as a JSON encoded response which will be used as a display value."
             );
         }
-        if ($hasDisplayConfig && !empty($this->displayValueConfig[$value])) {
+        if ($hasDisplayConfig && isset($this->displayValueConfig[$value]) && (!empty($this->displayValueConfig[$value]) ||  $this->displayValueConfig[$value] === "0")) {
             $this->displayValue = $this->displayValueConfig[$value];
         }
         Html::addCssClass($this->containerOptions, 'kv-editable');
