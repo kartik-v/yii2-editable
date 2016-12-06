@@ -487,14 +487,14 @@ HTML;
             echo Html::beginTag('div', $this->inlineSettings['options']);
         }
         echo $this->renderFormFields();
+        if (!$this->asPopover) {
+            echo "</div>\n"; // inline options
+        }
         /**
          * @var ActiveForm $class
          */
         $class = $this->formClass;
         $class::end();
-        if (!$this->asPopover) {
-            echo "</div>\n"; // inline options
-        }
         echo "</div>\n"; // content options
         if ($this->asPopover === true) {
             PopoverX::end();
