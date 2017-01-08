@@ -2,7 +2,7 @@
 /**
  * @package   yii2-editable
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2016
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2017
  * @version   1.7.5
  */
 
@@ -29,13 +29,15 @@ use yii\widgets\ActiveForm;
 class Editable extends InputWidget
 {
     /**
-     * Editable display formats
+     * Editable LINK display format (default)
      */
     const FORMAT_LINK = 'link';
-    const FORMAT_BUTTON = 'button';
-
     /**
-     * Editable prebuilt inline templates
+     * Editable BUTTON display format
+     */
+    const FORMAT_BUTTON = 'button';
+    /**
+     * Editable prebuilt inline template number 1 for content before
      */
     const INLINE_BEFORE_1 = <<< HTML
 <div class="kv-editable-form-inline">
@@ -43,14 +45,18 @@ class Editable extends InputWidget
         {loading}
     </div>
 HTML;
-
+    /**
+     * Editable prebuilt inline template number 1 for content after
+     */
     const INLINE_AFTER_1 = <<< HTML
     <div class="form-group">
         {buttons}{close}
     </div>
 </div>
 HTML;
-
+    /**
+     * Editable prebuilt inline template number 2 for content before
+     */
     const INLINE_BEFORE_2 = <<< HTML
 <div class="panel-heading">
     {close}
@@ -58,100 +64,202 @@ HTML;
 </div>
 <div class="panel-body">
 HTML;
-
+    /**
+     * Editable prebuilt inline template number 2 for content after
+     */
     const INLINE_AFTER_2 = <<< HTML
 </div>
 <div class="panel-footer">
     {loading}{buttons}
 </div>
 HTML;
-
     /**
-     * Editable input types
+     * Hidden input
      */
-    // input types
     const INPUT_HIDDEN = 'hiddenInput';
+    /**
+     * Text input
+     */
     const INPUT_TEXT = 'textInput';
-    const INPUT_PASSWORD = 'passwordInput';
+    /**
+     * Text area
+     */
     const INPUT_TEXTAREA = 'textArea';
-    const INPUT_CHECKBOX = 'checkbox';
-    const INPUT_RADIO = 'radio';
-    const INPUT_LIST_BOX = 'listBox';
+    /**
+     * Password input
+     */
+    const INPUT_PASSWORD = 'passwordInput';
+    /**
+     * Dropdown list allowing single select
+     */
     const INPUT_DROPDOWN_LIST = 'dropDownList';
+    /**
+     * List box allowing multiple select
+     */
+    const INPUT_LIST_BOX = 'listBox';
+    /**
+     * Checkbox input
+     */
+    const INPUT_CHECKBOX = 'checkbox';
+    /**
+     * Radio input
+     */
+    const INPUT_RADIO = 'radio';
+    /**
+     * Checkbox inputs as a list allowing multiple selection
+     */
     const INPUT_CHECKBOX_LIST = 'checkboxList';
+    /**
+     * Radio inputs as a list
+     */
     const INPUT_RADIO_LIST = 'radioList';
+    /**
+     * Bootstrap styled checkbox button group
+     */
+    const INPUT_CHECKBOX_BUTTON_GROUP = 'checkboxButtonGroup';
+    /**
+     * Bootstrap styled radio button group
+     */
+    const INPUT_RADIO_BUTTON_GROUP = 'radioButtonGroup';
+    /**
+     * Krajee styled multiselect input that allows formatted checkbox list and radio list
+     */
+    const INPUT_MULTISELECT = 'multiselect';
+    /**
+     * File input
+     */
     const INPUT_FILE = 'fileInput';
-    const INPUT_HTML5_INPUT = 'input';
+    /**
+     * Other HTML5 input (e.g. color, range, email etc.)
+     */
+    const INPUT_HTML5 = 'input';
+    /**
+     * Input widget
+     */
     const INPUT_WIDGET = 'widget';
-
-    // input widget classes
+    /**
+     * Krajee dependent dropdown input widget [[\kartik\depdrop\DepDrop]]
+     */
     const INPUT_DEPDROP = '\kartik\depdrop\DepDrop';
+    /**
+     * Krajee select2 input widget [[\kartik\select2\Select2]]
+     */
     const INPUT_SELECT2 = '\kartik\select2\Select2';
+    /**
+     * Krajee typeahead input widget [[\kartik\typeahead\Typeahead]]
+     */
     const INPUT_TYPEAHEAD = '\kartik\typeahead\Typeahead';
+    /**
+     * Krajee switch input widget [[\kartik\switchinput\SwitchInput]]
+     */
     const INPUT_SWITCH = '\kartik\switchinput\SwitchInput';
+    /**
+     * Krajee touch spin input widget [[\kartik\touchspin\TouchSpin]]
+     */
     const INPUT_SPIN = '\kartik\touchspin\TouchSpin';
-    const INPUT_DATE = '\kartik\date\DatePicker';
-    const INPUT_TIME = '\kartik\time\TimePicker';
-    const INPUT_DATETIME = '\kartik\datetime\DateTimePicker';
-    const INPUT_DATE_RANGE = '\kartik\daterange\DateRangePicker';
-    const INPUT_SORTABLE = '\kartik\sortinput\SortableInput';
-    const INPUT_RANGE = '\kartik\range\RangeInput';
-    const INPUT_COLOR = '\kartik\color\ColorInput';
+    /**
+     * Krajee star rating input widget [[\kartik\rating\StarRating]]
+     */
     const INPUT_RATING = '\kartik\rating\StarRating';
+    /**
+     * Krajee range input widget [[\kartik\range\RangeInput]]
+     */
+    const INPUT_RANGE = '\kartik\range\RangeInput';
+    /**
+     * Krajee color input widget [[\kartik\color\ColorInput]]
+     */
+    const INPUT_COLOR = '\kartik\color\ColorInput';
+    /**
+     * Krajee file input widget [[\kartik\file\FileInput]]
+     */
     const INPUT_FILEINPUT = '\kartik\file\FileInput';
+    /**
+     * Krajee date picker input widget [[\kartik\date\DatePicker]]
+     */
+    const INPUT_DATE = '\kartik\date\DatePicker';
+    /**
+     * Krajee Time picker input widget [[\kartik\time\TimePicker]]
+     */
+    const INPUT_TIME = '\kartik\time\TimePicker';
+    /**
+     * Krajee date time Picker input widget [[\kartik\datetime\DateTimePicker]]
+     */
+    const INPUT_DATETIME = '\kartik\datetime\DateTimePicker';
+    /**
+     * Krajee date range picker input widget [[\kartik\daterange\DateRangePicker]]
+     */
+    const INPUT_DATE_RANGE = '\kartik\daterange\DateRangePicker';
+    /**
+     * Krajee sortable input widget [[\kartik\sortinput\SortableInput]]
+     */
+    const INPUT_SORTABLE = '\kartik\sortinput\SortableInput';
+    /**
+     * Krajee slider input widget [[\kartik\slider\Slider]]
+     */
     const INPUT_SLIDER = '\kartik\slider\Slider';
+    /**
+     * Krajee mask money input widget [[\kartik\money\MaskMoney]]
+     */
     const INPUT_MONEY = '\kartik\money\MaskMoney';
+    /**
+     * Krajee checkbox extended input widget [[\kartik\checkbox\CheckboxX]]
+     */
     const INPUT_CHECKBOX_X = '\kartik\checkbox\CheckboxX';
-
+    /**
+     * Loading indicator markup for the editable
+     */
     const LOAD_INDICATOR = '<div class="kv-editable-loading" style="display:none">&nbsp;</div>';
+    /**
+     * CSS setting for the editable parent
+     */
     const CSS_PARENT = "kv-editable-parent form-group";
 
     /**
      * @var string the identifier for the PJAX widget container if the editable widget is to be rendered inside a PJAX
-     *     container. This will ensure the PopoverX plugin is initialized correctly after a PJAX request is completed.
-     *     If this is not set, no re-initialization will be done for pjax.
+     * container. This will ensure the PopoverX plugin is initialized correctly after a PJAX request is completed.
+     * If this is not set, no re-initialization will be done for pjax.
      */
     public $pjaxContainerId;
 
     /**
      * @var string the display format for the editable. Accepts one of the following values.
-     * - 'link' or [[Editable::FORMAT_LINK]]: will convert the text to a clickable editable link.
-     * - 'button' or [[Editable::FORMAT_BUTTON]]: will display a separate button beside the text.
+     * - `'link' or [[Editable::FORMAT_LINK]]: will convert the text to a clickable editable link.
+     * - `'button' or [[Editable::FORMAT_BUTTON]]: will display a separate button beside the text.
      * Defaults to [[Editable::FORMAT_LINK]] if you do not set it as [[Editable::FORMAT_BUTTON]].
      */
     public $format = self::FORMAT_LINK;
 
     /**
-     * @var bool whether to show the editable input as a popover. Defaults to `true`. If set to `false`, it will be
-     *     rendered inline.
+     * @var boolean whether to show the editable input as a popover. Defaults to `true`. If set to `false`, it will be
+     * rendered inline.
      */
     public $asPopover = true;
 
     /**
-     * @var array the settings for the inline editable when `asPopover` is `false`. The following properties are
-     *     recognized:
-     * - options: array, the HTML attributes for the `div` panel container that will enclose the inline content. By
-     *     default the options will be set to `['class' => 'panel panel-default']`.
-     * - closeButton: string, the markup for rendering the close button to close the inline panel. Note the markup must
-     *     have the CSS class `kv-editable-close` to trigger the closure of the inline panel. The `closeButton`
-     *     defaults to `<button class="kv-editable-close close">&times;</button>`.
-     * - templateBefore: string, he template for inline content rendered before the input. Defaults to
-     *     `Editable::INLINE_BEFORE_1`.
-     * - templateAfter: string, he template for inline content rendered after the input. Defaults to
-     *     `Editable::INLINE_AFTER_1`. The following tags in the templates above will be automatically replaced:
-     *      - '{header}': the header generated via `preHeader` and `header` properties.
-     *      - '{inputs}': the main form input content (combining `beforeInput`, the input/widget generated based on
-     *     `inputType`, and `afterInput`)
-     *      - '{buttons}': the form action buttons (submit and reset).
-     *      - '{loading}': the loading indicator.
-     *      - '{close}': the close button to close the inline content as set in `inlineSettings['closeButton']`.
+     * @var array the settings for the inline editable when [[asPopover]] is `false`. The following properties are
+     * recognized:
+     * - `options`: _array_, the HTML attributes for the `div` panel container that will enclose the inline content. By
+     * default the options will be set to `['class' => 'panel panel-default']`.
+     * - `closeButton`: _string_, the markup for rendering the close button to close the inline panel. Note the markup must
+     * have the CSS class `kv-editable-close` to trigger the closure of the inline panel. The `closeButton`
+     * defaults to `<button class="kv-editable-close close">&times;</button>`.
+     * - `templateBefore`: _string_, the template for inline content rendered before the input. Defaults to
+     * [[INLINE_BEFORE_1]].
+     * - `templateAfter`: _string_, he template for inline content rendered after the input. Defaults to
+     * [[INLINE_AFTER_1]]. The following tokens in the templates above will be automatically replaced:
+     *    - '{header}': the header generated via `preHeader` and `header` properties.
+     *    - '{inputs}': the main form input content (combining `beforeInput`, the input/widget generated based on
+     *      `inputType`, and `afterInput`)
+     *    - '{buttons}': the form action buttons (submit and reset).
+     *    - '{loading}': the loading indicator.
+     *    - '{close}': the close button to close the inline content as set in `inlineSettings['closeButton']`.
      */
     public $inlineSettings = [];
 
     /**
      * @var array the HTML attributes for the editable button to be displayed when the format has been set to 'button':
-     * - label: string, the editable button label. This is not HTML encoded. Defaults to
-     *     `<i class="glyphicon glyphicon-pencil"></i>
+     * - `label`: _string_, the editable button label. This is not HTML encoded and efaults to
+     * `<i class="glyphicon glyphicon-pencil"></i>
      */
     public $editableButtonOptions = ['class' => 'btn btn-sm btn-default'];
 
@@ -172,54 +280,54 @@ HTML;
 
     /**
      * @var string the popover contextual type. Must be one of the [[PopoverX::TYPE]] constants Defaults to
-     *     `PopoverX::TYPE_DEFAULT` or `default`. This will be applied only if `asPopover` is `true`.
+     * [[PopoverX::TYPE_DEFAULT]] or `default`. This will be applied only if [[asPopover]] is `true`.
      */
     public $type = PopoverX::TYPE_DEFAULT;
 
     /**
-     * @var string the size of the popover window. One of the [[PopoverX::SIZE]] constants. This will be applied only
-     *     if `asPopover` is `true`.
+     * @var string the size of the popover window. One of the `PopoverX::SIZE` constants. This will be applied only
+     * if [[asPopover]] is `true`.
      */
     public $size;
 
     /**
-     * @var string the popover placement. Must be one of the [[PopoverX::ALIGN]] constants Defaults to
-     *     `PopoverX::ALIGN_RIGHT` or `right`. This will be applied only if `asPopover` is `true`.
+     * @var string the popover placement. Must be one of the `PopoverX::ALIGN` constants Defaults to
+     * [[PopoverX::ALIGN_RIGHT]] or `right`. This will be applied only if [[asPopover]] is `true`.
      */
     public $placement = PopoverX::ALIGN_RIGHT;
 
     /**
      * @var string the header content placed before the header text in the popover dialog or inline panel. This
-     *     defaults to `<i class="glyphicon glyphicon-edit"></i> Edit`.
+     * defaults to `<i class="glyphicon glyphicon-edit"></i> Edit`.
      */
     public $preHeader;
 
     /**
      * @var string the header content in the popover dialog or inline panel. If not set, this will be auto generated
-     *     based on the attribute label or set to null.
+     * based on the attribute label or set to null.
      */
     public $header;
 
     /**
      * @var string the footer content in the popover dialog or inline panel. The following special tags/variables will
-     *     be parsed and replaced in the footer:
-     * - `{loading}`: string, will be replaced with the loading indicator.
-     * - `{buttons}`: string, will be replaced with the submit and reset button. If this is set to null or an empty
-     *     string, it will not be displayed.
+     * be parsed and replaced in the footer:
+     * - `{loading}`: _string_, will be replaced with the loading indicator.
+     * - `{buttons}`: _string_, will be replaced with the submit and reset button. If this is set to null or an empty
+     * string, it will not be displayed.
      */
     public $footer = '{loading}{buttons}';
 
     /**
      * @var string the value to be displayed. If not set, this will default to the attribute value. If the attribute
-     *     value is null, then this will display the value as set in [[valueIfNull]].
+     * value is null, then this will display the value as set in [[valueIfNull]].
      */
     public $displayValue;
 
     /**
      * @var array the configuration to auto-calculate display value, based on the value of the editable input. This
-     *     should be a single dimensional array whose keys must match the input value, and the array values must be the
-     *     description to be displayed. For example, to display user friendly bool values, you could configure this as
-     *     `[0 => 'Inactive', 1 => 'Active']`. If this is set, it will override any value set in `displayValue`.
+     * should be a single dimensional array whose keys must match the input value, and the array values must be the
+     * description to be displayed. For example, to display user friendly bool values, you could configure this as
+     * `[0 => 'Inactive', 1 => 'Active']`. If this is set, it will override any value set in `displayValue`.
      */
     public $displayValueConfig = [];
 
@@ -235,7 +343,7 @@ HTML;
 
     /**
      * @var array the class for the ActiveForm widget to be used. The class must extend from `\yii\widgets\ActiveForm`.
-     *     This defaults to `\yii\widgets\ActiveForm`.
+     * This defaults to `\yii\widgets\ActiveForm`.
      */
     public $formClass = '\yii\widgets\ActiveForm';
 
@@ -246,43 +354,43 @@ HTML;
 
     /**
      * @var array the input type to render for the editing the input in the editable form. This must be one of the
-     *     [[Editable::TYPE]] constants.
+     * `Editable::TYPE` constants.
      */
     public $inputType = self::INPUT_TEXT;
 
     /**
      * @var string any custom widget class to use. Will only be used if the `inputType` is set to
-     *     [[Editable::INPUT_WIDGET]]
+     * [[INPUT_WIDGET]]
      */
     public $widgetClass;
 
     /**
-     * @var bool additional ajax settings to pass to the plugin.
+     * @var boolean additional ajax settings to pass to the plugin.
      * @see http://api.jquery.com/jquery
      */
     public $ajaxSettings = [];
 
     /**
-     * @var bool whether to display any ajax processing errors. Defaults to `true`.
+     * @var boolean whether to display any ajax processing errors. Defaults to `true`.
      */
     public $showAjaxErrors = true;
 
     /**
-     * @var bool whether to auto submit/save the form on pressing ENTER key. Defaults to `true`.
+     * @var boolean whether to auto submit/save the form on pressing ENTER key. Defaults to `true`.
      */
     public $submitOnEnter = true;
 
     /**
-     * @var bool whether to HTML encode the output via javascript after editable update. Defaults to `true`. Note that
-     *     this is only applied, if you do not return an output value via your AJAX response action. If you return an
-     *     output value via AJAX it will not be HTML encoded.
+     * @var boolean whether to HTML encode the output via javascript after editable update. Defaults to `true`. Note that
+     * this is only applied, if you do not return an output value via your AJAX response action. If you return an
+     * output value via AJAX it will not be HTML encoded.
      */
     public $encodeOutput = true;
 
     /**
      * @var array the options for the input. If the inputType is one of the HTML inputs, this will capture the HTML
-     *     attributes. If the `inputType` is set to [[Editable::INPUT_WIDGET]] or set to an input widget from the
-     *     `\kartik\` namespace, then this will capture the widget options.
+     * attributes. If the `inputType` is set to [[INPUT_WIDGET]] or set to an input widget from the
+     * `\kartik\` namespace, then this will capture the widget options.
      */
     public $options = [];
 
@@ -293,39 +401,43 @@ HTML;
 
     /**
      * @var string|Closure the content to be placed before the rendered input. If not set as a string, this can be
-     *     passed as a callback function of the following signature:
-     * ```
+     * passed as a callback function of the following signature:
+     * `
      * function ($form, $widget) {
      *    // echo $form->field($widget->model, 'attrib');
      * }
-     * ```
+     * `
+     *
      * where:
-     * - $form ActiveForm is the active form instance for the editable form
-     * - $widget Editable is the current editable widget instance
+     *
+     * - `$form`: _ActiveForm_, is the active form instance for the editable form
+     * - `$widget`: _Editable_, is the current editable widget instance
      */
     public $beforeInput;
 
     /**
      * @var string|Closure the content to be placed after the rendered input. If not set as a string, this can be
-     *     passed as a callback function of the following signature:
-     * ```
+     * passed as a callback function of the following signature:
+     * `
      * function ($form, $widget) {
      *    // echo $form->field($widget->model, 'attrib');
      * }
-     * ```
+     * `
+     *
      * where:
-     * - $form ActiveForm is the active form instance for the editable form
-     * - $widget Editable is the current editable widget instance
+     *
+     * - `$form`: _ActiveForm_, is the active form instance for the editable form
+     * - `$widget`: _Editable_, is the current editable widget instance
      */
     public $afterInput;
 
     /**
-     * @var bool whether you wish to automatically display the form submit and reset buttons. Defaults to `true`.
+     * @var boolean whether you wish to automatically display the form submit and reset buttons. Defaults to `true`.
      */
     public $showButtons = true;
 
     /**
-     * @var bool whether you want to show the button labels. Defaults to `false`.
+     * @var boolean whether you want to show the button labels. Defaults to `false`.
      */
     public $showButtonLabels = false;
 
@@ -336,24 +448,30 @@ HTML;
 
     /**
      * @var array the HTML attributes for the form submit button. The following special properties are additionally
-     *     recognized:
-     * - icon: string, the icon for the button. Defaults to `<i class="glyphicon glyphicon-ok"></i> `.
-     * - label: string, the label of the button. This is Html encoded. Defaults to 'Apply' and is translated via yii
-     *     i18n message files.
+     * recognized:
+     * - `icon`: _string_, the icon for the button. Defaults to `<i class="glyphicon glyphicon-ok"></i> `.
+     * - `label`: _string_, the label of the button. This is HTML encoded. Defaults to `Apply` and is translated via yii
+     *   i18n message files.
      */
     public $submitButton = ['class' => 'btn btn-sm btn-primary'];
 
     /**
      * @var array the HTML attributes for the form reset button. The following special properties are additionally
-     *     recognized:
-     * - icon: string, the icon for the button. Defaults to `<i class="glyphicon glyphicon-ban-circle"></i> `.
-     * - label: string, the label of the button. This is Html encoded. Defaults to 'Reset' and is translated via yii
-     *     i18n message files.
+     * recognized:
+     * - `icon`: _string_, the icon for the button. Defaults to `<i class="glyphicon glyphicon-ban-circle"></i> `.
+     * - `label`: _string_, the label of the button. This is HTML encoded. Defaults to `Reset` and is translated via yii
+     * i18n message files.
      */
     public $resetButton = ['class' => 'btn btn-sm btn-default'];
 
     /**
-     * @var array the generated configuration for the `kartik\popover\PopoverX` widget.
+     * @var array additional data to be passed when editable is submitted via ajax request as `$key => $value` pairs.
+     * This will generate hidden inputs in the editable form with input name as `$key` and input value as `$value`.
+     */
+    public $additionalData = [];
+
+    /**
+     * @var array the generated configuration for the [[PopoverX]] widget.
      */
     protected $_popoverOptions = [];
 
@@ -390,7 +508,7 @@ HTML;
     }
 
     /**
-     * Registers the needed assets
+     * Registers the client assets for [[Editable]] widget.
      */
     public function registerAssets()
     {
@@ -418,12 +536,15 @@ HTML;
                 $view->registerJs($js);
             }
         }
+        if ($this->inputType === Editable::INPUT_TIME) {
+            $this->_popoverOptions['toggleButton']['data-show'] = true;
+        }
     }
 
     /**
      * Gets the form instance for use at runtime
      *
-     * @return \yii\widgets\ActiveForm
+     * @return ActiveForm
      */
     public function getForm()
     {
@@ -487,14 +608,14 @@ HTML;
             echo Html::beginTag('div', $this->inlineSettings['options']);
         }
         echo $this->renderFormFields();
+        if (!$this->asPopover) {
+            echo "</div>\n"; // inline options
+        }
         /**
          * @var ActiveForm $class
          */
         $class = $this->formClass;
         $class::end();
-        if (!$this->asPopover) {
-            echo "</div>\n"; // inline options
-        }
         echo "</div>\n"; // content options
         if ($this->asPopover === true) {
             PopoverX::end();
@@ -587,7 +708,7 @@ HTML;
                 "Your editable value cannot be an array or object for parsing with 'displayValueConfig'. The array keys in 'displayValueConfig' must be a simple string or number. For advanced display value calculations, you must use your controller AJAX action to return 'output' as a JSON encoded response which will be used as a display value."
             );
         }
-        if ($hasDisplayConfig && !empty($this->displayValueConfig[$value])) {
+        if ($hasDisplayConfig && isset($this->displayValueConfig[$value])) {
             $this->displayValue = $this->displayValueConfig[$value];
         }
         Html::addCssClass($this->containerOptions, 'kv-editable');
@@ -729,12 +850,15 @@ HTML;
     {
         echo $this->parseTemplate('templateBefore');
         echo Html::hiddenInput('hasEditable', 0) . "\n";
+        foreach ($this->additionalData as $name => $value) {
+            echo Html::hiddenInput($name, $value) . "\n";
+        }
         $before = $this->beforeInput;
         $after = $this->afterInput;
         if ($before !== null && is_string($before) || is_callable($before)) {
             echo (is_callable($before) ? call_user_func($before, $this->_form, $this) : $before) . "\n";
         }
-        if ($this->inputType === self::INPUT_HTML5_INPUT) {
+        if ($this->inputType === self::INPUT_HTML5) {
             echo $this->renderHtml5Input() . "\n";
         } elseif ($this->inputType === self::INPUT_WIDGET) {
             echo $this->renderWidget($this->widgetClass) . "\n";
@@ -800,7 +924,7 @@ HTML;
     }
 
     /**
-     * Renders all other HTML inputs (except HTML5)
+     * Renders all native HTML inputs (except [[INPUT_HTML5]])
      *
      * @return string
      */

@@ -3,7 +3,7 @@ Change Log: `yii2-editable`
 
 ## Version 1.7.5
 
-**Date:** 06-Jul-2016
+**Date:** 08-Jan-2017
 
 - (enh #105): Add Indonesian translations.
 - (enh #108): Add Dutch translations.
@@ -14,6 +14,12 @@ Change Log: `yii2-editable`
 - (enh #123): Allow advanced form data to be sent via ajax (e.g. file inputs).
 - (enh #125): Add Latvian translations.
 - (enh #126): Fix help block display for non active forms.
+- (bug #136): New property `additionalData` to send additional data as key-value pairs via editable ajax form POST.
+- (bug #139): Better validation of value set in displayValueConfig.
+- (bug #141): Close inline editable tags correctly.
+- Correct Editable input types.
+- Add github contribution and issue/PR logging templates.
+- Update message config to include all default standard translation files.
 
 ## Version 1.7.4
 
