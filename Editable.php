@@ -379,6 +379,11 @@ HTML;
      * @var boolean whether to auto submit/save the form on pressing ENTER key. Defaults to `true`.
      */
     public $submitOnEnter = true;
+	
+	/**
+     * @var boolean whether to exit the form on pressing ESC key. Defaults to `true`.
+     */
+    public $closeOnEscape = true;
 
     /**
      * @var boolean whether to HTML encode the output via javascript after editable update. Defaults to `true`. Note that
@@ -523,6 +528,7 @@ HTML;
             'showAjaxErrors' => $this->showAjaxErrors,
             'ajaxSettings' => $this->ajaxSettings,
             'submitOnEnter' => $this->submitOnEnter,
+			'closeOnEscape' => $this->closeOnEscape,
             'encodeOutput' => $this->encodeOutput,
         ];
         $this->registerPlugin('editable', 'jQuery("#' . $this->containerOptions['id'] . '")');
@@ -650,7 +656,7 @@ HTML;
                 'templateBefore' => self::INLINE_BEFORE_1,
                 'templateAfter' => self::INLINE_AFTER_1,
                 'options' => ['class' => 'panel panel-default'],
-                'closeButton' => "<button type='button' class='kv-editable-close close' title='{$title}'>&times;</button>",
+                'closeButton' => "<button class='kv-editable-close close' title='{$title}'>&times;</button>",
             ], $this->inlineSettings
         );
         Html::addCssClass($this->contentOptions, 'kv-editable-inline');
