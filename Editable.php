@@ -380,7 +380,7 @@ HTML;
      */
     public $submitOnEnter = true;
 	
-	/**
+    /**
      * @var boolean whether to exit the form on pressing ESC key. Defaults to `true`.
      */
     public $closeOnEscape = true;
@@ -528,7 +528,7 @@ HTML;
             'showAjaxErrors' => $this->showAjaxErrors,
             'ajaxSettings' => $this->ajaxSettings,
             'submitOnEnter' => $this->submitOnEnter,
-			'closeOnEscape' => $this->closeOnEscape,
+            'closeOnEscape' => $this->closeOnEscape,
             'encodeOutput' => $this->encodeOutput,
         ];
         $this->registerPlugin('editable', 'jQuery("#' . $this->containerOptions['id'] . '")');
