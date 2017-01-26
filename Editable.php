@@ -379,11 +379,6 @@ HTML;
      * @var boolean whether to auto submit/save the form on pressing ENTER key. Defaults to `true`.
      */
     public $submitOnEnter = true;
-	
-	/**
-     * @var boolean whether to exit the form on pressing ESC key. Defaults to `true`.
-     */
-    public $closeOnEscape = true;
 
     /**
      * @var boolean whether to HTML encode the output via javascript after editable update. Defaults to `true`. Note that
@@ -528,7 +523,6 @@ HTML;
             'showAjaxErrors' => $this->showAjaxErrors,
             'ajaxSettings' => $this->ajaxSettings,
             'submitOnEnter' => $this->submitOnEnter,
-			'closeOnEscape' => $this->closeOnEscape,
             'encodeOutput' => $this->encodeOutput,
         ];
         $this->registerPlugin('editable', 'jQuery("#' . $this->containerOptions['id'] . '")');
