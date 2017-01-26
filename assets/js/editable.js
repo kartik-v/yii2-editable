@@ -151,7 +151,11 @@
                     }
                     self.refreshPopover();
                 }, 200);
-            });
+            }).on('keyup.editable', function (ev) {
+				if (ev.which === 27 && self.closeOnEscape) {
+					self.raise($close, 'click.editable');
+				}
+			});
             $form.find('input, select').on('change.editable', function () {
                 if (self.raise($el, 'editableChange', [$input.val()])) {
                     self.refreshPopover();
@@ -317,6 +321,7 @@
         ajaxSettings: {},
         showAjaxErrors: true,
         submitOnEnter: true,
+		closeOnEscape: true,
         asPopover: true,
         encodeOutput: true,
         validationDelay: 500
