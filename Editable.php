@@ -381,6 +381,11 @@ HTML;
     public $submitOnEnter = true;
 
     /**
+     * @var int to control the editable submission validation delay (in micro-seconds). Defaults to `500`.
+     */
+    public $validationDelay = 500;
+
+    /**
      * @var boolean whether to HTML encode the output via javascript after editable update. Defaults to `true`. Note that
      * this is only applied, if you do not return an output value via your AJAX response action. If you return an
      * output value via AJAX it will not be HTML encoded.
@@ -523,6 +528,7 @@ HTML;
             'showAjaxErrors' => $this->showAjaxErrors,
             'ajaxSettings' => $this->ajaxSettings,
             'submitOnEnter' => $this->submitOnEnter,
+            'validationDelay' => $this->validationDelay,
             'encodeOutput' => $this->encodeOutput,
         ];
         $this->registerPlugin('editable', 'jQuery("#' . $this->containerOptions['id'] . '")');
