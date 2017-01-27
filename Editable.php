@@ -380,6 +380,11 @@ HTML;
      */
     public $submitOnEnter = true;
 
+     /**
+     * @var boolean whether to select all text from the input. Defaults to `true`.
+     */
+    public $selectAllOnEdit = true;
+
     /**
      * @var boolean whether to HTML encode the output via javascript after editable update. Defaults to `true`. Note that
      * this is only applied, if you do not return an output value via your AJAX response action. If you return an
@@ -523,6 +528,7 @@ HTML;
             'showAjaxErrors' => $this->showAjaxErrors,
             'ajaxSettings' => $this->ajaxSettings,
             'submitOnEnter' => $this->submitOnEnter,
+            'selectAllOnEdit' => $this->selectAllOnEdit,
             'encodeOutput' => $this->encodeOutput,
         ];
         $this->registerPlugin('editable', 'jQuery("#' . $this->containerOptions['id'] . '")');

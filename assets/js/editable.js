@@ -68,12 +68,16 @@
             if (show) {
                 if (!self.asPopover) {
                     $value.fadeOut(delay, function () {
-                        $inline.fadeIn(delay);
+                        $inline.fadeIn(delay, function () {
+                            if (self.selectAllOnEdit) self.$input.select();
+                        });
                         if (self.target === '.kv-editable-button') {
                             addCss(self.$target, 'kv-inline-open');
                         }
                     });
+                    return;
                 }
+                if (self.selectAllOnEdit) self.$input.select();
                 return;
             }
             if (self.asPopover) {
@@ -322,6 +326,7 @@
         ajaxSettings: {},
         showAjaxErrors: true,
         submitOnEnter: true,
+        selectAllOnEdit: true,
         asPopover: true,
         encodeOutput: true,
         validationDelay: 500
