@@ -650,7 +650,7 @@ HTML;
                 'templateBefore' => self::INLINE_BEFORE_1,
                 'templateAfter' => self::INLINE_AFTER_1,
                 'options' => ['class' => 'panel panel-default'],
-                'closeButton' => "<button class='kv-editable-close close' title='{$title}'>&times;</button>",
+                'closeButton' => "<button type='button' class='kv-editable-close close' title='{$title}'>&times;</button>",
             ], $this->inlineSettings
         );
         Html::addCssClass($this->contentOptions, 'kv-editable-inline');
