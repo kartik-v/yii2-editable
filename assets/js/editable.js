@@ -151,8 +151,9 @@
                     }
                     self.refreshPopover();
                 }, 200);
-            }).on('keyup.editable', function (ev) {
-                if (ev.which === 27 && self.closeOnEscape) {
+            });
+            $inline.on('keyup.editable', function (ev) {
+                if (ev.which === 27) {
                     self.raise($close, 'click.editable');
                 }
             });
@@ -321,7 +322,6 @@
         ajaxSettings: {},
         showAjaxErrors: true,
         submitOnEnter: true,
-        closeOnEscape: true,
         asPopover: true,
         encodeOutput: true,
         validationDelay: 500
