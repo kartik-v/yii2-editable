@@ -3,7 +3,7 @@
  * @package   yii2-editable
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2017
- * @version   1.7.5
+ * @version   1.7.6
  */
 
 namespace kartik\editable;
@@ -11,6 +11,7 @@ namespace kartik\editable;
 use Closure;
 use kartik\base\Config;
 use kartik\base\InputWidget;
+use kartik\form\ActiveField;
 use kartik\popover\PopoverX;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -376,12 +377,17 @@ HTML;
     public $showAjaxErrors = true;
 
     /**
-     * @var boolean whether to auto submit/save the form on pressing ENTER key. Defaults to `true`.
+     * @var boolean whether to auto submit/save the form on pressing ENTER key.
      */
     public $submitOnEnter = true;
 
-     /**
-     * @var boolean whether to select all text from the input. Defaults to `true`.
+    /**
+     * @var integer editable submission validation delay (in micro-seconds). Defaults to `500`.
+     */
+    public $validationDelay = 500;
+
+    /**
+     * @var boolean whether to select all text in the input when editable is opened.
      */
     public $selectAllOnEdit = true;
 
@@ -486,7 +492,7 @@ HTML;
     protected $_inputOptions = [];
 
     /**
-     * @var \yii\widgets\ActiveForm instance
+     * @var \yii\widgets\ActiveForm active form instance
      */
     protected $_form;
 
@@ -525,11 +531,12 @@ HTML;
             'placement' => $this->placement,
             'target' => $this->format === self::FORMAT_BUTTON ? '.kv-editable-button' : '.kv-editable-link',
             'displayValueConfig' => $this->displayValueConfig,
-            'showAjaxErrors' => $this->showAjaxErrors,
             'ajaxSettings' => $this->ajaxSettings,
+            'showAjaxErrors' => $this->showAjaxErrors,
             'submitOnEnter' => $this->submitOnEnter,
             'selectAllOnEdit' => $this->selectAllOnEdit,
             'encodeOutput' => $this->encodeOutput,
+            'validationDelay' => $this->validationDelay,
         ];
         $this->registerPlugin('editable', 'jQuery("#' . $this->containerOptions['id'] . '")');
         if (!empty($this->pjaxContainerId)) {
@@ -651,14 +658,13 @@ HTML;
     protected function initInlineOptions()
     {
         $title = Yii::t('kveditable', 'Close');
-        $this->inlineSettings = array_replace_recursive(
-            [
-                'templateBefore' => self::INLINE_BEFORE_1,
-                'templateAfter' => self::INLINE_AFTER_1,
-                'options' => ['class' => 'panel panel-default'],
-                'closeButton' => "<button class='kv-editable-close close' title='{$title}'>&times;</button>",
-            ], $this->inlineSettings
-        );
+        $defaultSettings = [
+            'templateBefore' => self::INLINE_BEFORE_1,
+            'templateAfter' => self::INLINE_AFTER_1,
+            'options' => ['class' => 'panel panel-default'],
+            'closeButton' => Html::button('&times;', ['class' => 'kv-editable-close close', 'title' => $title]),
+        ];
+        $this->inlineSettings = array_replace_recursive($defaultSettings, $this->inlineSettings);
         Html::addCssClass($this->contentOptions, 'kv-editable-inline');
         Html::addCssStyle($this->contentOptions, 'display:none');
     }
@@ -723,9 +729,10 @@ HTML;
         $class = 'kv-editable-value';
         if ($this->format == self::FORMAT_BUTTON) {
             if (!$this->asPopover) {
-                if ($this->inlineSettings['templateBefore'] === self::INLINE_BEFORE_1) {
+                $before = ArrayHelper::getValue($this->inlineSettings, 'templateBefore', '');
+                if ($before === self::INLINE_BEFORE_1) {
                     Html::addCssClass($this->containerOptions, 'kv-editable-inline-1');
-                } elseif ($this->inlineSettings['templateBefore'] === self::INLINE_BEFORE_2) {
+                } elseif ($before === self::INLINE_BEFORE_2) {
                     Html::addCssClass($this->containerOptions, 'kv-editable-inline-2');
                 }
             }
@@ -794,17 +801,15 @@ HTML;
             $submitLabel = $submitIcon . ' ' . Html::encode($submitLabel);
             $resetLabel = $resetIcon . ' ' . Html::encode($resetLabel);
         }
-
         $submitOpts['type'] = 'button';
         $resetOpts['type'] = 'button';
         Html::addCssClass($submitOpts, 'kv-editable-submit');
         Html::addCssClass($resetOpts, 'kv-editable-reset');
-        return strtr(
-            $this->buttonsTemplate, [
+        $params = [
             '{reset}' => Html::button($resetLabel, $resetOpts),
             '{submit}' => Html::button($submitLabel, $submitOpts),
-        ]
-        );
+        ];
+        return strtr($this->buttonsTemplate, $params);
     }
 
     /**
@@ -814,12 +819,7 @@ HTML;
      */
     protected function renderFooter()
     {
-        return strtr(
-            $this->footer, [
-            '{loading}' => self::LOAD_INDICATOR,
-            '{buttons}' => $this->renderActionButtons(),
-        ]
-        );
+        return strtr($this->footer, ['{loading}' => self::LOAD_INDICATOR, '{buttons}' => $this->renderActionButtons()]);
     }
 
     /**
@@ -834,13 +834,12 @@ HTML;
         if ($this->asPopover) {
             return '';
         }
-        $out = strtr(
-            $this->inlineSettings[$template], [
+        $params = [
             '{header}' => $this->_popoverOptions['header'],
             '{close}' => $this->inlineSettings['closeButton'],
             '{loading}' => self::LOAD_INDICATOR,
-        ]
-        );
+        ];
+        $out = strtr($this->inlineSettings[$template], $params);
         if (strpos($out, '{buttons}') === false) {
             return $out;
         }
@@ -880,6 +879,29 @@ HTML;
     }
 
     /**
+     * Gets the active field instance for the configured editable input
+     *
+     * @param boolean|string $label the label for the field
+     *
+     * @return ActiveField
+     */
+    protected function getField($label = false)
+    {
+        return $this->_form->field($this->model, $this->attribute, $this->inputFieldConfig)->label($label);
+    }
+
+    /**
+     * Generates the widget output markup
+     *
+     * @param string $content the content to render
+     *
+     * @return string
+     */
+    protected function getOutput($content)
+    {
+        return Html::tag('div', $content, $this->inputContainerOptions);
+    }
+    /**
      * Renders the HTML 5 input
      *
      * @return string
@@ -890,14 +912,11 @@ HTML;
         $out = Html::input($type, $this->name, $this->value, $this->_inputOptions);
         if ($this->hasModel()) {
             if (isset($this->_form)) {
-                return $this->_form
-                    ->field($this->model, $this->attribute, $this->inputFieldConfig)
-                    ->input($type, $this->_inputOptions)
-                    ->label(false);
+                return $this->getField()->input($type, $this->_inputOptions);
             }
             $out = Html::activeInput($this->type, $this->model, $this->attribute, $this->_inputOptions);
         }
-        return Html::tag('div', $out, $this->inputContainerOptions);
+        return $this->getOutput($out);
     }
 
     /**
@@ -911,10 +930,7 @@ HTML;
     {
         if ($this->hasModel()) {
             if (isset($this->_form)) {
-                return $this->_form
-                    ->field($this->model, $this->attribute, $this->inputFieldConfig)
-                    ->widget($class, $this->_inputOptions)
-                    ->label(false);
+                return $this->getField()->widget($class, $this->_inputOptions);
             }
             $defaults = ['model' => $this->model, 'attribute' => $this->attribute];
 
@@ -926,7 +942,7 @@ HTML;
          * @var InputWidget $class
          */
         $field = $class::widget($options);
-        return Html::tag('div', $field, $this->inputContainerOptions);
+        return $this->getOutput($field);
     }
 
     /**
@@ -940,34 +956,21 @@ HTML;
         $input = $this->inputType;
         if ($this->hasModel()) {
             if (isset($this->_form)) {
-                return $list ?
-                    $this->_form
-                        ->field($this->model, $this->attribute, $this->inputFieldConfig)
-                        ->$input(
-                            $this->data, $this->_inputOptions
-                        )
-                        ->label(false) :
-                    $this->_form
-                        ->field($this->model, $this->attribute, $this->inputFieldConfig)
-                        ->$input(
-                            $this->_inputOptions
-                        )
-                        ->label(false);
+                $field = $this->getField();
+                return $list ? $field->$input($this->data, $this->_inputOptions) : $field->$input($this->_inputOptions);
             }
             $input = 'active' . ucfirst($this->inputType);
         }
-        $checked = false;
-        if ($input == 'radio' || $input == 'checkbox') {
-            $this->options['value'] = $this->value;
-            $checked = ArrayHelper::remove($this->_inputOptions, 'checked', false);
+        $value = $this->value;
+        if ($input === 'radio' || $input === 'checkbox') {
+            $this->options['value'] = $value;
+            $value = ArrayHelper::remove($this->_inputOptions, 'checked', false);
         }
         if ($list) {
-            $field = Html::$input($this->name, $this->value, $this->data, $this->_inputOptions);
+            $field = Html::$input($this->name, $value, $this->data, $this->_inputOptions);
         } else {
-            $field = ($input == 'checkbox' || $input == 'radio') ?
-                Html::$input($this->name, $checked, $this->_inputOptions) :
-                Html::$input($this->name, $this->value, $this->_inputOptions);
+            $field = Html::$input($this->name, $value, $this->_inputOptions);
         }
-        return Html::tag('div', $field, $this->inputContainerOptions);
+        return $this->getOutput($field);
     }
 }
