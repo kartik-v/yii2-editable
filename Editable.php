@@ -394,7 +394,7 @@ HTML;
     /**
      * @var integer editable animation delay (in micro-seconds). Defaults to `200`.
      */
-    public $animationDelay = 'fast';
+    public $animationDelay = 200;
 
     /**
      * @var boolean whether to HTML encode the output via javascript after editable update. Defaults to `true`. Note that

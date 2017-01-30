@@ -107,16 +107,16 @@
                     }
                 },
                 closeClick: function () {
-                    self.toggle(false, animationDelay);
+                    self.toggle(false, self.animationDelay);
                 },
                 targetClick: function () {
                     var status;
                     if (self.asPopover) {
-                        self.toggle(true, animationDelay);
+                        self.toggle(true, self.animationDelay);
                         return;
                     }
                     status = !$inline.is(':visible');
-                    self.toggle(status, animationDelay);
+                    self.toggle(status, self.animationDelay);
                 },
                 resetClick: function () {
                     if (self.raise($el, 'editableReset')) {
@@ -207,12 +207,12 @@
                                         $parent2.find('.help-block').remove();
                                         $parent2.removeClass('has-error');
                                         $message.html('');
-                                        self.toggle(false, animationDelay);
+                                        self.toggle(false, self.animationDelay);
                                         self.$value.html(out);
                                     } else {
                                         $parent.removeClass('has-error');
                                         $message.html('');
-                                        self.toggle(false, animationDelay);
+                                        self.toggle(false, self.animationDelay);
                                         self.$value.html(out);
                                         if (objActiveForm) {
                                             $form.yiiActiveForm('destroy');
