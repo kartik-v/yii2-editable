@@ -356,7 +356,7 @@
         asPopover: true,
         encodeOutput: true,
         validationDelay: 500,
-        animationDelay: '200'
+        animationDelay: 200
     };
 
     $.fn.editable.Constructor = Editable;
