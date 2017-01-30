@@ -107,16 +107,16 @@
                     }
                 },
                 closeClick: function () {
-                    self.toggle(false);
+                    self.toggle(false, animationDelay);
                 },
                 targetClick: function () {
                     var status;
                     if (self.asPopover) {
-                        self.toggle(true);
+                        self.toggle(true, animationDelay);
                         return;
                     }
                     status = !$inline.is(':visible');
-                    self.toggle(status);
+                    self.toggle(status, animationDelay);
                 },
                 resetClick: function () {
                     if (self.raise($el, 'editableReset')) {
@@ -207,12 +207,12 @@
                                         $parent2.find('.help-block').remove();
                                         $parent2.removeClass('has-error');
                                         $message.html('');
-                                        self.toggle(false);
+                                        self.toggle(false, animationDelay);
                                         self.$value.html(out);
                                     } else {
                                         $parent.removeClass('has-error');
                                         $message.html('');
-                                        self.toggle(false);
+                                        self.toggle(false, animationDelay);
                                         self.$value.html(out);
                                         if (objActiveForm) {
                                             $form.yiiActiveForm('destroy');
@@ -355,7 +355,8 @@
         selectAllOnEdit: true,
         asPopover: true,
         encodeOutput: true,
-        validationDelay: 500
+        validationDelay: 500,
+        animationDelay: '200'
     };
 
     $.fn.editable.Constructor = Editable;
