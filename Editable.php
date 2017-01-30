@@ -390,6 +390,11 @@ HTML;
      * @var boolean whether to select all text in the input when editable is opened.
      */
     public $selectAllOnEdit = true;
+    
+    /**
+     * @var boolean whether to close form when it loses focus.
+     */
+    public $closeOnLoseFocus = true;
 
     /**
      * @var boolean whether to HTML encode the output via javascript after editable update. Defaults to `true`. Note that
@@ -535,6 +540,7 @@ HTML;
             'showAjaxErrors' => $this->showAjaxErrors,
             'submitOnEnter' => $this->submitOnEnter,
             'selectAllOnEdit' => $this->selectAllOnEdit,
+            'closeOnLoseFocus' => $this->closeOnLoseFocus,
             'encodeOutput' => $this->encodeOutput,
             'validationDelay' => $this->validationDelay,
         ];
