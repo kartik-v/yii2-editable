@@ -392,6 +392,11 @@ HTML;
     public $selectAllOnEdit = true;
     
     /**
+     * @var integer editable animation delay (in micro-seconds). Defaults to `200`.
+     */
+    public $animationDelay = 200;
+
+    /**
      * @var boolean whether to close form when it loses focus.
      */
     public $closeOnLoseFocus = true;
@@ -543,6 +548,7 @@ HTML;
             'closeOnLoseFocus' => $this->closeOnLoseFocus,
             'encodeOutput' => $this->encodeOutput,
             'validationDelay' => $this->validationDelay,
+            'animationDelay' => $this->animationDelay
         ];
         $this->registerPlugin('editable', 'jQuery("#' . $this->containerOptions['id'] . '")');
         if (!empty($this->pjaxContainerId)) {
