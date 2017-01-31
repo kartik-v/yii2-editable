@@ -12,7 +12,7 @@ use Yii;
 use kartik\base\AssetBundle;
 
 /**
- * Asset bundle for Editable widget.
+ * Asset bundle for the [[Editable]] widget.
  *
  * @see http://github.com/kartik-v/yii2-editable
  * @author Kartik Visweswaran <kartikv2@gmail.com>

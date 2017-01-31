@@ -382,19 +382,9 @@ HTML;
     public $submitOnEnter = true;
 
     /**
-     * @var integer editable submission validation delay (in micro-seconds). Defaults to `500`.
-     */
-    public $validationDelay = 500;
-
-    /**
      * @var boolean whether to select all text in the input when editable is opened.
      */
     public $selectAllOnEdit = true;
-    
-    /**
-     * @var integer editable animation delay (in micro-seconds). Defaults to `200`.
-     */
-    public $animationDelay = 200;
 
     /**
      * @var boolean whether to HTML encode the output via javascript after editable update. Defaults to `true`. Note that
@@ -404,9 +394,31 @@ HTML;
     public $encodeOutput = true;
 
     /**
+     * @var boolean whether to close the editable form when it loses focus.
+     */
+    public $closeOnBlur = false;
+
+    /**
+     * @var integer editable submission validation delay (in micro-seconds).
+     */
+    public $validationDelay = 500;
+
+    /**
+     * @var integer editable reset delay (in micro-seconds).
+     */
+    public $resetDelay = 200;
+
+    /**
+     * @var integer|string editable fade animation delay (in micro-seconds). If entered as a string, it can be one of
+     * `'slow'` or `'fast'`.
+     * @see http://api.jquery.com/fadein/
+     */
+    public $animationDelay = 300;
+
+    /**
      * @var array the options for the input. If the inputType is one of the HTML inputs, this will capture the HTML
-     * attributes. If the `inputType` is set to [[INPUT_WIDGET]] or set to an input widget from the
-     * `\kartik\` namespace, then this will capture the widget options.
+     * attributes. If the `inputType` is set to [[INPUT_WIDGET]] or set to an input widget from the `\kartik\`
+     * namespace, then this will capture the widget options.
      */
     public $options = [];
 
@@ -418,11 +430,12 @@ HTML;
     /**
      * @var string|Closure the content to be placed before the rendered input. If not set as a string, this can be
      * passed as a callback function of the following signature:
-     * `
+     *
+     * ```
      * function ($form, $widget) {
      *    // echo $form->field($widget->model, 'attrib');
      * }
-     * `
+     * ```
      *
      * where:
      *
@@ -497,7 +510,7 @@ HTML;
     protected $_inputOptions = [];
 
     /**
-     * @var \yii\widgets\ActiveForm active form instance
+     * @var ActiveForm active form instance
      */
     protected $_form;
 
@@ -541,8 +554,10 @@ HTML;
             'submitOnEnter' => $this->submitOnEnter,
             'selectAllOnEdit' => $this->selectAllOnEdit,
             'encodeOutput' => $this->encodeOutput,
+            'closeOnBlur' => $this->closeOnBlur,
             'validationDelay' => $this->validationDelay,
-            'animationDelay' => $this->animationDelay
+            'resetDelay' => $this->resetDelay,
+            'animationDelay' => $this->animationDelay,
         ];
         $this->registerPlugin('editable', 'jQuery("#' . $this->containerOptions['id'] . '")');
         if (!empty($this->pjaxContainerId)) {
@@ -907,6 +922,7 @@ HTML;
     {
         return Html::tag('div', $content, $this->inputContainerOptions);
     }
+
     /**
      * Renders the HTML 5 input
      *

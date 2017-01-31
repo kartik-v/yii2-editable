@@ -12,7 +12,7 @@ use Yii;
 use kartik\base\AssetBundle;
 
 /**
- * Asset bundle for Pjax processing of Editable widget to reinitialize bootstrap-popover-x on pjax completion
+ * Asset bundle for Pjax processing of the [[Editable]] widget to reinitialize bootstrap-popover-x on pjax completion
  *
  * @see http://plugins.krajee.com/popover-x
  * @see http://github.com/kartik-v/bootstrap-popover-x

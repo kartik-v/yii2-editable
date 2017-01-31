@@ -3,16 +3,19 @@ Change Log: `yii2-editable`
 
 ## Version 1.7.6 (_under development_)
 
-**Date:** 28-Jan-2017
+**Date:** 31-Jan-2017
 
-- (enh # 146): Exit inline form on escape.
+- (enh # 146): Close inline form on escape.
 - (enh # 147): Fix disappearing form when pressing enter.
 - (enh # 148): New property `selectAllOnEdit` that automatically selects all text in the input on edit. 
 - (enh # 149): New property `validationDelay` to control client validation delay for active form.  
-- (enh # 150): Code enhancements and optimizations.  
+- (enh # 150): Code enhancements and optimizations.
+- (enh # 152): New property `animationDelay` to control fade animation delay for popover or inline element.  
+- (enh # 152): New property `closeOnBlur` that automatically closes the form on blur.
+- (enh # 153): New property `resetDelay` to control the delay in processing callback during editable reset. 
+    Also includes code optimizations and enhancements.
 
 ## Version 1.7.5
-
 
 **Date:** 08-Jan-2017
 
