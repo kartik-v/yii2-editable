@@ -98,6 +98,7 @@
                 },
                 formKeyup: function (ev) {
                     if (ev.which === 13 && self.submitOnEnter) { // enter key pressed
+                        self.submitFlag = true;
                         self.actions.submitClick();
                     }
                 },
@@ -105,7 +106,7 @@
                     var delegateTarget = ev.delegateTarget;
                     setTimeout(function() {
                         var activeElement = document.activeElement;
-                        if (!delegateTarget.contains(activeElement) && self.closeOnLoseFocus) {
+                        if (!delegateTarget.contains(activeElement) && !self.submitFlag && self.closeOnLoseFocus) {
                             self.toggle(false, self.animationDelay);
                         }
                     }, 0);
@@ -114,7 +115,7 @@
                     var delegateTarget = ev.delegateTarget;
                     setTimeout(function() {
                         var activeElement = document.activeElement;
-                        if (!delegateTarget.contains(activeElement) && self.closeOnLoseFocus) {
+                        if (!delegateTarget.contains(activeElement) && !self.submitFlag && self.closeOnLoseFocus) {
                             self.toggle(false, self.animationDelay);
                         }
                     }, 0);
@@ -129,6 +130,7 @@
                 },
                 targetClick: function () {
                     var status;
+                    self.submitFlag = false;
                     if (self.asPopover) {
                         self.toggle(true, self.animationDelay);
                         return;
@@ -335,6 +337,7 @@
             $target.off('.editable');
         },
         create: function () {
+            var submitFlag = false;
             var self = this, $target = self.target === '.kv-editable-button' ? self.$target : self.$value;
             handler(self.$form, 'reset', $.proxy(self.actions.formReset, self));
             handler(self.$form, 'submit', $.proxy(self.actions.formSubmit, self));
