@@ -101,10 +101,23 @@
                         self.actions.submitClick();
                     }
                 },
-                inputBlur: function () {
-                    if ($input.is(':visible') && self.closeOnLoseFocus) {
-                        self.toggle(false);
-                    }
+                popoverBlur: function (ev) {
+                    var delegateTarget = ev.delegateTarget;
+                    setTimeout(function() {
+                        var activeElement = document.activeElement;
+                        if (!delegateTarget.contains(activeElement) && self.closeOnLoseFocus) {
+                            self.toggle(false);
+                        }
+                    }, 0);
+                },
+                inlineBlur: function (ev) {
+                    var delegateTarget = ev.delegateTarget;
+                    setTimeout(function() {
+                        var activeElement = document.activeElement;
+                        if (!delegateTarget.contains(activeElement) && self.closeOnLoseFocus) {
+                            self.toggle(false);
+                        }
+                    }, 0);
                 },
                 inlineKeyup: function (ev) {
                     if (ev.which === 27) { // escape key pressed
@@ -327,7 +340,8 @@
             handler(self.$form, 'submit', $.proxy(self.actions.formSubmit, self));
             handler(self.$form.find('input, select'), 'change', $.proxy(self.actions.formChange, self));
             handler(self.$form, 'keyup', $.proxy(self.actions.formKeyup, self));
-            handler(self.$input, 'blur', $.proxy(self.actions.inputBlur, self));
+            handler(self.$popover, 'focusout', $.proxy(self.actions.popoverBlur, self));
+            handler(self.$inline, 'focusout', $.proxy(self.actions.inlineBlur, self));
             handler(self.$inline, 'keyup', $.proxy(self.actions.inlineKeyup, self));
             handler(self.$btnReset, 'click', $.proxy(self.actions.resetClick, self));
             handler(self.$btnSubmit, 'click', $.proxy(self.actions.submitClick, self));
