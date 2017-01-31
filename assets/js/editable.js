@@ -98,8 +98,27 @@
                 },
                 formKeyup: function (ev) {
                     if (ev.which === 13 && self.submitOnEnter) { // enter key pressed
+                        self.submitFlag = true;
                         self.actions.submitClick();
                     }
+                },
+                popoverBlur: function (ev) {
+                    var delegateTarget = ev.delegateTarget;
+                    setTimeout(function() {
+                        var activeElement = document.activeElement;
+                        if (!delegateTarget.contains(activeElement) && !self.submitFlag && self.closeOnLoseFocus) {
+                            self.toggle(false, self.animationDelay);
+                        }
+                    }, 0);
+                },
+                inlineBlur: function (ev) {
+                    var delegateTarget = ev.delegateTarget;
+                    setTimeout(function() {
+                        var activeElement = document.activeElement;
+                        if (!delegateTarget.contains(activeElement) && !self.submitFlag && self.closeOnLoseFocus) {
+                            self.toggle(false, self.animationDelay);
+                        }
+                    }, 0);
                 },
                 inlineKeyup: function (ev) {
                     if (ev.which === 27) { // escape key pressed
@@ -111,6 +130,7 @@
                 },
                 targetClick: function () {
                     var status;
+                    self.submitFlag = false;
                     if (self.asPopover) {
                         self.toggle(true, self.animationDelay);
                         return;
@@ -317,11 +337,14 @@
             $target.off('.editable');
         },
         create: function () {
+            var submitFlag = false;
             var self = this, $target = self.target === '.kv-editable-button' ? self.$target : self.$value;
             handler(self.$form, 'reset', $.proxy(self.actions.formReset, self));
             handler(self.$form, 'submit', $.proxy(self.actions.formSubmit, self));
             handler(self.$form.find('input, select'), 'change', $.proxy(self.actions.formChange, self));
             handler(self.$form, 'keyup', $.proxy(self.actions.formKeyup, self));
+            handler(self.$popover, 'focusout', $.proxy(self.actions.popoverBlur, self));
+            handler(self.$inline, 'focusout', $.proxy(self.actions.inlineBlur, self));
             handler(self.$inline, 'keyup', $.proxy(self.actions.inlineKeyup, self));
             handler(self.$btnReset, 'click', $.proxy(self.actions.resetClick, self));
             handler(self.$btnSubmit, 'click', $.proxy(self.actions.submitClick, self));
@@ -353,6 +376,7 @@
         showAjaxErrors: true,
         submitOnEnter: true,
         selectAllOnEdit: true,
+        closeOnLoseFocus: true,
         asPopover: true,
         encodeOutput: true,
         validationDelay: 500,

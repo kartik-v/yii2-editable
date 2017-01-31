@@ -397,6 +397,11 @@ HTML;
     public $animationDelay = 200;
 
     /**
+     * @var boolean whether to close form when it loses focus.
+     */
+    public $closeOnLoseFocus = true;
+
+    /**
      * @var boolean whether to HTML encode the output via javascript after editable update. Defaults to `true`. Note that
      * this is only applied, if you do not return an output value via your AJAX response action. If you return an
      * output value via AJAX it will not be HTML encoded.
@@ -540,6 +545,7 @@ HTML;
             'showAjaxErrors' => $this->showAjaxErrors,
             'submitOnEnter' => $this->submitOnEnter,
             'selectAllOnEdit' => $this->selectAllOnEdit,
+            'closeOnLoseFocus' => $this->closeOnLoseFocus,
             'encodeOutput' => $this->encodeOutput,
             'validationDelay' => $this->validationDelay,
             'animationDelay' => $this->animationDelay
