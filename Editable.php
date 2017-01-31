@@ -390,6 +390,11 @@ HTML;
      * @var boolean whether to select all text in the input when editable is opened.
      */
     public $selectAllOnEdit = true;
+    
+    /**
+     * @var integer editable animation delay (in micro-seconds). Defaults to `200`.
+     */
+    public $animationDelay = 200;
 
     /**
      * @var boolean whether to HTML encode the output via javascript after editable update. Defaults to `true`. Note that
@@ -537,6 +542,7 @@ HTML;
             'selectAllOnEdit' => $this->selectAllOnEdit,
             'encodeOutput' => $this->encodeOutput,
             'validationDelay' => $this->validationDelay,
+            'animationDelay' => $this->animationDelay
         ];
         $this->registerPlugin('editable', 'jQuery("#' . $this->containerOptions['id'] . '")');
         if (!empty($this->pjaxContainerId)) {
