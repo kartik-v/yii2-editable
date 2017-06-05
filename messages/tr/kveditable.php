@@ -17,9 +17,9 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    '(not set)' => '',
-    'Apply' => '',
-    'Close' => '',
-    'Edit' => '',
-    'Reset' => '',
+    '(not set)' => '(boş)',
+    'Apply' => 'Uygula',
+    'Close' => 'Kapat',
+    'Edit' => 'Düzenle',
+    'Reset' => 'Sıfırla',
 ];
