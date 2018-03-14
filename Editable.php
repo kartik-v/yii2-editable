@@ -711,6 +711,7 @@ HTML;
                 $options = ArrayHelper::getValue($this->options, 'options.options', []);
                 Html::addCssClass($options, 'kv-editable-input');
                 $this->options['options']['options'] = $options;
+                $this->options['widgetOptions']['options'] = $options;
             } elseif ($this->inputType !== self::INPUT_WIDGET) {
                 $options = ArrayHelper::getValue($this->options, 'options', []);
                 Html::addCssClass($options, 'kv-editable-input');
