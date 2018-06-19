@@ -273,6 +273,7 @@
                 $.each(data, function (key, value) {
                     data[key] = self.htmlEncode(value);
                 });
+                return data;
             }
             return data.replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
