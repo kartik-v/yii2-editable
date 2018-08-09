@@ -2,6 +2,7 @@ yii2-editable
 =============
 
 [![Latest Stable Version](https://poser.pugx.org/kartik-v/yii2-editable/v/stable)](https://packagist.org/packages/kartik-v/yii2-editable)
+[![Unstable Version](https://poser.pugx.org/kartik-v/yii2-krajee-base/v/unstable)](https://packagist.org/packages/kartik-v/yii2-editable)
 [![License](https://poser.pugx.org/kartik-v/yii2-editable/license)](https://packagist.org/packages/kartik-v/yii2-editable)
 [![Total Downloads](https://poser.pugx.org/kartik-v/yii2-editable/downloads)](https://packagist.org/packages/kartik-v/yii2-editable)
 [![Monthly Downloads](https://poser.pugx.org/kartik-v/yii2-editable/d/monthly)](https://packagist.org/packages/kartik-v/yii2-editable)

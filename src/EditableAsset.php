@@ -1,0 +1,33 @@
+<?php
+/**
+ * @package   yii2-editable
+ * @author    Kartik Visweswaran <kartikv2@gmail.com>
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2018
+ * @version   1.7.7
+ */
+
+namespace kartik\editable;
+
+use Yii;
+use kartik\base\AssetBundle;
+
+/**
+ * Asset bundle for the [[Editable]] widget.
+ *
+ * @see http://github.com/kartik-v/yii2-editable
+ * @author Kartik Visweswaran <kartikv2@gmail.com>
+ * @since 1.0
+ */
+class EditableAsset extends AssetBundle
+{
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        $this->setSourcePath(__DIR__ . '/assets');
+        $this->setupAssets('css', ['css/editable']);
+        $this->setupAssets('js', ['js/editable']);
+        parent::init();
+    }
+}

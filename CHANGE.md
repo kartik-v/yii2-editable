@@ -1,7 +1,15 @@
 Change Log: `yii2-editable`
 ===========================
 
-##Version 1.7.6
+## Version 1.7.7 (_under development_)
+
+**Date:** _work in progress_
+
+- Reorganize source code in `src` directory.
+- (enh #174): Correct HTML Encode.
+- (enh #167): Correct widget options for widgets like DateControl.
+
+## Version 1.7.6
 
 **Date:** 28-Jun-2017
 
@@ -16,7 +24,7 @@ Change Log: `yii2-editable`
 - (enh #147): Fix disappearing form when pressing enter.
 - (enh #146): Close inline form on escape.
 
-##Version 1.7.5
+## Version 1.7.5
 
 **Date:** 08-Jan-2017
 
@@ -36,7 +44,7 @@ Change Log: `yii2-editable`
 - Add github contribution and issue/PR logging templates.
 - Update message config to include all default standard translation files.
 
-##Version 1.7.4
+## Version 1.7.4
 
 **Date:** 27-Dec-2015
 
@@ -54,7 +62,7 @@ Change Log: `yii2-editable`
 - (enh #84): Update Portugese translations.
 - (enh #64): Better fix for #64 in resetting errors.
 
-##Version 1.7.3
+## Version 1.7.3
 
 **Date:** 01-Jul-2015
 
@@ -78,7 +86,7 @@ Change Log: `yii2-editable`
 - (enh #56): Reset/Clear help-block error messages before next validation.
 - (enh #54): Auto guess input and set input options based on input type.
 
-##Version 1.7.2
+## Version 1.7.2
 
 **Date:** 29-Mar-2015
 
@@ -90,7 +98,7 @@ Change Log: `yii2-editable`
 - (enh #40): Enhanced styling for disabled editable button.
 - (enh #39): Better validation for `valueIfNull`.
 
-##Version 1.7.1
+## Version 1.7.1
 
 **Date:** 13-Feb-2015
 
@@ -104,7 +112,7 @@ Change Log: `yii2-editable`
     - `editableError`: pass ajax response data editable form jquery elementin addition to editable input element value 
 - (bug #24): More correct `displayValueConfig` validation.
 
-##Version 1.7.0
+## Version 1.7.0
 
 **Date:** 12-Jan-2015
 
@@ -113,7 +121,7 @@ Change Log: `yii2-editable`
 - (enh #27): Add Spanish translations.
 - (bug #25): Fix options setting for PopoverX.
 
-##Version 1.6.0
+## Version 1.6.0
 
 **Date:** 22-Nov-2014
 
@@ -124,14 +132,14 @@ Change Log: `yii2-editable`
 - (enh #16): Enhance dependency validation using common code base.
 - (enh #15): Add Vietnamese language translations.
 
-##Version 1.4.0
+## Version 1.4.0
 
 **Date:** 22-Oct-2014
 
 - New property `showAjaxErrors` included for the editable jQuery plugin.
 - (enh #14): Raise new `editableAjaxError` event for errors faced via ajax
 
-##Version 1.3.0
+## Version 1.3.0
 
 **Date:** 04-Sep-2014
 
@@ -139,7 +147,7 @@ Change Log: `yii2-editable`
 - (enh #9): Included client plugin events `editableChange`, `editableSubmit`, `editableReset`, `editableSuccess`, and `editableError`.
 - (enh #8): Enhance `beforeInput` & `afterInput` to be passed as callback functions.
 
-##Version 1.2.0
+## Version 1.2.0
 
 **Date:** 26-Aug-2014
 
@@ -147,7 +155,7 @@ Change Log: `yii2-editable`
 - (enh #4): Better fix to reinitialize form error blocks for each ajax call.
 
 
-##Version 1.1.0
+## Version 1.1.0
 
 **Date:** 21-Aug-2014
 
@@ -155,7 +163,7 @@ Change Log: `yii2-editable`
 - (enh #4): Reinitialize form error blocks for each ajax call.
 - (enh #2): Enhancements to the widget for rendering and processing via Pjax.
    
-##Version 1.0.0
+## Version 1.0.0
 
 **Date:** 27-Jul-2014
 
