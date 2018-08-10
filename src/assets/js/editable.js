@@ -25,7 +25,7 @@
             $el.removeClass(css).addClass(css);
         },
         handler: function ($element, event, callback) {
-            var ev = event + NAMESPACE;
+            var ev = event + this.NAMESPACE;
             $element.off(ev).on(ev, callback);
         },
         raise: function ($el, event, params) {
@@ -337,20 +337,20 @@
         },
         create: function () {
             var self = this, actions = self.actions, $form = self.$form, $inline = self.$inline;
-            handler($form, 'reset', $.proxy(actions.formReset, self));
-            handler($form, 'submit', $.proxy(actions.formSubmit, self));
-            handler($form.find('input, select'), 'change', $.proxy(actions.formChange, self));
-            handler($form, 'keyup', $.proxy(actions.formKeyup, self));
+            $h.handler($form, 'reset', $.proxy(actions.formReset, self));
+            $h.handler($form, 'submit', $.proxy(actions.formSubmit, self));
+            $h.handler($form.find('input, select'), 'change', $.proxy(actions.formChange, self));
+            $h.handler($form, 'keyup', $.proxy(actions.formKeyup, self));
             if (self.asPopover) {
-                handler(self.$popover, 'focusout', $.proxy(actions.formBlur, self));
+                $h.handler(self.$popover, 'focusout', $.proxy(actions.formBlur, self));
             } else {
-                handler($inline, 'keyup', $.proxy(actions.inlineKeyup, self));
-                handler($inline, 'focusout', $.proxy(actions.formBlur, self));
+                $h.handler($inline, 'keyup', $.proxy(actions.inlineKeyup, self));
+                $h.handler($inline, 'focusout', $.proxy(actions.formBlur, self));
             }
-            handler(self.$btnReset, 'click', $.proxy(actions.resetClick, self));
-            handler(self.$btnSubmit, 'click', $.proxy(actions.submitClick, self));
-            handler(self.$close, 'click', $.proxy(actions.closeClick, self));
-            handler(self.$targetEl, 'click', $.proxy(actions.targetClick, self));
+            $h.handler(self.$btnReset, 'click', $.proxy(actions.resetClick, self));
+            $h.handler(self.$btnSubmit, 'click', $.proxy(actions.submitClick, self));
+            $h.handler(self.$close, 'click', $.proxy(actions.closeClick, self));
+            $h.handler(self.$targetEl, 'click', $.proxy(actions.targetClick, self));
         }
     };
 
