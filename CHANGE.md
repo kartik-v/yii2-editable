@@ -5,6 +5,7 @@ Change Log: `yii2-editable`
 
 **Date:** _work in progress_
 
+- (bug #178, #179): Correct bugs in editable.js variable calls.
 - Reorganize source code in `src` directory.
 - (enh #174): Correct HTML Encode.
 - (enh #167): Correct widget options for widgets like DateControl.
