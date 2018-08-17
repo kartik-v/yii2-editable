@@ -25,7 +25,7 @@
             $el.removeClass(css).addClass(css);
         },
         handler: function ($element, event, callback) {
-            var ev = event + NAMESPACE;
+            var ev = event + this.NAMESPACE;
             $element.off(ev).on(ev, callback);
         },
         raise: function ($el, event, params) {
