@@ -27,6 +27,7 @@ class EditablePjaxAsset extends AssetBundle
      */
     public function init()
     {
+        $this->depends = array_merge($this->depends, ['kartik\editable\EditableAsset']);
         $this->setSourcePath(__DIR__ . '/assets');
         $this->setupAssets('js', ['js/editable-pjax']);
         parent::init();

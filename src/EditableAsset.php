@@ -25,6 +25,7 @@ class EditableAsset extends AssetBundle
      */
     public function init()
     {
+        $this->depends = array_merge($this->depends, ['kartik\popover\PopoverXAsset']);
         $this->setSourcePath(__DIR__ . '/assets');
         $this->setupAssets('css', ['css/editable']);
         $this->setupAssets('js', ['js/editable']);

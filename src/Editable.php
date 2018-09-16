@@ -11,7 +11,6 @@ namespace kartik\editable;
 use Closure;
 use kartik\base\Config;
 use kartik\base\InputWidget;
-use kartik\form\ActiveField;
 use kartik\popover\PopoverX;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -38,7 +37,7 @@ class Editable extends InputWidget
      */
     const FORMAT_BUTTON = 'button';
     /**
-     * Editable prebuilt inline template number 1 for content before
+     * @var string editable prebuilt inline template number 1 for content before
      */
     const INLINE_BEFORE_1 = <<< HTML
 <div class="kv-editable-form-inline">
@@ -59,21 +58,22 @@ HTML;
      * Editable prebuilt inline template number 2 for content before
      */
     const INLINE_BEFORE_2 = <<< HTML
-<div class="panel-heading">
+<div class="card-header panel-heading">
     {close}
     {header}
 </div>
-<div class="panel-body">
+<div class="card-body panel-body">
 HTML;
     /**
      * Editable prebuilt inline template number 2 for content after
      */
     const INLINE_AFTER_2 = <<< HTML
 </div>
-<div class="panel-footer">
+<div class="card-footer panel-footer">
     {loading}{buttons}
 </div>
 HTML;
+
     /**
      * Hidden input
      */
@@ -240,7 +240,7 @@ HTML;
      * @var array the settings for the inline editable when [[asPopover]] is `false`. The following properties are
      * recognized:
      * - `options`: _array_, the HTML attributes for the `div` panel container that will enclose the inline content. By
-     * default the options will be set to `['class' => 'panel panel-default']`.
+     * default the options will be set to `['class' => 'card panel panel-default']`.
      * - `closeButton`: _string_, the markup for rendering the close button to close the inline panel. Note the markup must
      * have the CSS class `kv-editable-close` to trigger the closure of the inline panel. The `closeButton`
      * defaults to `<button class="kv-editable-close close">&times;</button>`.
@@ -259,10 +259,9 @@ HTML;
 
     /**
      * @var array the HTML attributes for the editable button to be displayed when the format has been set to 'button':
-     * - `label`: _string_, the editable button label. This is not HTML encoded and efaults to
-     * `<i class="glyphicon glyphicon-pencil"></i>
+     * - `label`: _string_, the editable button label. This is not HTML encoded. Defaults to [[defaultEditableBtnIcon]].
      */
-    public $editableButtonOptions = ['class' => 'btn btn-sm btn-default'];
+    public $editableButtonOptions = [];
 
     /**
      * @var array the HTML attributes for the editable value displayed
@@ -299,7 +298,7 @@ HTML;
 
     /**
      * @var string the header content placed before the header text in the popover dialog or inline panel. This
-     * defaults to `<i class="glyphicon glyphicon-edit"></i> Edit`.
+     * defaults to: '{icon} Edit' - where {icon} is the [[defaultPreHeaderIcon]] markup.
      */
     public $preHeader;
 
@@ -344,9 +343,9 @@ HTML;
 
     /**
      * @var array the class for the ActiveForm widget to be used. The class must extend from `\yii\widgets\ActiveForm`.
-     * This defaults to `\yii\widgets\ActiveForm`.
+     * This defaults to `\kartik\form\ActiveForm`.
      */
-    public $formClass = '\yii\widgets\ActiveForm';
+    public $formClass = '\kartik\form\ActiveForm';
 
     /**
      * @var array the options for the ActiveForm widget class selected in `formClass`.
@@ -476,9 +475,37 @@ HTML;
     public $buttonsTemplate = "{reset}{submit}";
 
     /**
+     * @var string the default icon for editable button set as the label in [[editableButtonOptions]]. Defaults to
+     *   `<i class="glyphicon glyphicon-pencil"></i> for [[bsVersion]] = '3.x' and
+     *   `<i class="fas fa-pencil-alt"></i> for [[bsVersion]] = '4.x'
+     */
+    public $defaultEditableBtnIcon;
+
+    /**
+     * @var string the default icon for editable button used in the [[preHeader]]. Defaults to:
+     *   `<i class="glyphicon glyphicon-ok"></i> ` for [[bsVersion]] = '3.x' and
+     *   `<i class="fas fa-check"></i> ` for [[bsVersion]] = '4.x'
+     */
+    public $defaultSubmitBtnIcon;
+
+    /**
+     * @var string the default icon for editable button used in the [[preHeader]]. Defaults to:
+     *   `<i class="glyphicon glyphicon-ban-circle"></i> ` for [[bsVersion]] = '3.x' and
+     *   `<i class="fas fa-ban"></i> ` for [[bsVersion]] = '4.x'
+     */
+    public $defaultResetBtnIcon;
+
+    /**
+     * @var string the default icon for editable button used in the [[preHeader]]. Defaults to:
+     *   `<i class="glyphicon glyphicon-edit"></i> ` for [[bsVersion]] = '3.x' and
+     *   `<i class="fas fa-edit"></i> Edit` for [[bsVersion]] = '4.x'
+     */
+    public $defaultPreHeaderIcon;
+
+    /**
      * @var array the HTML attributes for the form submit button. The following special properties are additionally
      * recognized:
-     * - `icon`: _string_, the icon for the button. Defaults to `<i class="glyphicon glyphicon-ok"></i> `.
+     * - `icon`: _string_, the icon for the button. Defaults to [[defaultSubmitBtnIcon]].
      * - `label`: _string_, the label of the button. This is HTML encoded. Defaults to `Apply` and is translated via yii
      *   i18n message files.
      */
@@ -487,11 +514,11 @@ HTML;
     /**
      * @var array the HTML attributes for the form reset button. The following special properties are additionally
      * recognized:
-     * - `icon`: _string_, the icon for the button. Defaults to `<i class="glyphicon glyphicon-ban-circle"></i> `.
+     * - `icon`: _string_, the icon for the button. Defaults to [[defaultResetBtnIcon]]
      * - `label`: _string_, the label of the button. This is HTML encoded. Defaults to `Reset` and is translated via yii
      * i18n message files.
      */
-    public $resetButton = ['class' => 'btn btn-sm btn-default'];
+    public $resetButton = [];
 
     /**
      * @var array additional data to be passed when editable is submitted via ajax request as `$key => $value` pairs.
@@ -518,6 +545,16 @@ HTML;
      * @var string the i18n message category
      */
     protected $_msgCat = 'kveditable';
+
+    /**
+     * @var array configuration of icons for BS3 and BS4
+     */
+    protected static $_icons = [
+        'defaultEditableBtnIcon' => ['pencil', 'pencil-alt'],
+        'defaultSubmitBtnIcon' => ['ok', 'check'],
+        'defaultResetBtnIcon' => ['ban-circle', 'ban'],
+        'defaultPreHeaderIcon' => ['edit', 'edit'],
+    ];
 
     /**
      * @inheritdoc
@@ -586,9 +623,23 @@ HTML;
     }
 
     /**
-     * Initializes the widget
-     *
+     * Initialize default icons
      * @throws InvalidConfigException
+     */
+    protected function initIcons()
+    {
+        $isBs4 = $this->isBs4();
+        $prefix = $this->getDefaultIconPrefix();
+        foreach (static::$_icons as $icon => $setting) {
+            if (!isset($this->$icon)) {
+                $css = $isBs4 ? $setting[1] : $setting[0];
+                $this->$icon = Html::tag('i', '', ['class' => $prefix . $css]);
+            }
+        }
+    }
+
+    /**
+     * Initializes the widget
      */
     protected function initEditable()
     {
@@ -609,9 +660,13 @@ HTML;
         }
         Config::validateInputWidget($this->inputType);
         $this->initI18N(__DIR__);
+        $this->initIcons();
         $this->initOptions();
         $this->_popoverOptions['options']['id'] = $this->options['id'] . '-popover';
         $this->_popoverOptions['toggleButton']['id'] = $this->options['id'] . '-targ';
+        if ($this->isBs4()) {
+            $this->_popoverOptions['bsVersion'] = $this->bsVersion;
+        }
         $this->registerAssets();
         echo Html::beginTag('div', $this->containerOptions);
         if ($this->format == self::FORMAT_BUTTON) {
@@ -627,6 +682,9 @@ HTML;
          * @var ActiveForm $class
          */
         $class = $this->formClass;
+        if (!class_exists($class)) {
+            throw new InvalidConfigException("The form class '{$class}' set via 'Editable::formClass' does not exist.");
+        }
         $this->_form = $class::begin($this->formOptions);
         if (!$this->_form instanceof ActiveForm) {
             throw new InvalidConfigException("The form class '{$class}' MUST extend from '\yii\widgets\ActiveForm'.");
@@ -673,8 +731,6 @@ HTML;
 
     /**
      * Initializes the inline settings & options.
-     *
-     * @throws InvalidConfigException
      */
     protected function initInlineOptions()
     {
@@ -682,7 +738,7 @@ HTML;
         $defaultSettings = [
             'templateBefore' => self::INLINE_BEFORE_1,
             'templateAfter' => self::INLINE_AFTER_1,
-            'options' => ['class' => 'panel panel-default'],
+            'options' => ['class' => 'card panel panel-default'],
             'closeButton' => Html::button('&times;', ['class' => 'kv-editable-close close', 'title' => $title]),
         ];
         $this->inlineSettings = array_replace_recursive($defaultSettings, $this->inlineSettings);
@@ -697,6 +753,13 @@ HTML;
      */
     protected function initOptions()
     {
+        $defaultBtnCss = $this->getDefaultBtnCss();
+        if (!isset($this->resetButton['class'])) {
+            $this->resetButton['class'] = 'btn btn-sm ' . $defaultBtnCss;
+        }
+        if (!isset($this->editableButtonOptions['class'])) {
+            $this->editableButtonOptions['class'] = 'btn btn-sm ' . $defaultBtnCss;
+        }
         Html::addCssClass($this->inputContainerOptions, self::CSS_PARENT);
         if ($this->asPopover !== true) {
             $this->initInlineOptions();
@@ -767,7 +830,7 @@ HTML;
         $this->_popoverOptions['placement'] = $this->placement;
         $this->_popoverOptions['size'] = $this->size;
         if (!isset($this->preHeader)) {
-            $this->preHeader = '<i class="glyphicon glyphicon-edit"></i> ' . Yii::t('kveditable', 'Edit') . ' ';
+            $this->preHeader = $this->defaultPreHeaderIcon . ' ' . Yii::t('kveditable', 'Edit') . ' ';
         }
         if ($this->header == null) {
             $attribute = $this->attribute;
@@ -784,7 +847,7 @@ HTML;
         $this->_popoverOptions['options']['class'] = 'kv-editable-popover skip-export';
         if ($this->format == self::FORMAT_BUTTON) {
             if (empty($this->editableButtonOptions['label'])) {
-                $this->editableButtonOptions['label'] = '<i class="glyphicon glyphicon-pencil"></i>';
+                $this->editableButtonOptions['label'] = $this->defaultEditableBtnIcon;
             }
             Html::addCssClass($this->editableButtonOptions, 'kv-editable-toggle');
             $this->_popoverOptions['toggleButton'] = $this->editableButtonOptions;
@@ -806,8 +869,8 @@ HTML;
     {
         $submitOpts = $this->submitButton;
         $resetOpts = $this->resetButton;
-        $submitIcon = ArrayHelper::remove($submitOpts, 'icon', '<i class="glyphicon glyphicon-save"></i>');
-        $resetIcon = ArrayHelper::remove($resetOpts, 'icon', '<i class="glyphicon glyphicon-ban-circle"></i>');
+        $submitIcon = ArrayHelper::remove($submitOpts, 'icon', $this->defaultSubmitBtnIcon);
+        $resetIcon = ArrayHelper::remove($resetOpts, 'icon', $this->defaultResetBtnIcon);
         $submitLabel = ArrayHelper::remove($submitOpts, 'label', Yii::t('kveditable', 'Apply'));
         $resetLabel = ArrayHelper::remove($resetOpts, 'label', Yii::t('kveditable', 'Reset'));
         if ($this->showButtonLabels === false) {
@@ -870,8 +933,6 @@ HTML;
 
     /**
      * Renders the editable form fields
-     *
-     * @return string
      */
     protected function renderFormFields()
     {
@@ -905,7 +966,7 @@ HTML;
      *
      * @param boolean|string $label the label for the field
      *
-     * @return ActiveField
+     * @return \yii\widgets\ActiveField
      */
     protected function getField($label = false)
     {
@@ -948,6 +1009,7 @@ HTML;
      * @param string $class the input widget class name
      *
      * @return string
+     * @throws \Exception
      */
     protected function renderWidget($class)
     {

@@ -1,10 +1,11 @@
 Change Log: `yii2-editable`
 ===========================
 
-## Version 1.7.7 (_under development_)
+## Version 1.7.7
 
-**Date:** _work in progress_
+**Date:** 16-Sep-2018
 
+- (enh #180): Update Persian Translations.
 - (bug #178, #179): Correct bugs in editable.js variable calls.
 - Reorganize source code in `src` directory.
 - (enh #174): Correct HTML Encode.
