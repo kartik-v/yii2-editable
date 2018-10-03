@@ -1,6 +1,12 @@
 Change Log: `yii2-editable`
 ===========================
 
+## Version 1.7.8
+
+**Date:** 03-Oct-2018
+
+- (enh #181, #182): Correct composer dependencies.
+
 ## Version 1.7.7
 
 **Date:** 16-Sep-2018
