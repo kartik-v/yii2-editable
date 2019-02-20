@@ -280,11 +280,16 @@
                 });
                 return data;
             }
-            return data.replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&apos;');
+            
+            if (typeof data === 'string') {
+                data = data.replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&apos;');
+            }
+
+            return data;
         },
         toggle: function (show) {
             var self = this, $value = self.$value, $inline = self.$inline, delay = self.animationDelay,
