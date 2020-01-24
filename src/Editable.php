@@ -786,7 +786,7 @@ HTML;
         }
         $this->_inputOptions = $this->options;
         $this->containerOptions['id'] = $this->options['id'] . '-cont';
-        $value = $this->hasModel() ? Html::getAttributeValue($this->model, $this->attribute) : $this->value;
+        $value = ($this->hasModel() && !isset($this->value)) ? Html::getAttributeValue($this->model, $this->attribute) : $this->value;
         if ($value === null && !empty($this->valueIfNull)) {
             $value = $this->valueIfNull;
         }
