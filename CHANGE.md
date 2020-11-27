@@ -1,6 +1,14 @@
 Change Log: `yii2-editable`
 ===========================
 
+## Version 1.7.9
+
+**Date:** 27-Nov-2020
+
+- (enh #206): Validate undefined data returned to ajax call.
+- (enh #198): Initialize value for model.
+- (enh #184): Add gitattributes.
+
 ## Version 1.7.8
 
 **Date:** 03-Oct-2018
