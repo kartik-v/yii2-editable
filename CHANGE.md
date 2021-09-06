@@ -3,8 +3,9 @@ Change Log: `yii2-editable`
 
 ## Version 1.7.9
 
-**Date:** 27-Nov-2020
+**Date:** 06-Sep-2021
 
+- (enh #212): Enhancements to support Bootstrap v5.x.
 - (enh #206): Validate undefined data returned to ajax call.
 - (enh #198): Initialize value for model.
 - (enh #184): Add gitattributes.

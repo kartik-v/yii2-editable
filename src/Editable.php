@@ -2,13 +2,14 @@
 /**
  * @package   yii2-editable
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2020
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2021
  * @version   1.7.9
  */
 
 namespace kartik\editable;
 
 use Closure;
+use Exception;
 use kartik\base\Config;
 use kartik\base\InputWidget;
 use kartik\popover\PopoverX;
@@ -17,6 +18,7 @@ use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\View;
+use yii\widgets\ActiveField;
 use yii\widgets\ActiveForm;
 
 /**
@@ -624,15 +626,15 @@ HTML;
 
     /**
      * Initialize default icons
-     * @throws InvalidConfigException
+     * @throws InvalidConfigException|Exception
      */
     protected function initIcons()
     {
-        $isBs4 = $this->isBs4();
+        $notBs3 = !$this->isBs(3);
         $prefix = $this->getDefaultIconPrefix();
         foreach (static::$_icons as $icon => $setting) {
             if (!isset($this->$icon)) {
-                $css = $isBs4 ? $setting[1] : $setting[0];
+                $css = $notBs3 ? $setting[1] : $setting[0];
                 $this->$icon = Html::tag('i', '', ['class' => $prefix . $css]);
             }
         }
@@ -664,7 +666,7 @@ HTML;
         $this->initOptions();
         $this->_popoverOptions['options']['id'] = $this->options['id'] . '-popover';
         $this->_popoverOptions['toggleButton']['id'] = $this->options['id'] . '-targ';
-        if ($this->isBs4()) {
+        if (!$this->isBs(3)) {
             $this->_popoverOptions['bsVersion'] = $this->bsVersion;
         }
         $this->registerAssets();
@@ -679,7 +681,7 @@ HTML;
         }
         echo Html::beginTag('div', $this->contentOptions);
         /**
-         * @var ActiveForm $class
+         * @var string|ActiveForm $class
          */
         $class = $this->formClass;
         if (!class_exists($class)) {
@@ -699,7 +701,7 @@ HTML;
         if (!$this->asPopover) {
             echo Html::beginTag('div', $this->inlineSettings['options']);
         }
-        echo $this->renderFormFields();
+        $this->renderFormFields();
         if (!$this->asPopover) {
             echo "</div>\n"; // inline options
         }
@@ -966,7 +968,7 @@ HTML;
      *
      * @param boolean|string $label the label for the field
      *
-     * @return \yii\widgets\ActiveField
+     * @return ActiveField
      */
     protected function getField($label = false)
     {
@@ -1009,7 +1011,7 @@ HTML;
      * @param string $class the input widget class name
      *
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     protected function renderWidget($class)
     {

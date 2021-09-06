@@ -2,13 +2,12 @@
 /**
  * @package   yii2-editable
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2020
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2021
  * @version   1.7.9
  */
 
 namespace kartik\editable;
 
-use Yii;
 use kartik\base\AssetBundle;
 
 /**
