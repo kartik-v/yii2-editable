@@ -6,10 +6,12 @@
     yii2-editable
     <hr>
     <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DTP3NZQ6G2AYU"
-       title="Donate via Paypal" target="_blank">
-        <img src="http://kartik-v.github.io/bootstrap-fileinput-samples/samples/donate.png" alt="Donate"/>
-    </a>
+       title="Donate via Paypal" target="_blank"><img height="60" src="https://kartik-v.github.io/bootstrap-fileinput-samples/samples/donate.png" alt="Donate"/></a>
+    &nbsp; &nbsp; &nbsp;
+    <a href="https://www.buymeacoffee.com/kartikv" title="Buy me a coffee" ><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="60" alt="kartikv" /></a>
 </h1>
+
+<div align="center">
 
 [![Latest Stable Version](https://poser.pugx.org/kartik-v/yii2-editable/v/stable)](https://packagist.org/packages/kartik-v/yii2-editable)
 [![Unstable Version](https://poser.pugx.org/kartik-v/yii2-krajee-base/v/unstable)](https://packagist.org/packages/kartik-v/yii2-editable)
@@ -17,6 +19,8 @@
 [![Total Downloads](https://poser.pugx.org/kartik-v/yii2-editable/downloads)](https://packagist.org/packages/kartik-v/yii2-editable)
 [![Monthly Downloads](https://poser.pugx.org/kartik-v/yii2-editable/d/monthly)](https://packagist.org/packages/kartik-v/yii2-editable)
 [![Daily Downloads](https://poser.pugx.org/kartik-v/yii2-editable/d/daily)](https://packagist.org/packages/kartik-v/yii2-editable)
+
+</div>
 
 Easily set any displayed content as editable in Yii Framework 2.0. This is an enhanced editable widget for Yii 2.0 that allows easy editing of displayed data, using inputs, widgets and more with numerous configuration possibilities. The extension uses the enhanced [yii2-popover-x](http://demos.krajee.com/popover-x) extension as a popover modal for editing. With release v1.7.3, this extension also allows you to render the editable content inline and offers advanced inline templates for configuration. This extension does not use any external jQuery plugin like X-Editable, instead it uses its own lean and extensible
  jQuery editable plugin - that elaborately reuses functionality available within Yii Framework 2.0.

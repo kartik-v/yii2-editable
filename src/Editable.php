@@ -741,7 +741,7 @@ HTML;
             'templateBefore' => self::INLINE_BEFORE_1,
             'templateAfter' => self::INLINE_AFTER_1,
             'options' => ['class' => 'card panel panel-default'],
-            'closeButton' => Html::button('&times;', ['class' => 'kv-editable-close close', 'title' => $title]),
+            'closeButton' => Html::button('&times;', ['class' => 'kv-editable-close kv-btn-close', 'title' => $title]),
         ];
         $this->inlineSettings = array_replace_recursive($defaultSettings, $this->inlineSettings);
         Html::addCssClass($this->contentOptions, 'kv-editable-inline');

@@ -14,6 +14,35 @@
     display: inline-block;
 }
 
+.kv-btn-close {
+    float: right;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: .5;
+}
+
+.kv-btn-close:hover {
+    color: #000;
+    text-decoration: none;
+}
+
+.kv-btn-close:not(:disabled):not(.disabled):hover, .kv-editable-close:not(:disabled):not(.disabled):focus {
+    opacity: .75;
+}
+
+button.kv-btn-close {
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+}
+
+a.kv-btn-close.disabled {
+    pointer-events: none;
+}
+
 .kv-editable-link {
     color: #428bca;
     background: none;
@@ -244,6 +273,6 @@ button[disabled].kv-editable-button {
     margin: 2px 4px 0 0;
 }
 
-.kv-editable-form-inline .kv-editable-close {
+.kv-editable-form-inline .kv-btn-close {
     margin-top: 6px;
 }
