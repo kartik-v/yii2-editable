@@ -1,6 +1,12 @@
 Change Log: `yii2-editable`
 ===========================
 
+## Version 1.8.0
+
+**Date:** 29-Apr-2022
+
+- (enh #217): PHP 8.1 enhancements for native functions.
+
 ## Version 1.7.9
 
 **Date:** 20-Nov-2021

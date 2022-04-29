@@ -2,8 +2,8 @@
 /**
  * @package   yii2-editable
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2021
- * @version   1.7.9
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2022
+ * @version   1.8.0
  */
 
 namespace kartik\editable;
@@ -12,6 +12,7 @@ use Closure;
 use Exception;
 use kartik\base\Config;
 use kartik\base\InputWidget;
+use kartik\base\Lib;
 use kartik\popover\PopoverX;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -602,7 +603,7 @@ HTML;
         if (!empty($this->pjaxContainerId)) {
             EditablePjaxAsset::register($view);
             $toggleButton = $this->_popoverOptions['toggleButton']['id'];
-            $initPjaxVar = 'kvEdPjax_' . str_replace('-', '_', $this->_popoverOptions['options']['id']);
+            $initPjaxVar = 'kvEdPjax_' . Lib::str_replace('-', '_', $this->_popoverOptions['options']['id']);
             $view->registerJs("var {$initPjaxVar} = false;", View::POS_HEAD);
             if ($this->asPopover) {
                 $js = "initEditablePjax('{$this->pjaxContainerId}', '{$toggleButton}', '{$initPjaxVar}');";
@@ -836,8 +837,8 @@ HTML;
         }
         if ($this->header == null) {
             $attribute = $this->attribute;
-            if (strpos($attribute, ']') > 0) {
-                $tags = explode(']', $attribute);
+            if (Lib::strpos($attribute, ']') > 0) {
+                $tags = Lib::explode(']', $attribute);
                 $attribute = array_pop($tags);
             }
             $this->_popoverOptions['header'] = $this->preHeader .
@@ -896,7 +897,7 @@ HTML;
             '{reset}' => Html::button($resetLabel, $resetOpts),
             '{submit}' => Html::button($submitLabel, $submitOpts),
         ];
-        return strtr($this->buttonsTemplate, $params);
+        return Lib::strtr($this->buttonsTemplate, $params);
     }
 
     /**
@@ -906,7 +907,7 @@ HTML;
      */
     protected function renderFooter()
     {
-        return strtr($this->footer, ['{loading}' => self::LOAD_INDICATOR, '{buttons}' => $this->renderActionButtons()]);
+        return Lib::strtr($this->footer, ['{loading}' => self::LOAD_INDICATOR, '{buttons}' => $this->renderActionButtons()]);
     }
 
     /**
@@ -926,11 +927,11 @@ HTML;
             '{close}' => $this->inlineSettings['closeButton'],
             '{loading}' => self::LOAD_INDICATOR,
         ];
-        $out = strtr($this->inlineSettings[$template], $params);
-        if (strpos($out, '{buttons}') === false) {
+        $out = Lib::strtr($this->inlineSettings[$template], $params);
+        if (Lib::strpos($out, '{buttons}') === false) {
             return $out;
         }
-        return strtr($out, ['{buttons}' => $this->renderActionButtons()]);
+        return Lib::strtr($out, ['{buttons}' => $this->renderActionButtons()]);
     }
 
     /**
